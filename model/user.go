@@ -10,17 +10,3 @@ type SingUpUserJson struct {
 	Phone      string `json:"phone"`
 	IsStuff    bool   `json:"is_stuff"`
 }
-
-// type SignUpUserData struct {
-// 	Id         int
-// 	Email      string
-// 	FirstName  string
-// 	SecondName string
-// 	City       string
-// 	IsVerified bool
-// 	Phone      string
-// 	Ratings    string
-// 	PostReads  int
-// 	Posts      int
-// 	IsStuff    bool
-// }
