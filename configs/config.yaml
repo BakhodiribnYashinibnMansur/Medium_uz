@@ -1,0 +1,9 @@
+
+db:
+  dbname: mediumuz
+  host: localhost
+  port: '2001'
+  sslmode: disable
+  username: postgres
+
+port: '8080'

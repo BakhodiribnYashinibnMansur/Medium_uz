@@ -1,0 +1,16 @@
+
+CREATE TABLE  IF NOT EXISTS users (
+   id            SERIAL PRIMARY KEY     NOT NULL ,
+   email VARCHAR(45) NOT NULL UNIQUE,
+   paswordHash VARCHAR(30) NOT NULL ,
+   firstname VARCHAR(60) NOT NULL UNIQUE,
+   secondname VARCHAR(60) NOT NULL ,
+   city VARCHAR(30) NOT NULL ,
+   isVerified BOOLEAN DEFAULT FALSE,
+   verificationDate VARCHAR(30) NOT NULL,
+   accountImage VARCHAR(100) NULL,
+   phone VARCHAR(15) NOT NULL,
+   rating DOUBLE PRECISION DEFAULT 0.0,
+   postViews INTEGER DEFAULT 0,
+   isSuperUser BOOLEAN DEFAULT FALSE
+)
