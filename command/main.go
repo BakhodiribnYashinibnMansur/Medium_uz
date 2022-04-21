@@ -15,7 +15,7 @@ func main() {
 	logrus := logrus.GetLogger()
 
 	configs, err := configs.InitConfig()
-
+	logrus.Infof("configs %v", configs)
 	if err != nil {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
@@ -33,14 +33,16 @@ func main() {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
 	logrus.Info("successfull connection DB")
-	repos := repository.NewRepository(db, logrus)
-	services := service.NewService(repos, logrus)
+	repos := repository.NewRepository(db)
+	services := service.NewService(repos)
 	handlers := handler.NewHandler(services, logrus)
 
 	server := new(server.Server)
 	err = server.Run(configs.ServerPort, handlers.InitRoutes())
+
 	if err != nil {
 		logrus.Fatalf("error occurred while running http server: %s", err.Error())
 	}
-	go logrus.Infof("run server port:%v", configs.ServerPort)
+
+	defer logrus.Infof("run server port:%v", configs.ServerPort)
 }

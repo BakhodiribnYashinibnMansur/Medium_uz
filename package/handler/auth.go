@@ -2,9 +2,10 @@ package handler
 
 import "github.com/gin-gonic/gin"
 
-func (h *Handler) signUp(c *gin.Context) {
-
+func (handler *Handler) signUp(c *gin.Context) {
+	logrus := handler.logrus
+	logrus.Info("Signing up")
 }
 
-func (h *Handler) signIn(c *gin.Context) {
+func (h *Handler) signIn(ctx *gin.Context) {
 }
