@@ -1,10 +1,32 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"mediumuz/model"
+	"mediumuz/util/errors"
+	"net/http"
 
-func (handler *Handler) signUp(c *gin.Context) {
+	"github.com/gin-gonic/gin"
+)
+
+func (handler *Handler) signUp(ctx *gin.Context) {
 	logrus := handler.logrus
-	logrus.Info("Signing up")
+	var input model.SingUpUserJson
+	err := ctx.BindJSON(&input)
+	if err != nil {
+		errors.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	logrus.Info("signUp data send for  create user to service")
+	id, err := handler.services.Authorization.CreateUser(input, logrus)
+
+	if err != nil {
+		errors.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, map[string]interface{}{
+		"id": id,
+	})
 }
 
 func (h *Handler) signIn(ctx *gin.Context) {

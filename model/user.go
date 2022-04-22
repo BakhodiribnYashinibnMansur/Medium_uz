@@ -1,4 +1,4 @@
-package mediumModel
+package model
 
 type SingUpUserJson struct {
 	Id         int    `json:"-"`
