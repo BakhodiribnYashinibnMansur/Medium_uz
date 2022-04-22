@@ -33,7 +33,11 @@ func main() {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
 	logrus.Info("successfull connection DB")
-	repos := repository.NewRepository(db)
+	redis, err := repository.NewRedisDB(&repository.RedisConfig{Host: configs.RedisHost, Port: configs.RedisPort, Password: configs.RedisPassword, DB: configs.RedisDB}, logrus)
+	if err != nil {
+		logrus.Fatalf("failed to initialize db: %s", err.Error())
+	}
+	repos := repository.NewRepository(db, redis)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services, logrus)
 

@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -11,6 +12,6 @@ type Repository struct {
 	Authorization
 }
 
-func NewRepository(db *sqlx.DB) *Repository {
+func NewRepository(db *sqlx.DB, redis *redis.Client) *Repository {
 	return &Repository{}
 }
