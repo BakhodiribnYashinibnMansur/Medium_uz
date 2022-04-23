@@ -16,3 +16,9 @@ start-redis:
 
 swag:
 	swag init -g command/main.go
+
+migrate-up:
+	migrate -path ./schema -database 'postgresql://postgres:0224@localhost:2001/mediumuz?sslmode=disable' up
+
+migrate-down:
+	migrate -path ./schema -database 'postgresql://postgres:0224@localhost:2001/mediumuz?sslmode=disable' down

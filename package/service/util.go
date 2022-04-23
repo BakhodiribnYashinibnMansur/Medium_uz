@@ -27,7 +27,7 @@ func SendCodeToEmail(email string, userName string, logrus *logrus.Logger) (stri
 	configs, err := configs.InitConfig()
 	logrus.Infof("configs %v", configs)
 	if err != nil {
-		logrus.Fatalf("error initializing configs: %s", err.Error())
+		logrus.Errorf("error initializing configs: %s", err.Error())
 		return "", err
 	}
 	logrus.Info("successfull checked configs.")
@@ -36,7 +36,7 @@ func SendCodeToEmail(email string, userName string, logrus *logrus.Logger) (stri
 	parseTemplate, err := parseTemplate("template/email.html", TemplateData{UserName: userName, VerificationCode: verificationCode})
 	logrus.Info("DONE: Parsing email.html template")
 	if err != nil {
-		logrus.Fatalf("ERROR: Parsing template %s", err.Error())
+		logrus.Errorf("ERROR: Parsing template %s", err.Error())
 		return "", err
 	}
 	m := gomail.NewMessage()
@@ -50,7 +50,7 @@ func SendCodeToEmail(email string, userName string, logrus *logrus.Logger) (stri
 	dial.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 
 	if err := dial.DialAndSend(m); err != nil {
-		logrus.Fatalf("FAIL: send EMAIL %s", err)
+		logrus.Errorf("FAIL: send EMAIL %s", err)
 		return "", err
 	}
 	logrus.Infof("DONE:  send email code")

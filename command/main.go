@@ -23,6 +23,7 @@ import (
 // @name Authorization
 
 func main() {
+
 	logrus := logrus.GetLogger()
 	logrus.Info("send email")
 	configs, err := configs.InitConfig()
@@ -49,6 +50,7 @@ func main() {
 	if err != nil {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
+
 	repos := repository.NewRepository(db, redis)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services, logrus)

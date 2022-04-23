@@ -1,25 +1,44 @@
 basePath: /
 definitions:
-  errors.errorResponse:
+  error.errorResponse:
     properties:
       message:
         type: string
     type: object
-  model.SingUpUserJson:
+  model.ResponseSignUp:
+    properties:
+      id:
+        type: integer
+      token:
+        type: string
+    type: object
+  model.ResponseSuccess:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
+  model.User:
     properties:
       city:
+        default: Navoi
         type: string
       email:
+        default: phapp0224mb@gmail.com
         type: string
       first_name:
+        default: MRB
         type: string
       image:
         type: string
       password:
+        default: 0224mb
         type: string
       phone:
+        default: +9989 93 753 65 71
         type: string
       second_name:
+        default: HERO
         type: string
     type: object
 host: localhost:8080
@@ -29,6 +48,47 @@ info:
   title: MediumuZ API
   version: "1.0"
 paths:
+  /auth/resend:
+    get:
+      consumes:
+      - application/json
+      description: resend code to email for  verification
+      operationId: resend-code-email
+      parameters:
+      - description: email
+        in: query
+        name: email
+        type: string
+      - description: username
+        in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Resend cod for  Verification Email
+      tags:
+      - Auth
   /auth/sign-up:
     post:
       consumes:
@@ -41,33 +101,74 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/model.SingUpUserJson'
+          $ref: '#/definitions/model.User'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            type: integer
+            $ref: '#/definitions/model.ResponseSignUp'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/errors.errorResponse'
+            $ref: '#/definitions/error.errorResponse'
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/errors.errorResponse'
+            $ref: '#/definitions/error.errorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/errors.errorResponse'
+            $ref: '#/definitions/error.errorResponse'
         default:
           description: ""
           schema:
-            $ref: '#/definitions/errors.errorResponse'
+            $ref: '#/definitions/error.errorResponse'
       summary: SignUp
       tags:
-      - auth
+      - Auth
+  /auth/verify:
+    get:
+      consumes:
+      - application/json
+      description: verification email with code
+      operationId: verify-email
+      parameters:
+      - description: username
+        in: query
+        name: username
+        type: string
+      - description: code
+        in: query
+        name: code
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Verification Email
+      tags:
+      - Auth
 securityDefinitions:
   ApiKeyAuth:
     in: header
