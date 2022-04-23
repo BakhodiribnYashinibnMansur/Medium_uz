@@ -1,0 +1,76 @@
+basePath: /
+definitions:
+  errors.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  model.SingUpUserJson:
+    properties:
+      city:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      image:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      second_name:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API Server for MediumuZ Application
+  title: MediumuZ API
+  version: "1.0"
+paths:
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: create account
+      operationId: create-account
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.SingUpUserJson'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/errors.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/errors.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/errors.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/errors.errorResponse'
+      summary: SignUp
+      tags:
+      - auth
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

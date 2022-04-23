@@ -11,6 +11,17 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// @title MediumuZ API
+// @version 1.0
+// @description API Server for MediumuZ Application
+
+// @host localhost:8080
+// @BasePath /
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+
 func main() {
 	logrus := logrus.GetLogger()
 	logrus.Info("send email")
@@ -32,6 +43,7 @@ func main() {
 	if err != nil {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
+
 	logrus.Info("successfull connection DB")
 	redis, err := repository.NewRedisDB(&repository.RedisConfig{Host: configs.RedisHost, Port: configs.RedisPort, Password: configs.RedisPassword, DB: configs.RedisDB}, logrus)
 	if err != nil {

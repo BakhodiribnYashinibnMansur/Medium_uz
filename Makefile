@@ -13,3 +13,6 @@ start-psql:
 
 start-redis:
 	sudo docker run --redisdb redis-test-instance -p 6379:6379 -d redis
+
+swag:
+	swag init -g command/main.go

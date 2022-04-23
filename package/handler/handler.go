@@ -4,7 +4,11 @@ import (
 	"mediumuz/package/service"
 	"mediumuz/util/logrus"
 
+	_ "mediumuz/docs"
+
 	"github.com/gin-gonic/gin"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 type Handler struct {
@@ -18,7 +22,7 @@ func NewHandler(services *service.Service, logrus *logrus.Logger) *Handler {
 
 func (handler *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
-
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-up", handler.signUp)
