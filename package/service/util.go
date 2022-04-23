@@ -2,12 +2,14 @@ package service
 
 import (
 	"bytes"
-	"fmt"
+	"crypto/tls"
 	"html/template"
 	"math/rand"
 	"mediumuz/configs"
 	"mediumuz/util/logrus"
-	"net/smtp"
+	"time"
+
+	gomail "gopkg.in/mail.v2"
 )
 
 const (
@@ -20,41 +22,39 @@ type TemplateData struct {
 	VerificationCode string
 }
 
-func SendCodeToEmail(email string, firstName string, lastName string, logrus *logrus.Logger) (string, error) {
+func SendCodeToEmail(email string, userName string, logrus *logrus.Logger) (string, error) {
 
 	configs, err := configs.InitConfig()
 	logrus.Infof("configs %v", configs)
 	if err != nil {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
-	}
-	logrus.Info("successfull checked configs.")
-
-	from := configs.SMTPsenderEmail
-	password := configs.STMPappPassword
-	toEmail := email
-	to := []string{toEmail}
-	host := configs.SMTPHost
-	port := configs.SMTPPort
-	address := host + ":" + port
-
-	var templateData TemplateData
-	templateData.VerificationCode = generateCode()
-	templateData.UserName = firstName + " " + lastName
-	parseTemplate, err := parseTemplate("./template/email.html", templateData)
-	if err != nil {
-		logrus.Fatal(err.Error())
-	}
-	MIME := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";\n\n"
-	subject := "MediumuZ email verification\n"
-	message := []byte(subject + MIME + "\n" + parseTemplate)
-
-	auth := smtp.PlainAuth("", from, password, host)
-	err = smtp.SendMail(address, auth, from, to, []byte(message))
-	if err != nil {
-		fmt.Println("err:", err)
 		return "", err
 	}
-	return "", nil
+	logrus.Info("successfull checked configs.")
+	verificationCode := generateCode()
+	logrus.Info("DONE : generateCode")
+	parseTemplate, err := parseTemplate("template/email.html", TemplateData{UserName: userName, VerificationCode: verificationCode})
+	logrus.Info("DONE: Parsing email.html template")
+	if err != nil {
+		logrus.Fatalf("ERROR: Parsing template %s", err.Error())
+		return "", err
+	}
+	m := gomail.NewMessage()
+	m.SetHeader("From", configs.SMTPsenderEmail)
+	m.SetHeader("To", email)
+	m.SetHeader("Subject", "MediumuZ Email Verification")
+	m.SetBody("text/html", parseTemplate)
+
+	dial := gomail.NewDialer(configs.SMTPHost, configs.SMTPPort, configs.SMTPsenderEmail, configs.STMPappPassword)
+
+	dial.TLSConfig = &tls.Config{InsecureSkipVerify: true}
+
+	if err := dial.DialAndSend(m); err != nil {
+		logrus.Fatalf("FAIL: send EMAIL %s", err)
+		return "", err
+	}
+	logrus.Infof("DONE:  send email code")
+	return verificationCode, nil
 }
 
 func parseTemplate(fileName string, data interface{}) (string, error) {
@@ -71,6 +71,7 @@ func parseTemplate(fileName string, data interface{}) (string, error) {
 }
 
 func generateCode() string {
+	rand.Seed(time.Now().Unix())
 	letter := randStringRunes(lettersNumber)
 	number := randIntRunes(numbersNumber)
 	return letter + "-" + number

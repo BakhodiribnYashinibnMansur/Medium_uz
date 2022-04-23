@@ -17,5 +17,5 @@ type Repository struct {
 }
 
 func NewRepository(db *sqlx.DB, redis *redis.Client) *Repository {
-	return &Repository{}
+	return &Repository{Authorization: NewAuthPostgres(db, redis)}
 }

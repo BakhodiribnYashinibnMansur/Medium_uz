@@ -13,7 +13,6 @@ import (
 
 func main() {
 	logrus := logrus.GetLogger()
-	service.SendCodeToEmail("yodgorovumid9@gmail.com", "Umid", "Yodgorov", logrus)
 	logrus.Info("send email")
 	configs, err := configs.InitConfig()
 	logrus.Infof("configs %v", configs)

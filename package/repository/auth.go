@@ -4,15 +4,17 @@ import (
 	"mediumuz/model"
 	"mediumuz/util/logrus"
 
+	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"
 )
 
 type AuthPostgres struct {
-	db *sqlx.DB
+	db    *sqlx.DB
+	redis *redis.Client
 }
 
-func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
-	return &AuthPostgres{db: db}
+func NewAuthPostgres(db *sqlx.DB, redis *redis.Client) *AuthPostgres {
+	return &AuthPostgres{db: db, redis: redis}
 }
 
 func (r *AuthPostgres) CreateUser(user model.SingUpUserJson, logrus *logrus.Logger) (int, error) {
