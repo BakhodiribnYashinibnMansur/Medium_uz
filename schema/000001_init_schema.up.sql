@@ -8,7 +8,7 @@ CREATE TABLE  IF NOT EXISTS users (
    city VARCHAR(255) NOT NULL ,
    isverified BOOLEAN DEFAULT FALSE,
    verification_date VARCHAR(255) NULL ,
-   account_image VARCHAR(255) NULL,
+   account_image_path VARCHAR(255) NULL,
    phone VARCHAR(255) NOT NULL,
    rating DOUBLE PRECISION DEFAULT 0.0,
    post_views INTEGER DEFAULT 0,

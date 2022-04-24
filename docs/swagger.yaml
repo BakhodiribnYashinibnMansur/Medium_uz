@@ -5,7 +5,7 @@ definitions:
       message:
         type: string
     type: object
-  model.ResponseSignUp:
+  model.ResponseSign:
     properties:
       id:
         type: integer
@@ -16,6 +16,15 @@ definitions:
     properties:
       data: {}
       message:
+        type: string
+    type: object
+  model.SignInInput:
+    properties:
+      password:
+        default: 0224mb
+        type: string
+      username:
+        default: MRB
         type: string
     type: object
   model.User:
@@ -43,8 +52,10 @@ definitions:
     type: object
 host: localhost:8080
 info:
-  contact: {}
+  contact:
+    url: phapp0224mb@gmail.com
   description: API Server for MediumuZ Application
+  termsOfService: https://github.com/BakhodiribnYashinibnMansur/Medium_uz
   title: MediumuZ API
   version: "1.0"
 paths:
@@ -93,7 +104,97 @@ paths:
       summary: Resend cod for  Verification Email
       tags:
       - Auth
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: login account
+      operationId: login-account
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.SignInInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSign'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: SignIn
+      tags:
+      - Auth
   /auth/sign-up:
+    patch:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: Upload Account Image
+      operationId: upload-image
+      parameters:
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      - text/plain
+      - application/octet-stream
+      - image/png
+      - image/jpeg
+      - image/jpg
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Upload Account Image
+      tags:
+      - Auth
     post:
       consumes:
       - application/json
@@ -112,7 +213,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.ResponseSignUp'
+            $ref: '#/definitions/model.ResponseSign'
         "400":
           description: Bad Request
           schema:

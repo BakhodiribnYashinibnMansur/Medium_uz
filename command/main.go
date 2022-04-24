@@ -14,10 +14,10 @@ import (
 // @title MediumuZ API
 // @version 1.0
 // @description API Server for MediumuZ Application
-
+//@termsOfService https://github.com/BakhodiribnYashinibnMansur/Medium_uz
 // @host localhost:8080
 // @BasePath /
-
+// @contact.url phapp0224mb@gmail.com
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization

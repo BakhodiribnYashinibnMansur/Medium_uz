@@ -11,7 +11,12 @@ type User struct {
 	Phone      string `json:"phone" default:"+9989 93 753 65 71"`
 }
 
-type ResponseSignUp struct {
+type ResponseSign struct {
 	Id    int    `json:"id" `
 	Token string `json:"token"`
+}
+
+type SignInInput struct {
+	Username string `json:"username"  default:"MRB"`
+	Password string `json:"password" default:"0224mb"`
 }

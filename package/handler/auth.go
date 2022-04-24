@@ -1,9 +1,13 @@
 package handler
 
 import (
+	"fmt"
+	"io"
+	"log"
 	"mediumuz/model"
 	"mediumuz/util/error"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +19,7 @@ import (
 // @Accept  json
 // @Produce  json
 // @Param input body model.User true "account info"
-// @Success 200 {object} model.ResponseSignUp
+// @Success 200 {object} model.ResponseSign
 // @Failure 400,404 {object} error.errorResponse
 // @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
@@ -58,10 +62,37 @@ func (handler *Handler) signUp(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	ctx.JSON(http.StatusOK, model.ResponseSignUp{Id: id, Token: token})
+	ctx.JSON(http.StatusOK, model.ResponseSign{Id: id, Token: token})
 }
 
+// @Summary SignIn
+// @Tags Auth
+// @Description login account
+// @ID login-account
+// @Accept  json
+// @Produce  json
+// @Param input body model.SignInInput true "account info"
+// @Success 200 {object} model.ResponseSign
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /auth/sign-in [post]
 func (handler *Handler) signIn(ctx *gin.Context) {
+	logrus := handler.logrus
+	var input model.SignInInput
+
+	if err := ctx.BindJSON(&input); err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	token, err := handler.services.Authorization.GenerateToken(input.Username, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusInternalServerError, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSign{Token: token})
 }
 
 // @Summary  Verification Email
@@ -139,4 +170,44 @@ func (handler *Handler) resendCodeToEmail(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "DONE"})
+}
+
+// @Summary Upload Account Image
+// @Description Upload Account Image
+// @ID upload-image
+// @Tags   Auth
+// @Accept       json
+// @Produce      json
+// @Produce text/plain
+// @Produce application/octet-stream
+// @Produce image/png
+// @Produce image/jpeg
+// @Produce image/jpg
+// @Param file formData file true "file"
+// @Accept multipart/form-data
+// @Success      200   {object}      model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router       /auth/sign-up [PATCH]
+func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
+
+	file, header, err := ctx.Request.FormFile("file")
+	if err != nil {
+		ctx.String(http.StatusBadRequest, fmt.Sprintf("file err : %s", err.Error()))
+		return
+	}
+	filename := header.Filename
+	out, err := os.Create("assest/public" + filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+	_, err = io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	filepath := "http://localhost:8080/assest/public/" + filename
+	ctx.JSON(http.StatusOK, gin.H{"filepath": filepath})
 }
