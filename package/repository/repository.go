@@ -10,7 +10,8 @@ import (
 
 type Authorization interface {
 	CreateUser(user model.User, logrus *logrus.Logger) (int, error)
-	GetUser(username string, logrus *logrus.Logger) (model.User, error)
+	GetUserID(username string, logrus *logrus.Logger) (int, error)
+	CheckDataExists(username string, logrus *logrus.Logger) (int, error)
 	SaveVerificationCode(username, code string, logrus *logrus.Logger) error
 	CheckCode(username, code string, logrus *logrus.Logger) error
 	UpdateUserVerified(username string, logrus *logrus.Logger) (effectedRowsNum int64, err error)

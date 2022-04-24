@@ -17,6 +17,7 @@ import (
 // @Param input body model.User true "account info"
 // @Success 200 {object} model.ResponseSignUp
 // @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
 // @Router /auth/sign-up [post]
@@ -28,15 +29,25 @@ func (handler *Handler) signUp(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
+	logrus.Info("signUp data send for  check user Data to service")
+
+	count, err := handler.services.CheckDataExists(input.FirstName, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	if count != 0 {
+		error.NewHandlerErrorResponse(ctx, http.StatusConflict, "firstName already exist", logrus)
+		return
+	}
 	logrus.Info("signUp data send for  create user to service")
 	id, err := handler.services.Authorization.CreateUser(input, logrus)
-
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
 
-	token, err := handler.services.Authorization.GenerateToken(input.FirstName, input.Password, logrus)
+	token, err := handler.services.Authorization.GenerateToken(input.FirstName, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusInternalServerError, err.Error(), logrus)
 		return
@@ -63,6 +74,7 @@ func (handler *Handler) signIn(ctx *gin.Context) {
 // @Param code query string false "code"
 // @Success      200   {object}      model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
 // @Router       /auth/verify [GET]
@@ -71,6 +83,15 @@ func (handler *Handler) verifyEmail(ctx *gin.Context) {
 	code := ctx.Query("code")
 	username := ctx.Query("username")
 	logrus.Infof("DONE: get : %s ,%s", code, username)
+	count, err := handler.services.CheckDataExists(username, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	if count == 0 {
+		error.NewHandlerErrorResponse(ctx, http.StatusConflict, "user data not exist", logrus)
+		return
+	}
 	id, err := handler.services.VerifyCode(username, code, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
@@ -94,15 +115,25 @@ func (handler *Handler) verifyEmail(ctx *gin.Context) {
 // @Param username query string false "username"
 // @Success      200   {object}      model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
 // @Router       /auth/resend [GET]
-func (handler *Handler) resendCode(ctx *gin.Context) {
+func (handler *Handler) resendCodeToEmail(ctx *gin.Context) {
 	logrus := handler.logrus
 	email := ctx.Query("email")
 	username := ctx.Query("username")
 	logrus.Infof("DONE: get : %s ,%s", email, username)
-	err := handler.services.SendMessageEmail(email, username, logrus)
+	count, err := handler.services.CheckDataExists(username, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	if count == 0 {
+		error.NewHandlerErrorResponse(ctx, http.StatusConflict, "user data not exist", logrus)
+		return
+	}
+	err = handler.services.SendMessageEmail(email, username, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
