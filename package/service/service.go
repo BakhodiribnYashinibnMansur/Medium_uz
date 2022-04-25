@@ -12,6 +12,7 @@ type Authorization interface {
 	SendMessageEmail(email, username string, logrus *logrus.Logger) error
 	VerifyCode(username, code string, logrus *logrus.Logger) (int64, error)
 	CheckDataExists(username string, logrus *logrus.Logger) (int, error)
+	ParseToken(token string) (int, error)
 }
 
 type Service struct {

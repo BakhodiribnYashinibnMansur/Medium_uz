@@ -98,7 +98,7 @@ func (handler *Handler) signIn(ctx *gin.Context) {
 // @Summary  Verification Email
 // @Description verification email with code
 // @ID verify-email
-// @Tags   Auth
+// @Tags   Account
 // @Accept       json
 // @Produce      json
 // @Param username query string false "username"
@@ -108,7 +108,7 @@ func (handler *Handler) signIn(ctx *gin.Context) {
 // @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router       /auth/verify [GET]
+// @Router       /api/account/verify [GET]
 func (handler *Handler) verifyEmail(ctx *gin.Context) {
 	logrus := handler.logrus
 	code := ctx.Query("code")
@@ -139,7 +139,7 @@ func (handler *Handler) verifyEmail(ctx *gin.Context) {
 // @Summary Resend cod for  Verification Email
 // @Description resend code to email for  verification
 // @ID resend-code-email
-// @Tags   Auth
+// @Tags   Account
 // @Accept       json
 // @Produce      json
 // @Param email query string false "email"
@@ -149,7 +149,7 @@ func (handler *Handler) verifyEmail(ctx *gin.Context) {
 // @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router       /auth/resend [GET]
+// @Router       /api/account/resend [GET]
 func (handler *Handler) resendCodeToEmail(ctx *gin.Context) {
 	logrus := handler.logrus
 	email := ctx.Query("email")
@@ -175,10 +175,9 @@ func (handler *Handler) resendCodeToEmail(ctx *gin.Context) {
 // @Summary Upload Account Image
 // @Description Upload Account Image
 // @ID upload-image
-// @Tags   Auth
+// @Tags   Account
 // @Accept       json
 // @Produce      json
-// @Produce text/plain
 // @Produce application/octet-stream
 // @Produce image/png
 // @Produce image/jpeg
@@ -190,16 +189,18 @@ func (handler *Handler) resendCodeToEmail(ctx *gin.Context) {
 // @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router       /auth/sign-up [PATCH]
+// @Router   /api/account/upload/image [POST]
 func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
-
+	ctx.Request.ParseMultipartForm(10 << 20)
 	file, header, err := ctx.Request.FormFile("file")
+
 	if err != nil {
-		ctx.String(http.StatusBadRequest, fmt.Sprintf("file err : %s", err.Error()))
+		ctx.JSON(http.StatusBadRequest, fmt.Sprintf("file err : %s", err.Error()))
 		return
 	}
+
 	filename := header.Filename
-	out, err := os.Create("assest/public" + filename)
+	out, err := os.Create("public/" + filename)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -208,6 +209,10 @@ func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	filepath := "http://localhost:8080/assest/public/" + filename
+	filepath := "http://localhost:8080/public/" + filename
 	ctx.JSON(http.StatusOK, gin.H{"filepath": filepath})
+}
+
+func (handler *Handler) recoveryPassword(ctx *gin.Context) {
+
 }

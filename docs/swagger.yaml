@@ -59,7 +59,7 @@ info:
   title: MediumuZ API
   version: "1.0"
 paths:
-  /auth/resend:
+  /api/account/resend:
     get:
       consumes:
       - application/json
@@ -103,7 +103,99 @@ paths:
             $ref: '#/definitions/error.errorResponse'
       summary: Resend cod for  Verification Email
       tags:
-      - Auth
+      - Account
+  /api/account/upload/image:
+    post:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: Upload Account Image
+      operationId: upload-image
+      parameters:
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      - application/octet-stream
+      - image/png
+      - image/jpeg
+      - image/jpg
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Upload Account Image
+      tags:
+      - Account
+  /api/account/verify:
+    get:
+      consumes:
+      - application/json
+      description: verification email with code
+      operationId: verify-email
+      parameters:
+      - description: username
+        in: query
+        name: username
+        type: string
+      - description: code
+        in: query
+        name: code
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Verification Email
+      tags:
+      - Account
   /auth/sign-in:
     post:
       consumes:
@@ -148,53 +240,6 @@ paths:
       tags:
       - Auth
   /auth/sign-up:
-    patch:
-      consumes:
-      - application/json
-      - multipart/form-data
-      description: Upload Account Image
-      operationId: upload-image
-      parameters:
-      - description: file
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      - text/plain
-      - application/octet-stream
-      - image/png
-      - image/jpeg
-      - image/jpg
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.ResponseSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-      summary: Upload Account Image
-      tags:
-      - Auth
     post:
       consumes:
       - application/json
@@ -235,51 +280,6 @@ paths:
           schema:
             $ref: '#/definitions/error.errorResponse'
       summary: SignUp
-      tags:
-      - Auth
-  /auth/verify:
-    get:
-      consumes:
-      - application/json
-      description: verification email with code
-      operationId: verify-email
-      parameters:
-      - description: username
-        in: query
-        name: username
-        type: string
-      - description: code
-        in: query
-        name: code
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.ResponseSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-      summary: Verification Email
       tags:
       - Auth
 securityDefinitions:

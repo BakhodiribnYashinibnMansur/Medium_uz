@@ -26,18 +26,18 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-up", handler.signUp)
-		auth.PATCH("/sign-up", handler.signUp)
 		auth.POST("/sign-in", handler.signIn)
-		auth.GET("/verify", handler.verifyEmail)
-		auth.GET("/resend", handler.resendCodeToEmail)
-	}
 
-	// api := router.Group("/api")
-	// {
-	// 	lists := api.Group("/lists")
-	// 	{
-	// 		lists.POST("/")
-	// 	}
-	// }
+	}
+	api := router.Group("/api", handler.userIdentity)
+	{
+		account := api.Group("/account")
+		{
+			account.POST("/upload/image", handler.uploadAccountImage)
+			account.GET("/verify", handler.verifyEmail)
+			account.GET("/resend", handler.resendCodeToEmail)
+			account.GET("/recovery/password", handler.recoveryPassword)
+		}
+	}
 	return router
 }
