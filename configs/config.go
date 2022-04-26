@@ -29,7 +29,7 @@ type Configs struct {
 	STMPappPassword string
 }
 
-func InitConfig() (cnfg *Configs, err error) {
+func InitConfig() (cfg *Configs, err error) {
 	viper.AddConfigPath("./configs")
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
@@ -37,14 +37,14 @@ func InitConfig() (cnfg *Configs, err error) {
 	err = viper.ReadInConfig()
 
 	if err != nil {
-		return cnfg, fmt.Errorf("fatal error config file: %w ", err)
+		return cfg, fmt.Errorf("fatal error config file: %w ", err)
 	}
 
 	if err := godotenv.Load(); err != nil {
-		return cnfg, fmt.Errorf("error loading env variables: %s", err.Error())
+		return cfg, fmt.Errorf("error loading env variables: %s", err.Error())
 	}
 
-	cnfg = &Configs{
+	cfg = &Configs{
 		AppName:         viper.GetString("app.name"),
 		ServiceHost:     viper.GetString("app.server"),
 		HTTPPort:        viper.GetString("app.port"),

@@ -1,9 +1,13 @@
 package service
 
 import (
+	"fmt"
+	"io"
 	"mediumuz/model"
 	"mediumuz/package/repository"
 	"mediumuz/util/logrus"
+	"mime/multipart"
+	"os"
 )
 
 type UserService struct {
@@ -35,4 +39,38 @@ func (service *UserService) VerifyCode(id, username, code string, logrus *logrus
 		return 0, err
 	}
 	return effectedRowsNum, nil
+}
+
+func (service *UserService) UploadAccountImage(file multipart.File, header *multipart.FileHeader, user model.UserFull, logrus *logrus.Logger) (string, error) {
+
+	filename := header.Filename
+	folderPath := fmt.Sprintf("public/%s/", user.FirstName)
+	err := os.MkdirAll(folderPath, 0777)
+	if err != nil {
+		logrus.Errorf("ERROR: Failed to create folder %s: %v", folderPath, err)
+		return "", err
+	}
+	err = os.Chmod(folderPath, 0777)
+	if err != nil {
+		logrus.Errorf("ERROR: Failed Access Permission denied %s", err)
+		return "", err
+	}
+	filePath := folderPath + filename
+	out, err := os.Create(filePath)
+	if err != nil {
+		logrus.Errorf("ERROR: Failed CreateFile: %v", err)
+		return "", err
+	}
+
+	defer out.Close()
+	_, err = io.Copy(out, file)
+	if err != nil {
+		logrus.Errorf("ERROR: Failed copy %s", err)
+		return "", err
+	}
+	return filePath, nil
+}
+
+func (service *UserService) UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error) {
+	return service.repo.UpdateAccountImage(id, filePath, logrus)
 }

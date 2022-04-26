@@ -36,17 +36,21 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	{
 		auth.POST("/sign-up", handler.signUp)
 		auth.POST("/sign-in", handler.signIn)
-
+		//recoveryPassword
+		// auth.GET("/recovery")
+		// auth.GET("/verify-code")
+		// auth.GET("/recovery-password")
 	}
 	api := router.Group("/api", handler.userIdentity)
 	{
 		account := api.Group("/account")
 		{
-			account.POST("/upload-image", handler.uploadAccountImage)
-			account.GET("/verify", handler.verifyEmail)
 			account.GET("/resend", handler.resendCodeToEmail)
-			account.GET("/recovery-password", handler.recoveryPassword)
+			account.GET("/verify", handler.verifyEmail)
 			account.POST("/update", handler.updateAccount)
+			account.GET("/get", handler.getUser)
+			account.GET("/search", handler.getUser)
+			account.POST("/upload-image", handler.uploadAccountImage)
 		}
 	}
 	return router

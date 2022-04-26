@@ -50,6 +50,24 @@ func (repo *UserDB) UpdateUserVerified(id string, logrus *logrus.Logger) (effect
 	return effectedRowsNum, nil
 }
 
+func (repo *UserDB) UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error) {
+	tm := time.Now()
+	query := fmt.Sprintf("	UPDATE %s SET account_image_path=$1,updated_at=$2	WHERE id = $3  RETURNING id ", usersTable)
+	rows, err := repo.db.Exec(query, filePath, tm, id)
+
+	if err != nil {
+		logrus.Errorf("ERROR: Update verificationCode : %v", err)
+		return 0, err
+	}
+	effectedRowsNum, err := rows.RowsAffected()
+	if err != nil {
+		logrus.Errorf("ERROR: Update verificationCode effectedRowsNum : %v", err)
+		return 0, err
+	}
+	logrus.Info("DONE:Update verify email")
+	return effectedRowsNum, nil
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // REDIS
@@ -59,7 +77,7 @@ func (repo *UserDB) UpdateUserVerified(id string, logrus *logrus.Logger) (effect
 func (repo *UserDB) CheckCode(username, code string, logrus *logrus.Logger) error {
 	saveCode, err := repo.redis.Get(username).Result()
 	if err != nil {
-		logrus.Errorf("ERROR:dont save code %s", err)
+		logrus.Errorf("ERROR:don't save code %s", err)
 		return err
 	}
 	if saveCode != code {

@@ -2,12 +2,9 @@ package handler
 
 import (
 	"fmt"
-	"io"
-	"log"
 	"mediumuz/model"
 	"mediumuz/util/error"
 	"net/http"
-	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -103,11 +100,11 @@ func (handler *Handler) resendCodeToEmail(ctx *gin.Context) {
 //@Security ApiKeyAuth
 func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
 	logrus := handler.logrus
-	_, err := getUserId(ctx, logrus)
+	id, err := getUserId(ctx, logrus)
 	if err != nil {
 		return
 	}
-
+	userId := strconv.Itoa(id)
 	ctx.Request.ParseMultipartForm(10 << 20)
 	file, header, err := ctx.Request.FormFile("file")
 
@@ -115,25 +112,33 @@ func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, fmt.Sprintf("file err : %s", err.Error()))
 		return
 	}
-
-	filename := header.Filename
-	out, err := os.Create("public/" + filename)
+	user, err := handler.services.GetUserData(userId, logrus)
+	filePath, err := handler.services.UploadAccountImage(file, header, user, logrus)
 	if err != nil {
-		log.Fatal(err)
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
-	defer out.Close()
-	_, err = io.Copy(out, file)
+	effectedRowsNum, err := handler.services.UpdateAccountImage(id, filePath, logrus)
 	if err != nil {
-		log.Fatal(err)
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
 	}
-	filepath := "http://localhost:8080/public/" + filename
-	ctx.JSON(http.StatusOK, gin.H{"filepath": filepath})
-}
 
-func (handler *Handler) recoveryPassword(ctx *gin.Context) {
-
+	if effectedRowsNum == 0 {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "User not found", logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: filePath})
 }
 
 func (handler *Handler) updateAccount(ctx *gin.Context) {
+
+}
+
+func (handler *Handler) getUser(ctx *gin.Context) {
+
+}
+
+func (handler *Handler) searchUser(ctx *gin.Context) {
 
 }

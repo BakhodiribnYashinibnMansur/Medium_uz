@@ -92,3 +92,23 @@ func (handler *Handler) signIn(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, model.ResponseSign{Token: token})
 }
+
+// // @Summary Resend code for  Recovery Password
+// // @Description Resend code for  Recovery Password
+// // @ID recovery-password
+// // @Tags   Account
+// // @Accept       json
+// // @Produce      json
+// // @Param code query string false "code"
+// // @Param password query string false "password"
+// // @Success      200   {object}      model.ResponseSuccess
+// // @Failure 400,404 {object} error.errorResponse
+// // @Failure 409 {object} error.errorResponse
+// // @Failure 500 {object} error.errorResponse
+// // @Failure default {object} error.errorResponse
+// // @Router       /api/account/resend [GET]
+
+// func (handler *Handler) recoveryPassword(ctx *gin.Context) {
+// 	logrus := handler.logrus
+
+// }
