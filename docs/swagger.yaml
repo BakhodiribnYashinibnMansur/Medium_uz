@@ -53,7 +53,8 @@ definitions:
 host: localhost:8080
 info:
   contact:
-    url: phapp0224mb@gmail.com
+    email: phapp0224mb@gmail.com
+    name: Bakhodir Yashin Mansur
   description: API Server for MediumuZ Application
   termsOfService: https://github.com/BakhodiribnYashinibnMansur/Medium_uz
   title: MediumuZ API
@@ -65,15 +66,6 @@ paths:
       - application/json
       description: resend code to email for  verification
       operationId: resend-code-email
-      parameters:
-      - description: email
-        in: query
-        name: email
-        type: string
-      - description: username
-        in: query
-        name: username
-        type: string
       produces:
       - application/json
       responses:
@@ -101,10 +93,12 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Resend cod for  Verification Email
       tags:
       - Account
-  /api/account/upload/image:
+  /api/account/upload-image:
     post:
       consumes:
       - application/json
@@ -148,6 +142,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Upload Account Image
       tags:
       - Account
@@ -158,10 +154,6 @@ paths:
       description: verification email with code
       operationId: verify-email
       parameters:
-      - description: username
-        in: query
-        name: username
-        type: string
       - description: code
         in: query
         name: code
@@ -193,6 +185,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Verification Email
       tags:
       - Account
@@ -236,6 +230,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: SignIn
       tags:
       - Auth
@@ -279,6 +275,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: SignUp
       tags:
       - Auth

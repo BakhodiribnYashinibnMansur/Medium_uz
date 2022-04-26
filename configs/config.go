@@ -9,7 +9,10 @@ import (
 )
 
 type Configs struct {
-	ServerPort      string
+	AppName         string
+	ServiceHost     string
+	HTTPPort        string
+	Version         string
 	DBHost          string
 	DBPort          string
 	DBUsername      string
@@ -26,7 +29,7 @@ type Configs struct {
 	STMPappPassword string
 }
 
-func InitConfig() (dbcnfg *Configs, err error) {
+func InitConfig() (cnfg *Configs, err error) {
 	viper.AddConfigPath("./configs")
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
@@ -34,15 +37,18 @@ func InitConfig() (dbcnfg *Configs, err error) {
 	err = viper.ReadInConfig()
 
 	if err != nil {
-		return dbcnfg, fmt.Errorf("fatal error config file: %w ", err)
+		return cnfg, fmt.Errorf("fatal error config file: %w ", err)
 	}
 
 	if err := godotenv.Load(); err != nil {
-		return dbcnfg, fmt.Errorf("error loading env variables: %s", err.Error())
+		return cnfg, fmt.Errorf("error loading env variables: %s", err.Error())
 	}
 
-	dbcnfg = &Configs{
-		ServerPort:      viper.GetString("port"),
+	cnfg = &Configs{
+		AppName:         viper.GetString("app.name"),
+		ServiceHost:     viper.GetString("app.server"),
+		HTTPPort:        viper.GetString("app.port"),
+		Version:         viper.GetString("app.version"),
 		DBHost:          viper.GetString("db.host"),
 		DBPort:          viper.GetString("db.port"),
 		DBUsername:      viper.GetString("db.username"),

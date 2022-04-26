@@ -1,4 +1,8 @@
-port: '8080'
+app:
+  name: MediumuZ
+  host: localhost
+  port: '8080'
+  version: '1.0'
 
 db:
   dbname: mediumuz

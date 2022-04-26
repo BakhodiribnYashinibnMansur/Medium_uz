@@ -12,7 +12,8 @@ const docTemplate_swagger = `{
         "title": "{{.Title}}",
         "termsOfService": "https://github.com/BakhodiribnYashinibnMansur/Medium_uz",
         "contact": {
-            "url": "phapp0224mb@gmail.com"
+            "name": "Bakhodir Yashin Mansur",
+            "email": "phapp0224mb@gmail.com"
         },
         "version": "{{.Version}}"
     },
@@ -21,6 +22,11 @@ const docTemplate_swagger = `{
     "paths": {
         "/api/account/resend": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "resend code to email for  verification",
                 "consumes": [
                     "application/json"
@@ -33,20 +39,6 @@ const docTemplate_swagger = `{
                 ],
                 "summary": "Resend cod for  Verification Email",
                 "operationId": "resend-code-email",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "email",
-                        "name": "email",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "username",
-                        "name": "username",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -87,8 +79,13 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "/api/account/upload/image": {
+        "/api/account/upload-image": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Upload Account Image",
                 "consumes": [
                     "application/json",
@@ -157,6 +154,11 @@ const docTemplate_swagger = `{
         },
         "/api/account/verify": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "verification email with code",
                 "consumes": [
                     "application/json"
@@ -170,12 +172,6 @@ const docTemplate_swagger = `{
                 "summary": "Verification Email",
                 "operationId": "verify-email",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "username",
-                        "name": "username",
-                        "in": "query"
-                    },
                     {
                         "type": "string",
                         "description": "code",
@@ -225,6 +221,11 @@ const docTemplate_swagger = `{
         },
         "/auth/sign-in": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "login account",
                 "consumes": [
                     "application/json"
@@ -290,6 +291,11 @@ const docTemplate_swagger = `{
         },
         "/auth/sign-up": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "create account",
                 "consumes": [
                     "application/json"

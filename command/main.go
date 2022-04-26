@@ -17,11 +17,12 @@ import (
 //@termsOfService https://github.com/BakhodiribnYashinibnMansur/Medium_uz
 // @host localhost:8080
 // @BasePath /
-// @contact.url phapp0224mb@gmail.com
+
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
-
+// @contact.name   Bakhodir Yashin Mansur
+// @contact.email  phapp0224mb@gmail.com
 func main() {
 
 	logrus := logrus.GetLogger()
@@ -53,14 +54,14 @@ func main() {
 
 	repos := repository.NewRepository(db, redis)
 	services := service.NewService(repos)
-	handlers := handler.NewHandler(services, logrus)
+	handlers := handler.NewHandler(services, logrus, configs)
 
 	server := new(server.Server)
-	err = server.Run(configs.ServerPort, handlers.InitRoutes())
+	err = server.Run(configs.HTTPPort, handlers.InitRoutes())
 
 	if err != nil {
 		logrus.Fatalf("error occurred while running http server: %s", err.Error())
 	}
 
-	defer logrus.Infof("run server port:%v", configs.ServerPort)
+	defer logrus.Infof("run server port:%v", configs.HTTPPort)
 }

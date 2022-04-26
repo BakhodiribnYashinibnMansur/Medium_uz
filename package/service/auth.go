@@ -28,7 +28,8 @@ func (service *AuthService) CreateUser(user model.User, logrus *logrus.Logger) (
 }
 
 func (service *AuthService) CheckDataExists(username string, logrus *logrus.Logger) (int, error) {
-	count, err := service.repo.CheckDataExists(username, logrus)
+
+	count, err := service.repo.CheckDataExistsUsername(username, logrus)
 	if err != nil {
 		logrus.Errorf("ERROR: CheckDataExists  failed: %v", err)
 		return 0, err
@@ -37,7 +38,7 @@ func (service *AuthService) CheckDataExists(username string, logrus *logrus.Logg
 }
 
 func (service *AuthService) GenerateToken(username string, logrus *logrus.Logger) (string, error) {
-	count, err := service.repo.CheckDataExists(username, logrus)
+	count, err := service.repo.CheckDataExistsUsername(username, logrus)
 	if err != nil {
 		logrus.Errorf("ERROR: CheckDataExists  failed: %v", err)
 		return "", err
@@ -80,6 +81,7 @@ func (s *AuthService) ParseToken(accessToken string) (int, error) {
 }
 
 func (service *AuthService) SendMessageEmail(email, username string, logrus *logrus.Logger) error {
+	logrus.Infof(email)
 	code, err := SendCodeToEmail(email, username, logrus)
 	if err != nil {
 		logrus.Errorf("ERROR: send email error %v", err)
@@ -91,18 +93,4 @@ func (service *AuthService) SendMessageEmail(email, username string, logrus *log
 		return err
 	}
 	return nil
-}
-
-func (service *AuthService) VerifyCode(username, code string, logrus *logrus.Logger) (int64, error) {
-	err := service.repo.CheckCode(username, code, logrus)
-	if err != nil {
-		logrus.Errorf("ERROR: check error code : %v", err)
-		return 0, err
-	}
-	effectedRowsNum, err := service.repo.UpdateUserVerified(username, logrus)
-	if err != nil {
-		logrus.Errorf("ERROR: check error code update : %v", err)
-		return 0, err
-	}
-	return effectedRowsNum, nil
 }

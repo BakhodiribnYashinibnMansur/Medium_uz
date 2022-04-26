@@ -18,6 +18,7 @@ const (
 func (handler *Handler) userIdentity(ctx *gin.Context) {
 	logrus := handler.logrus
 	header := ctx.GetHeader(authorizationHeader)
+	logrus.Info(header)
 	if header == "" {
 		errs.NewHandlerErrorResponse(ctx, http.StatusUnauthorized, "empty auth header", logrus)
 		return
