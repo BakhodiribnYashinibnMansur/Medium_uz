@@ -221,11 +221,6 @@ const docTemplate_swagger = `{
         },
         "/auth/sign-in": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "login account",
                 "consumes": [
                     "application/json"
@@ -291,11 +286,6 @@ const docTemplate_swagger = `{
         },
         "/auth/sign-up": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "create account",
                 "consumes": [
                     "application/json"

@@ -214,11 +214,6 @@
         },
         "/auth/sign-in": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "login account",
                 "consumes": [
                     "application/json"
@@ -284,11 +279,6 @@
         },
         "/auth/sign-up": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "create account",
                 "consumes": [
                     "application/json"

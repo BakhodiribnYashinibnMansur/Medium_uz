@@ -21,7 +21,6 @@ import (
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
 // @Router /auth/sign-up [post]
-//@Security ApiKeyAuth
 func (handler *Handler) signUp(ctx *gin.Context) {
 	logrus := handler.logrus
 	var input model.User
@@ -75,7 +74,6 @@ func (handler *Handler) signUp(ctx *gin.Context) {
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
 // @Router /auth/sign-in [post]
-//@Security ApiKeyAuth
 func (handler *Handler) signIn(ctx *gin.Context) {
 	logrus := handler.logrus
 	var input model.SignInInput

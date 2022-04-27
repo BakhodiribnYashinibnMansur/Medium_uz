@@ -49,7 +49,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 			account.GET("/verify", handler.verifyEmail)
 			account.POST("/update", handler.updateAccount)
 			account.GET("/get", handler.getUser)
-			account.GET("/search", handler.getUser)
+			account.GET("/search", handler.searchUser)
 			account.POST("/upload-image", handler.uploadAccountImage)
 		}
 	}

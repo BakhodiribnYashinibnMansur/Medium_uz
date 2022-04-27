@@ -1,19 +1,84 @@
 
 CREATE TABLE IF NOT EXISTS users (
-   id            SERIAL PRIMARY KEY     NOT NULL ,
-   email VARCHAR (255) NOT NULL ,
+   id  SERIAL PRIMARY KEY     NOT NULL ,
+   email VARCHAR (255) NOT NULL UNIQUE ,
+   nickname VARCHAR (255) NOT NULL UNIQUE ,
    password_hash VARCHAR (255) NOT NULL ,
-   firstname VARCHAR (255) NOT NULL UNIQUE,
+   firstname VARCHAR (253) NOT NULL ,
    secondname VARCHAR (255) NOT NULL ,
+   interistisng VARCHAR(255) [] NULL,
+   bio VARCHAR(255) NULL,
    city VARCHAR (255) NOT NULL ,
    is_verified BOOLEAN DEFAULT FALSE,
    verification_date TIMESTAMP NULL,
    account_image_path VARCHAR (255) NULL,
    phone VARCHAR (255) NOT NULL,
    rating DOUBLE PRECISION DEFAULT 0.0,
-   post_views INTEGER DEFAULT 0,
+   post_views_count INTEGER DEFAULT 0,
+   like_count INTEGER DEFAULT 0,
    is_super_user BOOLEAN DEFAULT FALSE,
-   created_at TIMESTAMP DEFAULT (NOW ()),
+   created_at TIMESTAMP DEFAULT (NOW()),
    updated_at TIMESTAMP NULL,
    deleted_at TIMESTAMP NULL
+);
+
+CREATE TABLE IF NOT EXISTS post (
+id SERIAL NOT NULL PRIMARY KEY ,
+post_author_id INTEGER NOT NULL,
+post_author_name VARCHAR(255) NOT NULL,
+post_title VARCHAR(255) NOT NULL,
+post_text VARCHAR(2048)[] NOT NULL,
+post_views_count INTEGER NOT NULL DEFAULT 0,
+post_like_count INTEGER NOT NULL DEFAULT 0,
+post_rated DOUBLE NOT NULL DEFAULT 0.0,
+post_tags VARCHAR(255)[] NOT NULL,
+post_date TIMESTAMP NOT NULL DEFAULT (NOW()),
+is_new BOOLEAN  NULL DEFAULT FALSE,
+is_top_read BOOLEAN  NULL DEFAULT FALSE,
+created_at TIMESTAMP  DEFAULT (NOW()),
+updated_at TIMESTAMP NULL,
+deleted_at TIMESTAMP NULL
+);
+
+CREATE TABLE IF NOT EXISTS liked_post (
+id  SERIAL NOT NULL PRIMARY KEY,
+reader_id INTEGER PRIMARY KEY NOT NULL,
+post_id INTEGER NOT NULL,
+like_data TIMESTAMP DEFAULT (NOW()),
+created_at TIMESTAMP  DEFAULT (NOW()),
+updated_at TIMESTAMP NULL,
+deleted_at TIMESTAMP NULL
+);
+
+CREATE TABLE IF NOT EXISTS followers (
+id  SERIAL NOT NULL PRIMARY KEY,
+reader_id INTEGER PRIMARY KEY NOT NULL,
+poster_id INTEGER PRIMARY KEY NOT NULL,
+following_data  TIMESTAMP DEFAULT (NOW()),
+created_at TIMESTAMP  DEFAULT (NOW()),
+updated_at TIMESTAMP NULL,
+deleted_at TIMESTAMP NULL
+);
+
+CREATE TABLE IF NOT EXISTS viewed_posts (
+id  SERIAL NOT NULL PRIMARY KEY,
+reader_id INTEGER PRIMARY KEY NOT NULL,
+poster_id INTEGER PRIMARY KEY NOT NULL,
+view_date TIMESTAMP DEFAULT (NOW()),
+created_at TIMESTAMP  DEFAULT (NOW()),
+updated_at TIMESTAMP NULL,
+deleted_at TIMESTAMP NULL
+);
+
+
+
+CREATE TABLE IF NOT EXISTS review_post (
+id  SERIAL NOT NULL PRIMARY KEY,
+reader_id INTEGER PRIMARY KEY NOT NULL,
+post_id INTEGER NOT NULL,
+review_data TIMESTAMP DEFAULT (NOW()),
+commits VARCHAR(255) NOT NULL,
+created_at TIMESTAMP  DEFAULT (NOW()),
+updated_at TIMESTAMP NULL,
+deleted_at TIMESTAMP NULL
 );

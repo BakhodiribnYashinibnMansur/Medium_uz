@@ -230,8 +230,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/error.errorResponse'
-      security:
-      - ApiKeyAuth: []
       summary: SignIn
       tags:
       - Auth
@@ -275,8 +273,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/error.errorResponse'
-      security:
-      - ApiKeyAuth: []
       summary: SignUp
       tags:
       - Auth
