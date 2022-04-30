@@ -15,7 +15,7 @@ start-redis:
 	sudo docker run --redisdb redis-test-instance -p 6379:6379 -d redis
 
 swag:
-	swag init -g command/main.go
+	swag init -g  command/main.go
 
 migrate-up:
 	migrate -path ./schema -database 'postgresql://postgres:0224@localhost:2001/mediumuz?sslmode=disable' up

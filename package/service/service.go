@@ -9,9 +9,9 @@ import (
 
 type Authorization interface {
 	CreateUser(user model.User, logrus *logrus.Logger) (int, error)
-	GenerateToken(username string, logrus *logrus.Logger) (string, error)
+	GenerateToken(email string, logrus *logrus.Logger) (string, error)
 	SendMessageEmail(email, username string, logrus *logrus.Logger) error
-	CheckDataExists(username string, logrus *logrus.Logger) (int, error)
+	CheckDataExistsEmailNickName(email, nickname string, logrus *logrus.Logger) (model.UserCheck, error)
 	ParseToken(token string) (int, error)
 }
 

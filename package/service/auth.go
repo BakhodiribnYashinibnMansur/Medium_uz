@@ -27,27 +27,32 @@ func (service *AuthService) CreateUser(user model.User, logrus *logrus.Logger) (
 	return id, err
 }
 
-func (service *AuthService) CheckDataExists(username string, logrus *logrus.Logger) (int, error) {
-
-	count, err := service.repo.CheckDataExistsUsername(username, logrus)
+func (service *AuthService) CheckDataExistsEmailNickName(email, nickname string, logrus *logrus.Logger) (model.UserCheck, error) {
+	var checkUser model.UserCheck
+	countEmail, countNickName, err := service.repo.CheckDataExistsEmailNickName(email, nickname, logrus)
 	if err != nil {
 		logrus.Errorf("ERROR: CheckDataExists  failed: %v", err)
-		return 0, err
+		return checkUser, err
 	}
-	return count, nil
+	checkUser.Bio = true
+	checkUser.City = true
+	checkUser.FirstName = true
+	checkUser.Interesting = true
+	checkUser.Password = true
+	checkUser.Phone = true
+	checkUser.SecondName = true
+
+	if countEmail == 0 {
+		checkUser.Email = true
+	}
+	if countNickName == 0 {
+		checkUser.NickName = true
+	}
+	return checkUser, nil
 }
 
-func (service *AuthService) GenerateToken(username string, logrus *logrus.Logger) (string, error) {
-	count, err := service.repo.CheckDataExistsUsername(username, logrus)
-	if err != nil {
-		logrus.Errorf("ERROR: CheckDataExists  failed: %v", err)
-		return "", err
-	}
-	if count == 0 {
-		logrus.Errorf("ERROR:  user data not exist : %v", err)
-		return "", errors.New("User data not exist")
-	}
-	id, err := service.repo.GetUserID(username, logrus)
+func (service *AuthService) GenerateToken(email string, logrus *logrus.Logger) (string, error) {
+	id, err := service.repo.GetUserID(email, logrus)
 	if err != nil {
 		logrus.Errorf("ERROR: Get user ID failed: %v", err)
 		return "", err
@@ -87,7 +92,7 @@ func (service *AuthService) SendMessageEmail(email, username string, logrus *log
 		logrus.Errorf("ERROR: send email error %v", err)
 		return err
 	}
-	err = service.repo.SaveVerificationCode(username, code, logrus)
+	err = service.repo.SaveVerificationCode(email, code, logrus)
 	if err != nil {
 		logrus.Errorf("ERROR: save verification code error %v", err)
 		return err

@@ -17,7 +17,7 @@ import (
 // @Param input body model.User true "account info"
 // @Success 200 {object} model.ResponseSign
 // @Failure 400,404 {object} error.errorResponse
-// @Failure 409 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
 // @Router /auth/sign-up [post]
@@ -31,13 +31,13 @@ func (handler *Handler) signUp(ctx *gin.Context) {
 	}
 	logrus.Info("signUp data send for  check user Data to service")
 
-	count, err := handler.services.CheckDataExists(input.FirstName, logrus)
+	checkedUser, err := handler.services.CheckDataExistsEmailNickName(input.Email, input.NickName, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	if count != 0 {
-		error.NewHandlerErrorResponse(ctx, http.StatusConflict, "firstName already exist", logrus)
+	if !checkedUser.NickName || !checkedUser.Email {
+		error.NewHandlerErrorResponseData(ctx, http.StatusConflict, "email or nickname already exist", checkedUser, logrus)
 		return
 	}
 	logrus.Info("signUp data send for  create user to service")
@@ -47,18 +47,18 @@ func (handler *Handler) signUp(ctx *gin.Context) {
 		return
 	}
 
-	token, err := handler.services.Authorization.GenerateToken(input.FirstName, logrus)
-	if err != nil {
-		error.NewHandlerErrorResponse(ctx, http.StatusInternalServerError, err.Error(), logrus)
-		return
-	}
-	err = handler.services.SendMessageEmail(input.Email, input.FirstName, logrus)
+	// token, err := handler.services.Authorization.GenerateToken(input.Email, logrus)
+	// if err != nil {
+	// 	error.NewHandlerErrorResponse(ctx, http.StatusInternalServerError, err.Error(), logrus)
+	// 	return
+	// }
+	// err = handler.services.SendMessageEmail(input.Email, input.FirstName, logrus)
 
-	if err != nil {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-		return
-	}
-	ctx.JSON(http.StatusOK, model.ResponseSign{Id: id, Token: token})
+	// if err != nil {
+	// 	error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+	// 	return
+	// }
+	// ctx.JSON(http.StatusOK, model.ResponseSign{Id: id, Token: token})
 }
 
 // @Summary SignIn
@@ -105,8 +105,7 @@ func (handler *Handler) signIn(ctx *gin.Context) {
 // // @Failure 500 {object} error.errorResponse
 // // @Failure default {object} error.errorResponse
 // // @Router       /api/account/resend [GET]
-
 // func (handler *Handler) recoveryPassword(ctx *gin.Context) {
-// 	logrus := handler.logrus
+// 	// logrus := handler.logrus
 
 // }

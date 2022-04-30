@@ -324,7 +324,7 @@
                     "409": {
                         "description": "Conflict",
                         "schema": {
-                            "$ref": "#/definitions/error.errorResponse"
+                            "$ref": "#/definitions/error.errorResponseData"
                         }
                     },
                     "500": {
@@ -347,6 +347,15 @@
         "error.errorResponse": {
             "type": "object",
             "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "error.errorResponseData": {
+            "type": "object",
+            "properties": {
+                "data": {},
                 "message": {
                     "type": "string"
                 }
@@ -388,6 +397,10 @@
         "model.User": {
             "type": "object",
             "properties": {
+                "bio": {
+                    "type": "string",
+                    "default": "I am Golang dev"
+                },
                 "city": {
                     "type": "string",
                     "default": "Navoi"
@@ -402,6 +415,16 @@
                 },
                 "image": {
                     "type": "string"
+                },
+                "interesting": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "nickname": {
+                    "type": "string",
+                    "default": "mrb"
                 },
                 "password": {
                     "type": "string",

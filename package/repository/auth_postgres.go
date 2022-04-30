@@ -9,6 +9,7 @@ import (
 
 	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"
+	"github.com/lib/pq"
 )
 
 type AuthDB struct {
@@ -22,10 +23,9 @@ func NewAuthDB(db *sqlx.DB, redis *redis.Client) *AuthDB {
 
 func (repo *AuthDB) CreateUser(user model.User, logrus *logrus.Logger) (int, error) {
 	var id int
+	query := fmt.Sprintf("INSERT INTO %s (email, password_hash,firstname,secondname,nickname,city,phone,interesting,bio) values ($1, $2, $3,$4,$5,$6,$7,$8,$9) RETURNING id", usersTable)
 
-	query := fmt.Sprintf("INSERT INTO %s (email, password_hash,firstname,secondname,city,phone) values ($1, $2, $3,$4,$5,$6) RETURNING id", usersTable)
-
-	row := repo.db.QueryRow(query, user.Email, user.Password, user.FirstName, user.SecondName, user.City, user.Phone)
+	row := repo.db.QueryRow(query, user.Email, user.Password, user.FirstName, user.SecondName, user.NickName, user.City, user.Phone, pq.Array(user.Interesting), user.Bio)
 
 	if err := row.Scan(&id); err != nil {
 		logrus.Infof("ERROR:PSQL Insert error %s", err.Error())
@@ -35,23 +35,32 @@ func (repo *AuthDB) CreateUser(user model.User, logrus *logrus.Logger) (int, err
 	return id, nil
 }
 
-func (repo *AuthDB) CheckDataExistsUsername(username string, logrus *logrus.Logger) (int, error) {
-	var count int
+func (repo *AuthDB) CheckDataExistsEmailNickName(email, nickname string, logrus *logrus.Logger) (int, int, error) {
+	var countEmail int
+	var countNickName int
 
-	query := fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE firstname=$1", usersTable)
-	err := repo.db.Get(&count, query, username)
+	queryEmail := fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE email=$1", usersTable)
+	err := repo.db.Get(&countEmail, queryEmail, email)
 
 	if err != nil {
-		logrus.Infof("ERROR:firstname query error: %s", err.Error())
-		return 0, err
+		logrus.Infof("ERROR:Email query error: %s", err.Error())
+		return -1, -1, err
 	}
-	return count, nil
+
+	queryNickName := fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE nickname=$1", usersTable)
+	err = repo.db.Get(&countNickName, queryNickName, nickname)
+
+	if err != nil {
+		logrus.Infof("ERROR:Email query error: %s", err.Error())
+		return -1, -1, err
+	}
+	return countEmail, countNickName, nil
 }
 
-func (repo *AuthDB) GetUserID(username string, logrus *logrus.Logger) (int, error) {
+func (repo *AuthDB) GetUserID(email string, logrus *logrus.Logger) (int, error) {
 	var id int
-	query := fmt.Sprintf("SELECT id FROM %s WHERE firstname=$1 ", usersTable)
-	err := repo.db.Get(&id, query, username)
+	query := fmt.Sprintf("SELECT id FROM %s WHERE email=$1 ", usersTable)
+	err := repo.db.Get(&id, query, email)
 	if err != nil {
 		logrus.Errorf("ERROR: don't get users %s", err)
 		return 0, errors.New("ERROR: user not found")
@@ -66,8 +75,8 @@ func (repo *AuthDB) GetUserID(username string, logrus *logrus.Logger) (int, erro
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-func (repo *AuthDB) SaveVerificationCode(username, code string, logrus *logrus.Logger) error {
-	err := repo.redis.Set(username, code, 180*time.Second).Err()
+func (repo *AuthDB) SaveVerificationCode(email, code string, logrus *logrus.Logger) error {
+	err := repo.redis.Set(email, code, 180*time.Second).Err()
 	if err != nil {
 		logrus.Errorf("ERROR:don't save code %s", err)
 		return err

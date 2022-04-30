@@ -5,6 +5,12 @@ definitions:
       message:
         type: string
     type: object
+  error.errorResponseData:
+    properties:
+      data: {}
+      message:
+        type: string
+    type: object
   model.ResponseSign:
     properties:
       id:
@@ -29,6 +35,9 @@ definitions:
     type: object
   model.User:
     properties:
+      bio:
+        default: I am Golang dev
+        type: string
       city:
         default: Navoi
         type: string
@@ -39,6 +48,13 @@ definitions:
         default: MRB
         type: string
       image:
+        type: string
+      interesting:
+        items:
+          type: string
+        type: array
+      nickname:
+        default: mrb
         type: string
       password:
         default: 0224mb
@@ -264,7 +280,7 @@ paths:
         "409":
           description: Conflict
           schema:
-            $ref: '#/definitions/error.errorResponse'
+            $ref: '#/definitions/error.errorResponseData'
         "500":
           description: Internal Server Error
           schema:

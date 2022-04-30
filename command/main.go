@@ -17,16 +17,13 @@ import (
 //@termsOfService https://github.com/BakhodiribnYashinibnMansur/Medium_uz
 // @host localhost:8080
 // @BasePath /
-
+// @contact.name   Bakhodir Yashin Mansur
+// @contact.email  phapp0224mb@gmail.com
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
-// @contact.name   Bakhodir Yashin Mansur
-// @contact.email  phapp0224mb@gmail.com
 func main() {
-
 	logrus := logrus.GetLogger()
-	logrus.Info("send email")
 	configs, err := configs.InitConfig()
 	logrus.Infof("configs %v", configs)
 	if err != nil {
