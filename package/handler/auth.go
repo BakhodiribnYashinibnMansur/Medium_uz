@@ -47,18 +47,18 @@ func (handler *Handler) signUp(ctx *gin.Context) {
 		return
 	}
 
-	// token, err := handler.services.Authorization.GenerateToken(input.Email, logrus)
-	// if err != nil {
-	// 	error.NewHandlerErrorResponse(ctx, http.StatusInternalServerError, err.Error(), logrus)
-	// 	return
-	// }
-	// err = handler.services.SendMessageEmail(input.Email, input.FirstName, logrus)
+	token, err := handler.services.Authorization.GenerateToken(input.Email, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusInternalServerError, err.Error(), logrus)
+		return
+	}
+	err = handler.services.SendMessageEmail(input.Email, input.FirstName, logrus)
 
-	// if err != nil {
-	// 	error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-	// 	return
-	// }
-	// ctx.JSON(http.StatusOK, model.ResponseSign{Id: id, Token: token})
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSign{Id: id, Token: token})
 }
 
 // @Summary SignIn
@@ -82,8 +82,16 @@ func (handler *Handler) signIn(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-
-	token, err := handler.services.Authorization.GenerateToken(input.Username, logrus)
+	checkedUser, err := handler.services.CheckDataExistsEmailNickName(input.Email, "", logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	if checkedUser.Email {
+		error.NewHandlerErrorResponse(ctx, http.StatusConflict, "email  not  exist", logrus)
+		return
+	}
+	token, err := handler.services.Authorization.GenerateToken(input.Email, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusInternalServerError, err.Error(), logrus)
 		return
@@ -91,21 +99,55 @@ func (handler *Handler) signIn(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.ResponseSign{Token: token})
 }
 
-// // @Summary Resend code for  Recovery Password
-// // @Description Resend code for  Recovery Password
-// // @ID recovery-password
-// // @Tags   Account
-// // @Accept       json
-// // @Produce      json
-// // @Param code query string false "code"
-// // @Param password query string false "password"
-// // @Success      200   {object}      model.ResponseSuccess
-// // @Failure 400,404 {object} error.errorResponse
-// // @Failure 409 {object} error.errorResponse
-// // @Failure 500 {object} error.errorResponse
-// // @Failure default {object} error.errorResponse
-// // @Router       /api/account/resend [GET]
-// func (handler *Handler) recoveryPassword(ctx *gin.Context) {
-// 	// logrus := handler.logrus
+// @Summary Send code for  Recovery Password
+// @Description send code for  Recovery Password
+// @ID recovery-password-send-code
+// @Tags   Auth
+// @Accept       json
+// @Produce      json
+// @Param email query string false "email"
+// @Success      200   {object}      model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router       /api/account/recovery [GET]
+func (handler *Handler) recoveryForMessageToEmail(ctx *gin.Context) {
+	// logrus := handler.logrus
+}
 
-// }
+// @Summary Check code for  Recovery Password
+// @Description check code for  Recovery Password
+// @ID recovery-code-email
+// @Tags   Auth
+// @Accept       json
+// @Produce      json
+// @Param code query string false "code"
+// @Success      200   {object}      model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router       /api/account/recovery-verify [GET]
+func (handler *Handler) recoveryCheckEmailCode(ctx *gin.Context) {
+	// logrus := handler.logrus
+
+}
+
+// @Summary   Recovery Password
+// @Description   Recovery Password
+// @ID recovery-password
+// @Tags   Auth
+// @Accept       json
+// @Produce      json
+// @Param password query string false "password"
+// @Success      200   {object}      model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router       /api/account/recovery-password [GET]
+func (handler *Handler) recoveryPassword(ctx *gin.Context) {
+	// logrus := handler.logrus
+
+}

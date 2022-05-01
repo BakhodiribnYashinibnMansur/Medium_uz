@@ -17,15 +17,13 @@ type User struct {
 }
 
 type UserCheck struct {
-	Email       bool `json:"email"   default:"false"  `
-	Password    bool `json:"password" default:"true"   `
-	NickName    bool `json:"nickname" default:"false"   `
-	FirstName   bool `json:"first_name" default:"true"   `
-	SecondName  bool `json:"second_name" default:"true"  `
-	Interesting bool `json:"interesting" default:"true"  `
-	Bio         bool `json:"bio"  default:"true"  `
-	City        bool `json:"city"   default:"true"  `
-	Phone       bool `json:"phone"   default:"true"  `
+	Email      bool `json:"email"   default:"false"  `
+	Password   bool `json:"password" default:"true"   `
+	NickName   bool `json:"nickname" default:"false"   `
+	FirstName  bool `json:"first_name" default:"true"   `
+	SecondName bool `json:"second_name" default:"true"  `
+	City       bool `json:"city"   default:"true"  `
+	Phone      bool `json:"phone"   default:"true"  `
 }
 
 type UserFull struct {
@@ -57,6 +55,6 @@ type ResponseSign struct {
 }
 
 type SignInInput struct {
-	Username string `json:"username"  default:"MRB"`
+	Email    string `json:"email"  default:"phapp0224mb@gmail.com"`
 	Password string `json:"password" default:"0224mb"`
 }

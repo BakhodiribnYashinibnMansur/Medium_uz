@@ -96,7 +96,7 @@ func (handler *Handler) resendCodeToEmail(ctx *gin.Context) {
 // @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router   /api/account/upload-image [POST]
+// @Router   /api/account/upload-image [PATCH]
 //@Security ApiKeyAuth
 func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
 	logrus := handler.logrus
@@ -113,6 +113,10 @@ func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
 		return
 	}
 	user, err := handler.services.GetUserData(userId, logrus)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, fmt.Sprintf("file err : %s", err.Error()))
+		return
+	}
 	filePath, err := handler.services.UploadAccountImage(file, header, user, logrus)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err.Error())
@@ -131,14 +135,61 @@ func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: filePath})
 }
 
+// @Summary Update Account
+// @Description update account give data
+// @ID update-account
+// @Tags   Account
+// @Accept       json
+// @Produce      json
+// @Success      200   {object}      model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router       /api/account/update [PUT]
+//@Security ApiKeyAuth
 func (handler *Handler) updateAccount(ctx *gin.Context) {
+	logrus := handler.logrus
+	var input model.User
+	err := ctx.BindJSON(&input)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	logrus.Info("signUp data send for  check user Data to service")
 
 }
 
+// @Summary Get Account Data
+// @Description return account data.
+// @ID get-account
+// @Tags   Account
+// @Accept       json
+// @Produce      json
+// @Success      200   {object}      model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router       /api/account/get [GET]
+//@Security ApiKeyAuth
 func (handler *Handler) getUser(ctx *gin.Context) {
 
 }
 
+// @Summary Search Account Data
+// @Description search account data.
+// @ID search-account
+// @Tags   Account
+// @Accept       json
+// @Produce      json
+// @Success      200   {object}      model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router       /api/account/search [GET]
+//@Security ApiKeyAuth
 func (handler *Handler) searchUser(ctx *gin.Context) {
 
 }

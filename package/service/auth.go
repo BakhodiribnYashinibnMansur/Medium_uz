@@ -34,10 +34,8 @@ func (service *AuthService) CheckDataExistsEmailNickName(email, nickname string,
 		logrus.Errorf("ERROR: CheckDataExists  failed: %v", err)
 		return checkUser, err
 	}
-	checkUser.Bio = true
 	checkUser.City = true
 	checkUser.FirstName = true
-	checkUser.Interesting = true
 	checkUser.Password = true
 	checkUser.Phone = true
 	checkUser.SecondName = true
