@@ -1,3 +1,5 @@
+run-all:
+	sudo docker start mediumuz && sudo docker start redisdb && go run command/main.go
 
 run-go:
 	go run command/main.go

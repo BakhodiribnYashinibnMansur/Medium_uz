@@ -47,8 +47,6 @@ definitions:
       first_name:
         default: MRB
         type: string
-      image:
-        type: string
       interesting:
         items:
           type: string
@@ -82,6 +80,11 @@ paths:
       - application/json
       description: return account data.
       operationId: get-account
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: integer
       produces:
       - application/json
       responses:

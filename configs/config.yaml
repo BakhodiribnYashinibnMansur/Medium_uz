@@ -1,19 +1,19 @@
 app:
   name: MediumuZ
-  host: localhost
-  port: '8080'
-  version: '1.0'
+  host: "localhost:"
+  port: "8080"
+  version: "1.0"
 
 db:
   dbname: mediumuz
   host: localhost
-  port: '2001'
+  port: "2001"
   sslmode: disable
   username: postgres
 
 redis:
   host: localhost
-  port: '6379'
+  port: "6379"
   db: 0
 
 smtp:

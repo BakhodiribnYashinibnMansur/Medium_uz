@@ -39,6 +39,14 @@ const docTemplate = `{
                 ],
                 "summary": "Get Account Data",
                 "operationId": "get-account",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -782,9 +790,6 @@ const docTemplate = `{
                 "first_name": {
                     "type": "string",
                     "default": "MRB"
-                },
-                "image": {
-                    "type": "string"
                 },
                 "interesting": {
                     "type": "array",

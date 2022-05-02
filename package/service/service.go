@@ -17,9 +17,11 @@ type Authorization interface {
 
 type User interface {
 	GetUserData(id string, logrus *logrus.Logger) (user model.UserFull, err error)
-	VerifyCode(id string, username, code string, logrus *logrus.Logger) (int64, error)
+	VerifyCode(id, email, code string, logrus *logrus.Logger) (int64, error)
 	UploadAccountImage(file multipart.File, header *multipart.FileHeader, user model.UserFull, logrus *logrus.Logger) (filePath string, err error)
 	UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error)
+	UpdateAccount(id int, user model.User, logrus *logrus.Logger) (int64, error)
+	CheckUserId(id int, logrus *logrus.Logger) (int, error)
 }
 type Service struct {
 	Authorization

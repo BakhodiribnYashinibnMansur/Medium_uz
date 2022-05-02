@@ -27,8 +27,8 @@ func (service *UserService) GetUserData(id string, logrus *logrus.Logger) (user 
 	return user, nil
 }
 
-func (service *UserService) VerifyCode(id, username, code string, logrus *logrus.Logger) (int64, error) {
-	err := service.repo.CheckCode(username, code, logrus)
+func (service *UserService) VerifyCode(id, email, code string, logrus *logrus.Logger) (int64, error) {
+	err := service.repo.CheckCode(email, code, logrus)
 	if err != nil {
 		logrus.Errorf("ERROR: check error code : %v", err)
 		return 0, err
@@ -73,4 +73,14 @@ func (service *UserService) UploadAccountImage(file multipart.File, header *mult
 
 func (service *UserService) UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error) {
 	return service.repo.UpdateAccountImage(id, filePath, logrus)
+}
+
+func (service *UserService) UpdateAccount(id int, user model.User, logrus *logrus.Logger) (int64, error) {
+	user.Password = generatePasswordHash(user.Password)
+	logrus.Info("successfully password_hash")
+	return service.repo.UpdateAccount(id, user, logrus)
+}
+
+func (service *UserService) CheckUserId(id int, logrus *logrus.Logger) (int, error) {
+	return service.repo.CheckUserId(id, logrus)
 }

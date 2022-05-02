@@ -23,6 +23,7 @@ import (
 // @in header
 // @name Authorization
 func main() {
+
 	logrus := logrus.GetLogger()
 	configs, err := configs.InitConfig()
 	logrus.Infof("configs %v", configs)
@@ -30,6 +31,7 @@ func main() {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
 	logrus.Info("successfull checked configs.")
+
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     configs.DBHost,
 		Port:     configs.DBPort,

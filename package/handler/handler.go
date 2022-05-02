@@ -2,11 +2,12 @@ package handler
 
 import (
 	"fmt"
+	"mediumuz/docs"
+
 	"mediumuz/package/service"
 	"mediumuz/util/logrus"
 
 	"mediumuz/configs"
-	_ "mediumuz/docs"
 
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -26,10 +27,10 @@ func NewHandler(services *service.Service, logrus *logrus.Logger, config *config
 func (handler *Handler) InitRoutes() *gin.Engine {
 	config := handler.config
 	fmt.Println(config)
-	// docs.SwaggerInfo.Title = config.AppName
-	// docs.SwaggerInfo.Version = config.Version
-	// docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
-	// docs.SwaggerInfo.Schemes = []string{"http", "https"}
+	docs.SwaggerInfo.Title = config.AppName
+	docs.SwaggerInfo.Version = config.Version
+	docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.New()
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	auth := router.Group("/auth")

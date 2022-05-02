@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
    email VARCHAR(255) NOT NULL UNIQUE ,
    nickname VARCHAR(255) NOT NULL UNIQUE ,
    password_hash VARCHAR(255) NOT NULL ,
-   interesting VARCHAR(255) [] NULL,
+   interesting TEXT [] NULL,
    bio VARCHAR(255) NULL,
    city VARCHAR (255) NOT NULL ,
    is_verified BOOLEAN DEFAULT FALSE,
