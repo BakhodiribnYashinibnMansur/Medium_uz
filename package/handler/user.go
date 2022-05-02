@@ -148,6 +148,7 @@ func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
 // @Tags   Account
 // @Accept       json
 // @Produce      json
+// @Param input body model.User false "account info"
 // @Success      200   {object}      model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
 // @Failure 409 {object} error.errorResponse

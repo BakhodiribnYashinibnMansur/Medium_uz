@@ -410,6 +410,16 @@ const docTemplate = `{
                 ],
                 "summary": "Update Account",
                 "operationId": "update-account",
+                "parameters": [
+                    {
+                        "description": "account info",
+                        "name": "input",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

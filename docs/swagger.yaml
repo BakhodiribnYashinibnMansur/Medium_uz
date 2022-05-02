@@ -322,6 +322,12 @@ paths:
       - application/json
       description: update account give data
       operationId: update-account
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        schema:
+          $ref: '#/definitions/model.User'
       produces:
       - application/json
       responses:

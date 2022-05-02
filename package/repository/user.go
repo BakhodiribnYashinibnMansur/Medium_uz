@@ -71,7 +71,7 @@ func (repo *UserDB) UpdateAccountImage(id int, filePath string, logrus *logrus.L
 
 func (repo *UserDB) UpdateAccount(id int, user model.User, logrus *logrus.Logger) (int64, error) {
 	tm := time.Now()
-	query := fmt.Sprintf("	UPDATE %s SET 	firstname = COALESCE($1,firstname), 	secondname   COALESCE($2,secondname), 	email = COALESCE($3,email), 	nickname = COALESCE( $4,nickname), 	password_hash = COALESCE($5,password_hash),  	interesting = COALESCE($6, interesting), 	bio = COALESCE($7,bio), 	city = COALESCE($8,city), 	phone = COALESCE($9,phone),  	updated_at=$10	,	WHERE id = $11 	 RETURNING id ", usersTable)
+	query := fmt.Sprintf("	UPDATE %s SET 	firstname = COALESCE($1,firstname), 	secondname  = COALESCE($2,secondname), 	email = COALESCE($3,email), 	nickname = COALESCE( $4,nickname), 	password_hash = COALESCE($5,password_hash),  	interesting = COALESCE($6, interesting), 	bio = COALESCE($7,bio), 	city = COALESCE($8,city), 	phone = COALESCE($9,phone),  	updated_at=$10		WHERE id = $11 	 RETURNING id ", usersTable)
 	rows, err := repo.db.Exec(query, user.FirstName, user.SecondName, user.Email, user.NickName, user.Password, pq.Array(user.Interesting), user.Bio, user.City, user.Phone, tm, id)
 
 	if err != nil {
