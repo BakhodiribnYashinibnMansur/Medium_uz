@@ -24,11 +24,14 @@ type User interface {
 	CheckUserId(id int, logrus *logrus.Logger) (int, error)
 }
 
+type Post interface{}
+
 type Repository struct {
 	Authorization
 	User
+	Post
 }
 
 func NewRepository(db *sqlx.DB, redis *redis.Client) *Repository {
-	return &Repository{Authorization: NewAuthDB(db, redis), User: NewUserDB(db, redis)}
+	return &Repository{Authorization: NewAuthDB(db, redis), User: NewUserDB(db, redis), Post: NewPostDB(db, redis)}
 }

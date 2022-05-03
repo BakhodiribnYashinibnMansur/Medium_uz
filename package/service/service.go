@@ -23,11 +23,15 @@ type User interface {
 	UpdateAccount(id int, user model.User, logrus *logrus.Logger) (int64, error)
 	CheckUserId(id int, logrus *logrus.Logger) (int, error)
 }
+
+type Post interface {
+}
 type Service struct {
 	Authorization
 	User
+	Post
 }
 
 func NewService(repos *repository.Repository) *Service {
-	return &Service{Authorization: NewAuthService(repos.Authorization), User: NewUserService(repos.User)}
+	return &Service{Authorization: NewAuthService(repos.Authorization), User: NewUserService(repos.User), Post: NewPostService(repos.Post)}
 }

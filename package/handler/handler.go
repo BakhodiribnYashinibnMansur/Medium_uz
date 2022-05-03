@@ -52,6 +52,10 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 			account.GET("/get", handler.getUser)                       //DONE
 			account.PATCH("/upload-image", handler.uploadAccountImage) //DONE
 		}
+		post := api.Group("/post")
+		{
+			post.POST("/create", handler.createPost)
+		}
 	}
 	return router
 }
