@@ -5,6 +5,7 @@ import (
 	"io"
 	"mediumuz/model"
 	"mediumuz/package/repository"
+	"mediumuz/util/convert"
 	"mediumuz/util/logrus"
 	"mime/multipart"
 	"os"
@@ -76,9 +77,21 @@ func (service *UserService) UpdateAccountImage(id int, filePath string, logrus *
 }
 
 func (service *UserService) UpdateAccount(id int, user model.User, logrus *logrus.Logger) (int64, error) {
+	var updateUser model.UpdateUser
+	updateUser.Bio = convert.EmptyStringToNull(user.Bio)
+	updateUser.Email = convert.EmptyStringToNull(user.Email)
 	user.Password = generatePasswordHash(user.Password)
+	updateUser.Password = convert.EmptyStringToNull(user.Password)
+	updateUser.City = convert.EmptyStringToNull(user.City)
+	updateUser.FirstName = convert.EmptyStringToNull(user.FirstName)
+	updateUser.SecondName = convert.EmptyStringToNull(user.SecondName)
+	updateUser.NickName = convert.EmptyStringToNull(user.NickName)
+	updateUser.Phone = convert.EmptyStringToNull(user.Phone)
+
+	updateUser.Interesting = convert.EmptyArrayStringToNullArray(user.Interesting)
+
 	logrus.Info("successfully password_hash")
-	return service.repo.UpdateAccount(id, user, logrus)
+	return service.repo.UpdateAccount(id, updateUser, logrus)
 }
 
 func (service *UserService) CheckUserId(id int, logrus *logrus.Logger) (int, error) {

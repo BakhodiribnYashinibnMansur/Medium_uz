@@ -51,9 +51,9 @@ func (handler *Handler) verifyEmail(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "DONE"})
 }
 
-// @Summary Resend cod for  Verification Email
-// @Description resend code to email for  verification
-// @ID resend-code-email
+// @Summary Send code for  Verification Email
+// @Description send code to email for  verification
+// @ID send-code-email
 // @Tags   Account
 // @Accept       json
 // @Produce      json
@@ -62,9 +62,9 @@ func (handler *Handler) verifyEmail(ctx *gin.Context) {
 // @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router       /api/account/resend [GET]
+// @Router       /api/account/sendcode [GET]
 //@Security ApiKeyAuth
-func (handler *Handler) resendCodeToEmail(ctx *gin.Context) {
+func (handler *Handler) sendCodeToEmail(ctx *gin.Context) {
 	logrus := handler.logrus
 
 	id, err := getUserId(ctx, logrus)
@@ -196,7 +196,7 @@ func (handler *Handler) updateAccount(ctx *gin.Context) {
 }
 
 // @Summary Get Account Data
-// @Description return account data.
+// @Description return account data. if you send id = "" or null return current user data. if send id = number return number user data .
 // @ID get-account
 // @Tags   Account
 // @Accept       json
@@ -244,21 +244,4 @@ func (handler *Handler) getUser(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "GETTED", Data: user})
-}
-
-// @Summary Search Account Data
-// @Description search account data.
-// @ID search-account
-// @Tags   Account
-// @Accept       json
-// @Produce      json
-// @Success      200   {object}      model.ResponseSuccess
-// @Failure 400,404 {object} error.errorResponse
-// @Failure 409 {object} error.errorResponse
-// @Failure 500 {object} error.errorResponse
-// @Failure default {object} error.errorResponse
-// @Router       /api/account/search [GET]
-//@Security ApiKeyAuth
-func (handler *Handler) searchUser(ctx *gin.Context) {
-
 }

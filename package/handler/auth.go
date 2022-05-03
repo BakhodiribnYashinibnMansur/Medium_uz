@@ -52,12 +52,6 @@ func (handler *Handler) signUp(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusInternalServerError, err.Error(), logrus)
 		return
 	}
-	err = handler.services.SendMessageEmail(input.Email, input.FirstName, logrus)
-
-	if err != nil {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-		return
-	}
 	ctx.JSON(http.StatusOK, model.ResponseSign{Id: id, Token: token})
 }
 

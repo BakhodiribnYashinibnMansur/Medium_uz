@@ -61,3 +61,16 @@ type SignInInput struct {
 	Email    string `json:"email"  default:"phapp0224mb@gmail.com"`
 	Password string `json:"password" default:"0224mb"`
 }
+
+type UpdateUser struct {
+	Id          int              `json:"-" `
+	Email       sql.NullString   `json:"email" default:"phapp0224mb@gmail.com"`
+	Password    sql.NullString   `json:"password" default:"0224mb"`
+	NickName    sql.NullString   `json:"nickname" default:"mrb"`
+	FirstName   sql.NullString   `json:"first_name" default:"MRB"`
+	SecondName  sql.NullString   `json:"second_name" default:"HERO"`
+	Interesting []sql.NullString `json:"interesting" default:""`
+	Bio         sql.NullString   `json:"bio" default:"I am Golang dev"`
+	City        sql.NullString   `json:"city" default:"Navoi"`
+	Phone       sql.NullString   `json:"phone" default:"+9989 93 753 65 71"`
+}

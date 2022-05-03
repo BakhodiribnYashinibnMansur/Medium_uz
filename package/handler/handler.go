@@ -35,8 +35,8 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	auth := router.Group("/auth")
 	{
-		auth.POST("/sign-up", handler.signUp)
-		auth.POST("/sign-in", handler.signIn)
+		auth.POST("/sign-up", handler.signUp) //DONE
+		auth.POST("/sign-in", handler.signIn) //DONE
 		// recoveryPassword
 		auth.GET("/recovery", handler.recoveryForMessageToEmail)
 		auth.GET("/recovery-verify", handler.recoveryCheckEmailCode)
@@ -46,12 +46,11 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	{
 		account := api.Group("/account")
 		{
-			account.GET("/resend", handler.resendCodeToEmail)
-			account.GET("/verify", handler.verifyEmail)
-			account.PUT("/update", handler.updateAccount)
-			account.GET("/get", handler.getUser)
-			account.GET("/search", handler.searchUser)
-			account.PATCH("/upload-image", handler.uploadAccountImage)
+			account.GET("/sendcode", handler.sendCodeToEmail)          //DONE
+			account.GET("/verify", handler.verifyEmail)                //DONE
+			account.PUT("/update", handler.updateAccount)              //DONE
+			account.GET("/get", handler.getUser)                       //DONE
+			account.PATCH("/upload-image", handler.uploadAccountImage) //DONE
 		}
 	}
 	return router

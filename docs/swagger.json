@@ -20,7 +20,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "return account data.",
+                "description": "return account data. if you send id = \"\" or null return current user data. if send id = number return number user data .",
                 "consumes": [
                     "application/json"
                 ],
@@ -266,14 +266,14 @@
                 }
             }
         },
-        "/api/account/resend": {
+        "/api/account/sendcode": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "resend code to email for  verification",
+                "description": "send code to email for  verification",
                 "consumes": [
                     "application/json"
                 ],
@@ -283,67 +283,8 @@
                 "tags": [
                     "Account"
                 ],
-                "summary": "Resend cod for  Verification Email",
-                "operationId": "resend-code-email",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/error.errorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/error.errorResponse"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/error.errorResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/error.errorResponse"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/error.errorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/account/search": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "search account data.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Account"
-                ],
-                "summary": "Search Account Data",
-                "operationId": "search-account",
+                "summary": "Send code for  Verification Email",
+                "operationId": "send-code-email",
                 "responses": {
                     "200": {
                         "description": "OK",
