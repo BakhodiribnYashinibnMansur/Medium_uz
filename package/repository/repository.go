@@ -27,6 +27,8 @@ type User interface {
 type Post interface {
 	CreatePost(post model.Post, logrus *logrus.Logger) (int, error)
 	CreatePostUser(userId, postId int, logrus *logrus.Logger) (int, error)
+	GetPostById(id int, logrus *logrus.Logger) (post model.PostFull, err error)
+	CheckPostId(id int, logrus *logrus.Logger) (int, error)
 }
 
 type Repository struct {

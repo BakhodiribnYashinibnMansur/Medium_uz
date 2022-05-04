@@ -55,6 +55,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 		post := api.Group("/post")
 		{
 			post.POST("/create", handler.createPost) //DONE
+			post.GET("/get/:id", handler.getPostID)
 		}
 	}
 	return router

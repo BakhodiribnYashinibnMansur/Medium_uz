@@ -13,6 +13,8 @@ definitions:
     type: object
   model.Post:
     properties:
+      image:
+        type: string
       tags:
         items:
           type: string
@@ -447,7 +449,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.ResponseSign'
+            $ref: '#/definitions/model.ResponseSuccess'
         "400":
           description: Bad Request
           schema:
@@ -471,6 +473,50 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Create Post
+      tags:
+      - Post
+  /api/post/get/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get post by id
+      operationId: get-post-id
+      parameters:
+      - description: Param ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get  Post By ID
       tags:
       - Post
   /auth/sign-in:
