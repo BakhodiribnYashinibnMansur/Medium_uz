@@ -25,6 +25,7 @@ type User interface {
 }
 
 type Post interface {
+	CreatePost(userId int, post model.Post, logrus *logrus.Logger) (int, error)
 }
 type Service struct {
 	Authorization

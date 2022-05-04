@@ -21,6 +21,7 @@ import (
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
 // @Router /api/post/create [post]
+//@Security ApiKeyAuth
 func (handler *Handler) createPost(ctx *gin.Context) {
 	logrus := handler.logrus
 	var input model.Post
@@ -29,9 +30,16 @@ func (handler *Handler) createPost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	id, err := getUserId(ctx, logrus)
+
+	userId, err := getUserId(ctx, logrus)
 	if err != nil {
 		return
 	}
-	logrus.Infof("User id : %s", id)
+
+	postId, err := handler.services.CreatePost(userId, input, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Data: postId, Message: "DONE"})
 }

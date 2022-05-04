@@ -54,7 +54,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 		}
 		post := api.Group("/post")
 		{
-			post.POST("/create", handler.createPost)
+			post.POST("/create", handler.createPost) //DONE
 		}
 	}
 	return router

@@ -468,6 +468,8 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
       summary: Create Post
       tags:
       - Post

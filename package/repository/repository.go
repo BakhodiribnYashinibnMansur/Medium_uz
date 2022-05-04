@@ -24,7 +24,10 @@ type User interface {
 	CheckUserId(id int, logrus *logrus.Logger) (int, error)
 }
 
-type Post interface{}
+type Post interface {
+	CreatePost(post model.Post, logrus *logrus.Logger) (int, error)
+	CreatePostUser(userId, postId int, logrus *logrus.Logger) (int, error)
+}
 
 type Repository struct {
 	Authorization

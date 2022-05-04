@@ -16,10 +16,6 @@ type Config struct {
 	SSLMode  string
 }
 
-const (
-	usersTable = "users"
-)
-
 func NewPostgresDB(cfg Config, logrus *logrus.Logger) (*sqlx.DB, error) {
 
 	db, err := sqlx.Open("postgres", fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
