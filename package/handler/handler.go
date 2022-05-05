@@ -51,13 +51,14 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 			account.PUT("/update", handler.updateAccount)              //DONE
 			account.GET("/get", handler.getUser)                       //DONE
 			account.PATCH("/upload-image", handler.uploadAccountImage) //DONE
+
 		}
 		post := api.Group("/post")
 		{
 			post.POST("/create", handler.createPost)             //DONE
 			post.GET("/get/:id", handler.getPostID)              //DONE
 			post.PATCH("/upload-image", handler.uploadImagePost) //DONE
-			post.PUT("/update", handler.updatePost)              //progress
+			post.PUT("/update", handler.updatePost)              //DONE
 		}
 	}
 	return router

@@ -525,7 +525,7 @@ paths:
       operationId: update-post-id
       parameters:
       - description: Param ID
-        in: path
+        in: query
         name: id
         required: true
         type: integer
@@ -580,7 +580,7 @@ paths:
         name: file
         required: true
         type: file
-      - description: code
+      - description: id
         in: query
         name: id
         type: integer

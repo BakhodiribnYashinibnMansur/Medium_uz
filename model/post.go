@@ -1,6 +1,10 @@
 package model
 
-import "github.com/lib/pq"
+import (
+	"database/sql"
+
+	"github.com/lib/pq"
+)
 
 type Post struct {
 	ID    int      `json:"-"`
@@ -9,6 +13,12 @@ type Post struct {
 	Tags  []string `json:"tags" default:["Devs"] `
 }
 
+type UpdatePost struct {
+	ID    int              `json:"-"`
+	Title sql.NullString   `json:"title" default:"Tutorial Golang"`
+	Body  sql.NullString   `json:"text" default:"Hello World"`
+	Tags  []sql.NullString `json:"tags" default:["Devs"] `
+}
 type PostFull struct {
 	ID             int            `json:"id" db:"id"`
 	PostTitle      string         `json:"post_title" db:"post_title"`

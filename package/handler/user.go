@@ -159,6 +159,7 @@ func (handler *Handler) updateAccount(ctx *gin.Context) {
 	if err != nil {
 		return
 	}
+
 	var input model.User
 	err = ctx.BindJSON(&input)
 

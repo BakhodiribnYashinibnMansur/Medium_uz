@@ -703,7 +703,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "Param ID",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -790,7 +790,7 @@ const docTemplate = `{
                     },
                     {
                         "type": "integer",
-                        "description": "code",
+                        "description": "id",
                         "name": "id",
                         "in": "query"
                     }

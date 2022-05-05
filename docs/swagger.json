@@ -696,7 +696,7 @@
                         "type": "integer",
                         "description": "Param ID",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
@@ -783,7 +783,7 @@
                     },
                     {
                         "type": "integer",
-                        "description": "code",
+                        "description": "id",
                         "name": "id",
                         "in": "query"
                     }

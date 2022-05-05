@@ -47,7 +47,7 @@ func (repo *PostDB) CreatePostUser(userId, postId int, logrus *logrus.Logger) (i
 }
 
 func (repo *PostDB) GetPostById(id int, logrus *logrus.Logger) (post model.PostFull, err error) {
-	query := fmt.Sprintf("SELECT post_title ,post_image_path, post_body, post_views_count, post_like_count, post_rated, post_vote, post_tags,  post_date, is_new, is_top_read FROM %s WHERE id = $1", postTable)
+	query := fmt.Sprintf("SELECT id , post_title ,post_image_path, post_body, post_views_count, post_like_count, post_rated, post_vote, post_tags,  post_date, is_new, is_top_read FROM %s WHERE id = $1 AND deleted_at IS NULL", postTable)
 	err = repo.db.Get(&post, query, id)
 	if err != nil {
 		logrus.Errorf("ERROR: don't get users %s", err)
@@ -59,7 +59,7 @@ func (repo *PostDB) GetPostById(id int, logrus *logrus.Logger) (post model.PostF
 
 func (repo *PostDB) CheckPostId(id int, logrus *logrus.Logger) (int, error) {
 	var postNumber int
-	queryID := fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE id=$1", postTable)
+	queryID := fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE id=$1 AND deleted_at IS NULL", postTable)
 	err := repo.db.Get(&postNumber, queryID, id)
 	if err != nil {
 		logrus.Infof("ERROR:Email query error: %s", err.Error())
@@ -87,4 +87,24 @@ func (repo *PostDB) UpdatePostImage(id int, filePath string, logrus *logrus.Logg
 	logrus.Info("DONE:Update Post image")
 	return effectedRowsNum, nil
 
+}
+
+func (repo *PostDB) UpdatePost(id int, post model.UpdatePost, logrus *logrus.Logger) (int64, error) {
+	tm := time.Now()
+	updateQuery := fmt.Sprintf(" UPDATE %s SET  post_title=COALESCE($1,post_title) ,post_body=COALESCE($2,post_body), post_tags=COALESCE($3,post_tags) , updated_at=$4 WHERE id=$5 RETURNING id", postTable)
+	rows, err := repo.db.Exec(updateQuery, post.Title, post.Body, pq.Array(post.Tags), tm, id)
+
+	if err != nil {
+		logrus.Errorf("ERROR: Update Post : %v", err)
+		return 0, err
+	}
+
+	effectedRowsNum, err := rows.RowsAffected()
+
+	if err != nil {
+		logrus.Errorf("ERROR: Update Post  effectedRowsNum : %v", err)
+		return 0, err
+	}
+	logrus.Info("DONE:Update Post ")
+	return effectedRowsNum, nil
 }

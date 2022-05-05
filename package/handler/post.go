@@ -100,7 +100,7 @@ func (handler *Handler) getPostID(ctx *gin.Context) {
 // @Produce image/jpeg
 // @Produce image/jpg
 // @Param file formData file true "file"
-// @Param id query int false "code"
+// @Param id query int false "id"
 // @Accept multipart/form-data
 // @Success      200   {object}      model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
@@ -151,7 +151,7 @@ func (handler *Handler) uploadImagePost(ctx *gin.Context) {
 // @ID update-post-id
 // @Accept  json
 // @Produce  json
-// @Param        id   path  int     true "Param ID"
+// @Param        id   query  int     true "Param ID"
 // @Param input body model.Post true "post info"
 // @Success 200 {object} model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
@@ -162,14 +162,32 @@ func (handler *Handler) uploadImagePost(ctx *gin.Context) {
 //@Security ApiKeyAuth
 func (handler *Handler) updatePost(ctx *gin.Context) {
 	logrus := handler.logrus
-	paramID := ctx.Param("id")
+	paramID := ctx.Query("id")
 	if paramID == "" {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
 		return
 	}
-	// id, err := strconv.Atoi(paramID)
-	// if err != nil {
-	// 	error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-	// 	return
-	// }
+	id, err := strconv.Atoi(paramID)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	var input model.Post
+	err = ctx.BindJSON(&input)
+
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	result, err := handler.services.UpdatePost(id, input, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	if result == 0 {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "User not found", logrus)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: id})
 }

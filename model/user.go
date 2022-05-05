@@ -30,7 +30,7 @@ type UserCheck struct {
 }
 
 type UserFull struct {
-	Id                int            `json:"-" db:"id"`
+	Id                int            `json:"id" db:"id"`
 	Email             string         `json:"email"  db:"email"`
 	Nickname          string         `json:"nickname" db:"nickname"`
 	Password          string         `json:"password" db:"password_hash"`
