@@ -88,3 +88,59 @@ func (handler *Handler) getPostID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Data: resp, Message: "DONE"})
 
 }
+
+// @Summary Upload Post Image
+// @Description Upload Post Image
+// @ID upload-image-post
+// @Tags   Post
+// @Accept       json
+// @Produce      json
+// @Produce application/octet-stream
+// @Produce image/png
+// @Produce image/jpeg
+// @Produce image/jpg
+// @Param file formData file true "file"
+// @Param id query int false "code"
+// @Accept multipart/form-data
+// @Success      200   {object}      model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router   /api/post/upload-image [PATCH]
+//@Security ApiKeyAuth
+func (handler *Handler) uploadImagePost(ctx *gin.Context) {
+	logrus := handler.logrus
+
+	id := ctx.Query("id")
+	postId, err := strconv.Atoi(id)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.Request.ParseMultipartForm(10 << 20)
+	file, header, err := ctx.Request.FormFile("file")
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	filePath, err := handler.services.UploadImage(file, header, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	effectedRowsNum, err := handler.services.UpdatePostImage(postId, filePath, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	if effectedRowsNum == 0 {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "User not found", logrus)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: filePath})
+}

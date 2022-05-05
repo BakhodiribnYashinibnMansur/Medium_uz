@@ -29,6 +29,7 @@ type Post interface {
 	CreatePostUser(userId, postId int, logrus *logrus.Logger) (int, error)
 	GetPostById(id int, logrus *logrus.Logger) (post model.PostFull, err error)
 	CheckPostId(id int, logrus *logrus.Logger) (int, error)
+	UpdatePostImage(id int, filePath string, logrus *logrus.Logger) (int64, error)
 }
 
 type Repository struct {

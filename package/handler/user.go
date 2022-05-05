@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"mediumuz/model"
 	"mediumuz/util/error"
 	"net/http"
@@ -108,27 +107,25 @@ func (handler *Handler) sendCodeToEmail(ctx *gin.Context) {
 func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
 	logrus := handler.logrus
 	id, err := getUserId(ctx, logrus)
+
 	if err != nil {
 		return
 	}
-	userId := strconv.Itoa(id)
+
 	ctx.Request.ParseMultipartForm(10 << 20)
 	file, header, err := ctx.Request.FormFile("file")
 
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, fmt.Sprintf("file err : %s", err.Error()))
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	user, err := handler.services.GetUserData(userId, logrus)
+
+	filePath, err := handler.services.UploadImage(file, header, logrus)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, fmt.Sprintf("file err : %s", err.Error()))
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	filePath, err := handler.services.UploadAccountImage(file, header, user, logrus)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err.Error())
-		return
-	}
+
 	effectedRowsNum, err := handler.services.UpdateAccountImage(id, filePath, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)

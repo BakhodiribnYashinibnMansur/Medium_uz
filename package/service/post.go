@@ -25,9 +25,15 @@ func (service *PostService) CreatePost(userId int, post model.Post, logrus *logr
 	}
 	return postId, err
 }
+
 func (service *PostService) GetPostById(id int, logrus *logrus.Logger) (post model.PostFull, err error) {
 	return service.repo.GetPostById(id, logrus)
 }
+
 func (service *PostService) CheckPostId(id int, logrus *logrus.Logger) (int, error) {
 	return service.repo.CheckPostId(id, logrus)
+}
+
+func (service *PostService) UpdatePostImage(id int, filePath string, logrus *logrus.Logger) (int64, error) {
+	return service.repo.UpdatePostImage(id, filePath, logrus)
 }

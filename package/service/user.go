@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"io"
 	"mediumuz/model"
 	"mediumuz/package/repository"
@@ -42,10 +41,10 @@ func (service *UserService) VerifyCode(id, email, code string, logrus *logrus.Lo
 	return effectedRowsNum, nil
 }
 
-func (service *UserService) UploadAccountImage(file multipart.File, header *multipart.FileHeader, user model.UserFull, logrus *logrus.Logger) (string, error) {
+func (service *UserService) UploadImage(file multipart.File, header *multipart.FileHeader, logrus *logrus.Logger) (string, error) {
 
 	filename := header.Filename
-	folderPath := fmt.Sprintf("public/%s/", user.FirstName)
+	folderPath := "public/"
 	err := os.MkdirAll(folderPath, 0777)
 	if err != nil {
 		logrus.Errorf("ERROR: Failed to create folder %s: %v", folderPath, err)

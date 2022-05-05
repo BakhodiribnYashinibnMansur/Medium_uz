@@ -57,15 +57,15 @@ func (repo *UserDB) UpdateAccountImage(id int, filePath string, logrus *logrus.L
 	rows, err := repo.db.Exec(query, filePath, tm, id)
 
 	if err != nil {
-		logrus.Errorf("ERROR: Update verificationCode : %v", err)
+		logrus.Errorf("ERROR: Update Update account image : %v", err)
 		return 0, err
 	}
 	effectedRowsNum, err := rows.RowsAffected()
 	if err != nil {
-		logrus.Errorf("ERROR: Update verificationCode effectedRowsNum : %v", err)
+		logrus.Errorf("ERROR: Update Update account image effectedRowsNum : %v", err)
 		return 0, err
 	}
-	logrus.Info("DONE:Update verify email")
+	logrus.Info("DONE:Update account image")
 	return effectedRowsNum, nil
 }
 

@@ -519,6 +519,59 @@ paths:
       summary: Get  Post By ID
       tags:
       - Post
+  /api/post/upload-image:
+    patch:
+      consumes:
+      - application/json
+      - multipart/form-data
+      description: Upload Post Image
+      operationId: upload-image-post
+      parameters:
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: code
+        in: query
+        name: id
+        type: integer
+      produces:
+      - application/json
+      - application/octet-stream
+      - image/png
+      - image/jpeg
+      - image/jpg
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Upload Post Image
+      tags:
+      - Post
   /auth/sign-in:
     post:
       consumes:

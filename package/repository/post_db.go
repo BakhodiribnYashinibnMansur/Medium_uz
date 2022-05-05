@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"mediumuz/model"
 	"mediumuz/util/logrus"
+	"time"
 
 	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"
@@ -65,4 +66,25 @@ func (repo *PostDB) CheckPostId(id int, logrus *logrus.Logger) (int, error) {
 		return -1, err
 	}
 	return postNumber, nil
+}
+
+func (repo *PostDB) UpdatePostImage(id int, filePath string, logrus *logrus.Logger) (int64, error) {
+	tm := time.Now()
+	query := fmt.Sprintf("	UPDATE %s SET post_image_path=$1,updated_at=$2	WHERE id = $3  RETURNING id ", postTable)
+	rows, err := repo.db.Exec(query, filePath, tm, id)
+
+	if err != nil {
+		logrus.Errorf("ERROR: Update PostImage : %v", err)
+		return 0, err
+	}
+
+	effectedRowsNum, err := rows.RowsAffected()
+
+	if err != nil {
+		logrus.Errorf("ERROR: Update Post Image effectedRowsNum : %v", err)
+		return 0, err
+	}
+	logrus.Info("DONE:Update Post image")
+	return effectedRowsNum, nil
+
 }
