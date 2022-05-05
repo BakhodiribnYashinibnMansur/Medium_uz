@@ -59,6 +59,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 			post.GET("/get/:id", handler.getPostID)              //DONE
 			post.PATCH("/upload-image", handler.uploadImagePost) //DONE
 			post.PUT("/update", handler.updatePost)              //DONE
+			post.DELETE("/delete", handler.deletePost)
 		}
 	}
 	return router

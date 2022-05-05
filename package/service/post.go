@@ -46,3 +46,7 @@ func (service *PostService) UpdatePost(id int, input model.Post, logrus *logrus.
 	post.Tags = convert.EmptyArrayStringToNullArray(input.Tags)
 	return service.repo.UpdatePost(id, post, logrus)
 }
+
+func (service *PostService) DeletePost(id int, logrus *logrus.Logger) (int64, int64, error) {
+	return service.repo.DeletePost(id, logrus)
+}

@@ -18,7 +18,7 @@ type Authorization interface {
 type User interface {
 	GetUserData(id string, logrus *logrus.Logger) (model.UserFull, error)
 	CheckCode(email, code string, logrus *logrus.Logger) error
-	UpdateUserVerified(id string, logrus *logrus.Logger) (effectedRowsNum int64, err error)
+	UpdateUserVerified(id string, logrus *logrus.Logger) (int64, error)
 	UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdateAccount(id int, user model.UpdateUser, logrus *logrus.Logger) (int64, error)
 	CheckUserId(id int, logrus *logrus.Logger) (int, error)
@@ -27,10 +27,11 @@ type User interface {
 type Post interface {
 	CreatePost(post model.Post, logrus *logrus.Logger) (int, error)
 	CreatePostUser(userId, postId int, logrus *logrus.Logger) (int, error)
-	GetPostById(id int, logrus *logrus.Logger) (post model.PostFull, err error)
+	GetPostById(id int, logrus *logrus.Logger) (model.PostFull, error)
 	CheckPostId(id int, logrus *logrus.Logger) (int, error)
 	UpdatePostImage(id int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdatePost(id int, input model.UpdatePost, logrus *logrus.Logger) (int64, error)
+	DeletePost(id int, logrus *logrus.Logger) (int64, int64, error)
 }
 
 type Repository struct {

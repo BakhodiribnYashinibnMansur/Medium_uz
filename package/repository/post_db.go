@@ -108,3 +108,37 @@ func (repo *PostDB) UpdatePost(id int, post model.UpdatePost, logrus *logrus.Log
 	logrus.Info("DONE:Update Post ")
 	return effectedRowsNum, nil
 }
+
+func (repo *PostDB) DeletePost(id int, logrus *logrus.Logger) (int64, int64, error) {
+	tm := time.Now()
+	deletePostQuery := fmt.Sprintf("UPDATE %s SET deleted_at = $1 WHERE id = $2 RETURNING id", postTable)
+	deletePostRow, err := repo.db.Exec(deletePostQuery, tm, id)
+
+	if err != nil {
+		logrus.Errorf("ERROR: Deleted Post : %v", err)
+		return -1, -1, err
+	}
+
+	deletedPost, err := deletePostRow.RowsAffected()
+
+	if err != nil {
+		logrus.Errorf("ERROR: Deleted Post  effectedRowsNum : %v", err)
+		return -1, -1, err
+	}
+	deletePostUserQuery := fmt.Sprintf("UPDATE %s SET deleted_at = $1 WHERE post_id = $2 RETURNING id", postUserTable)
+	deletePostUserRow, err := repo.db.Exec(deletePostUserQuery, tm, id)
+
+	if err != nil {
+		logrus.Errorf("ERROR: Deleted Post : %v", err)
+		return -1, -1, err
+	}
+
+	deletedPostUser, err := deletePostUserRow.RowsAffected()
+
+	if err != nil {
+		logrus.Errorf("ERROR: Deleted Post  effectedRowsNum : %v", err)
+		return -1, -1, err
+	}
+	logrus.Info("DONE:Deleted Post ")
+	return deletedPost, deletedPostUser, nil
+}

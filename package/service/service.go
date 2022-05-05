@@ -30,6 +30,7 @@ type Post interface {
 	CheckPostId(id int, logrus *logrus.Logger) (int, error)
 	UpdatePostImage(id int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdatePost(id int, input model.Post, logrus *logrus.Logger) (int64, error)
+	DeletePost(id int, logrus *logrus.Logger) (int64, int64, error)
 }
 type Service struct {
 	Authorization
