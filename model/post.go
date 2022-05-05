@@ -5,7 +5,6 @@ import "github.com/lib/pq"
 type Post struct {
 	ID    int      `json:"-"`
 	Title string   `json:"title" default:"Tutorial Golang"`
-	Image string   `json:"image" default:""`
 	Body  string   `json:"text" default:"Hello World"`
 	Tags  []string `json:"tags" default:["Devs"] `
 }

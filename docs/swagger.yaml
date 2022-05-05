@@ -13,8 +13,6 @@ definitions:
     type: object
   model.Post:
     properties:
-      image:
-        type: string
       tags:
         items:
           type: string
@@ -517,6 +515,56 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get  Post By ID
+      tags:
+      - Post
+  /api/post/update:
+    put:
+      consumes:
+      - application/json
+      description: Update post by id
+      operationId: update-post-id
+      parameters:
+      - description: Param ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: post info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.Post'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Update  Post By ID
       tags:
       - Post
   /api/post/upload-image:

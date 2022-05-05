@@ -144,3 +144,32 @@ func (handler *Handler) uploadImagePost(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: filePath})
 }
+
+// @Summary Update  Post By ID
+// @Tags Post
+// @Description Update post by id
+// @ID update-post-id
+// @Accept  json
+// @Produce  json
+// @Param        id   path  int     true "Param ID"
+// @Param input body model.Post true "post info"
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/post/update [PUT]
+//@Security ApiKeyAuth
+func (handler *Handler) updatePost(ctx *gin.Context) {
+	logrus := handler.logrus
+	paramID := ctx.Param("id")
+	if paramID == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
+		return
+	}
+	// id, err := strconv.Atoi(paramID)
+	// if err != nil {
+	// 	error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+	// 	return
+	// }
+}
