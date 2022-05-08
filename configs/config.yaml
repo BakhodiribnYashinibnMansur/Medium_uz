@@ -5,11 +5,11 @@ app:
   version: "1.0"
 
 db:
-  dbname: "dd3jlput8sprfr"
-  host: "ec2-35-168-194-15.compute-1.amazonaws.com"
+  dbname: "quffklnl"
+  host: "heffalump.db.elephantsql.com"
   port: "5432"
-  sslmode: "require"
-  username: "enfmdlgvbodjvj"
+  sslmode: "disable"
+  username: "quffklnl"
 
 redis:
   host: "redis-10231.c61.us-east-1-3.ec2.cloud.redislabs.com"
