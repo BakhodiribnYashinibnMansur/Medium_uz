@@ -48,11 +48,11 @@ func InitConfig() (cfg *Configs, err error) {
 	cfg = &Configs{
 		AppName:         viper.GetString("app.name"),
 		ServiceHost:     viper.GetString("app.host"),
-		HTTPPort:        viper.GetString("app.port"),
+		HTTPPort:        os.Getenv("APP_PORT"),
 		Version:         viper.GetString("app.version"),
 		DBURL:           os.Getenv("DB_URL"),
 		DBHost:          viper.GetString("db.host"),
-		DBPort:          os.Getenv("APP_PORT"),
+		DBPort:          viper.GetString("db.port"),
 		DBUsername:      viper.GetString("db.username"),
 		DBName:          viper.GetString("db.dbname"),
 		DBSSLMode:       viper.GetString("db.sslmode"),
