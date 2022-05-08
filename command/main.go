@@ -7,7 +7,6 @@ import (
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/service"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/server"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
-	"github.com/jmoiron/sqlx"
 
 	_ "github.com/lib/pq"
 )
@@ -32,15 +31,15 @@ func main() {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
 	logrus.Info("successfull checked configs.")
-	var db *sqlx.DB
-	// db, err := repository.NewPostgresDB(repository.Config{
-	// 	Host:     configs.DBHost,
-	// 	Port:     configs.DBPort,
-	// 	Username: configs.DBUsername,
-	// 	DBName:   configs.DBName,
-	// 	SSLMode:  configs.DBSSLMode,
-	// 	Password: configs.DBPassword,
-	// }, logrus)
+
+	db, err := repository.NewPostgresDB(repository.Config{
+		Host:     configs.DBHost,
+		Port:     configs.DBPort,
+		Username: configs.DBUsername,
+		DBName:   configs.DBName,
+		SSLMode:  configs.DBSSLMode,
+		Password: configs.DBPassword,
+	}, logrus)
 
 	if err != nil {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
