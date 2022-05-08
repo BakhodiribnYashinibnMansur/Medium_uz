@@ -12,8 +12,8 @@ db:
   username: "enfmdlgvbodjvj"
 
 redis:
-  host: localhost
-  port: "6379"
+  host: "redis-10231.c61.us-east-1-3.ec2.cloud.redislabs.com"
+  port: "10231"
   db: 0
 
 smtp:
