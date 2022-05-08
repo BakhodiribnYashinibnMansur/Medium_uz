@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"mediumuz/model"
-	"mediumuz/util/error"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/error"
 	"net/http"
 	"strconv"
 

@@ -747,6 +747,74 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/post/search": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Search post by search text",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Search  Post By search text",
+                "operationId": "search-post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search text",
+                        "name": "search",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/post/update": {
             "put": {
                 "security": [
@@ -1123,7 +1191,7 @@ const docTemplate = `{
                     "type": "string",
                     "default": "MRB"
                 },
-                "interesting": {
+                "interests": {
                     "type": "array",
                     "items": {
                         "type": "string"
@@ -1163,8 +1231,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "MediumuZ API",
-	Description:      "API Server for MediumuZ Application",
+	Title:            "github.com/BakhodiribnYashinibnMansur/Medium_uz API",
+	Description:      "API Server for github.com/BakhodiribnYashinibnMansur/Medium_uz Application",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

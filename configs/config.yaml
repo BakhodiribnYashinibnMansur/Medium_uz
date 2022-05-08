@@ -1,5 +1,5 @@
 app:
-  name: MediumuZ
+  name: github.com/BakhodiribnYashinibnMansur/Medium_uz
   host: "localhost:"
   port: "8080"
   version: "1.0"

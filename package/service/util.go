@@ -5,9 +5,10 @@ import (
 	"crypto/tls"
 	"html/template"
 	"math/rand"
-	"mediumuz/configs"
-	"mediumuz/util/logrus"
 	"time"
+
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/configs"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 
 	gomail "gopkg.in/mail.v2"
 )
@@ -42,7 +43,7 @@ func SendCodeToEmail(email string, userName string, logrus *logrus.Logger) (stri
 	m := gomail.NewMessage()
 	m.SetHeader("From", configs.SMTPsenderEmail)
 	m.SetHeader("To", email)
-	m.SetHeader("Subject", "MediumuZ Email Verification")
+	m.SetHeader("Subject", "github.com/BakhodiribnYashinibnMansur/Medium_uz Email Verification")
 	m.SetBody("text/html", parseTemplate)
 
 	dial := gomail.NewDialer(configs.SMTPHost, configs.SMTPPort, configs.SMTPsenderEmail, configs.STMPappPassword)

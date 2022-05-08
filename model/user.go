@@ -7,16 +7,16 @@ import (
 )
 
 type User struct {
-	Id          int      `json:"-" `
-	Email       string   `json:"email" default:"phapp0224mb@gmail.com"`
-	Password    string   `json:"password" default:"0224mb"`
-	NickName    string   `json:"nickname" default:"mrb"`
-	FirstName   string   `json:"first_name" default:"MRB"`
-	SecondName  string   `json:"second_name" default:"HERO"`
-	Interesting []string `json:"interesting" default:""`
-	Bio         string   `json:"bio" default:"I am Golang dev"`
-	City        string   `json:"city" default:"Navoi"`
-	Phone       string   `json:"phone" default:"+9989 93 753 65 71"`
+	Id         int      `json:"-" `
+	Email      string   `json:"email" default:"phapp0224mb@gmail.com"`
+	Password   string   `json:"password" default:"0224mb"`
+	NickName   string   `json:"nickname" default:"mrb"`
+	FirstName  string   `json:"first_name" default:"MRB"`
+	SecondName string   `json:"second_name" default:"HERO"`
+	Interests  []string `json:"interests" default:""`
+	Bio        string   `json:"bio" default:"I am Golang dev"`
+	City       string   `json:"city" default:"Navoi"`
+	Phone      string   `json:"phone" default:"+9989 93 753 65 71"`
 }
 
 type UserCheck struct {
@@ -36,7 +36,7 @@ type UserFull struct {
 	Password          string         `json:"password" db:"password_hash"`
 	FirstName         string         `json:"first_name" db:"firstname"`
 	SecondName        string         `json:"second_name" db:"secondname"`
-	Interesting       pq.StringArray `json:"interesting" db:"interesting"`
+	Interests         pq.StringArray `json:"interests" db:"interests"`
 	Bio               string         `json:"bio" db:"bio"`
 	City              string         `json:"city" db:"city"`
 	IsVerified        bool           `json:"is_verified" db:"is_verified"`
@@ -63,14 +63,14 @@ type SignInInput struct {
 }
 
 type UpdateUser struct {
-	Id          int              `json:"-" `
-	Email       sql.NullString   `json:"email" default:"phapp0224mb@gmail.com"`
-	Password    sql.NullString   `json:"password" default:"0224mb"`
-	NickName    sql.NullString   `json:"nickname" default:"mrb"`
-	FirstName   sql.NullString   `json:"first_name" default:"MRB"`
-	SecondName  sql.NullString   `json:"second_name" default:"HERO"`
-	Interesting []sql.NullString `json:"interesting" default:""`
-	Bio         sql.NullString   `json:"bio" default:"I am Golang dev"`
-	City        sql.NullString   `json:"city" default:"Navoi"`
-	Phone       sql.NullString   `json:"phone" default:"+9989 93 753 65 71"`
+	Id         int              `json:"-" `
+	Email      sql.NullString   `json:"email" default:"phapp0224mb@gmail.com"`
+	Password   sql.NullString   `json:"password" default:"0224mb"`
+	NickName   sql.NullString   `json:"nickname" default:"mrb"`
+	FirstName  sql.NullString   `json:"first_name" default:"MRB"`
+	SecondName sql.NullString   `json:"second_name" default:"HERO"`
+	Interests  []sql.NullString `json:"interests" default:""`
+	Bio        sql.NullString   `json:"bio" default:"I am Golang dev"`
+	City       sql.NullString   `json:"city" default:"Navoi"`
+	Phone      sql.NullString   `json:"phone" default:"+9989 93 753 65 71"`
 }

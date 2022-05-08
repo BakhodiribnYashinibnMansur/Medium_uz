@@ -1,10 +1,11 @@
 package service
 
 import (
-	"mediumuz/model"
-	"mediumuz/package/repository"
-	"mediumuz/util/logrus"
 	"mime/multipart"
+
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/repository"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 )
 
 type Authorization interface {

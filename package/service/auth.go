@@ -2,10 +2,11 @@ package service
 
 import (
 	"errors"
-	"mediumuz/model"
-	"mediumuz/package/repository"
-	"mediumuz/util/logrus"
 
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
+
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/repository"
 	"github.com/dgrijalva/jwt-go"
 )
 

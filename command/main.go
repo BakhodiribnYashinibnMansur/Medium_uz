@@ -1,19 +1,19 @@
 package main
 
 import (
-	"mediumuz/configs"
-	"mediumuz/package/handler"
-	"mediumuz/package/repository"
-	"mediumuz/package/service"
-	"mediumuz/server"
-	"mediumuz/util/logrus"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/configs"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/handler"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/repository"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/service"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/server"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 
 	_ "github.com/lib/pq"
 )
 
-// @title MediumuZ API
+// @title github.com/BakhodiribnYashinibnMansur/Medium_uz API
 // @version 1.0
-// @description API Server for MediumuZ Application
+// @description API Server for github.com/BakhodiribnYashinibnMansur/Medium_uz Application
 //@termsOfService https://github.com/BakhodiribnYashinibnMansur/Medium_uz
 // @host localhost:8080
 // @BasePath /

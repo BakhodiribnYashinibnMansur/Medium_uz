@@ -1,8 +1,9 @@
 package repository
 
 import (
-	"mediumuz/util/logrus"
 	"strconv"
+
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 
 	"github.com/go-redis/redis"
 )

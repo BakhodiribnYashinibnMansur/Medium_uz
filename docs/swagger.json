@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "API Server for MediumuZ Application",
-        "title": "MediumuZ API",
+        "description": "API Server for github.com/BakhodiribnYashinibnMansur/Medium_uz Application",
+        "title": "github.com/BakhodiribnYashinibnMansur/Medium_uz API",
         "termsOfService": "https://github.com/BakhodiribnYashinibnMansur/Medium_uz",
         "contact": {
             "name": "Bakhodir Yashin Mansur",
@@ -740,6 +740,74 @@
                 }
             }
         },
+        "/api/post/search": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Search post by search text",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Search  Post By search text",
+                "operationId": "search-post",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "search text",
+                        "name": "search",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/post/update": {
             "put": {
                 "security": [
@@ -1116,7 +1184,7 @@
                     "type": "string",
                     "default": "MRB"
                 },
-                "interesting": {
+                "interests": {
                     "type": "array",
                     "items": {
                         "type": "string"

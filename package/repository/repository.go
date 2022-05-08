@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"mediumuz/model"
-	"mediumuz/util/logrus"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 
 	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"

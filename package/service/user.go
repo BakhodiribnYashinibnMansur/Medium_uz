@@ -2,12 +2,13 @@ package service
 
 import (
 	"io"
-	"mediumuz/model"
-	"mediumuz/package/repository"
-	"mediumuz/util/convert"
-	"mediumuz/util/logrus"
 	"mime/multipart"
 	"os"
+
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/repository"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/convert"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 )
 
 type UserService struct {
@@ -87,7 +88,7 @@ func (service *UserService) UpdateAccount(id int, user model.User, logrus *logru
 	updateUser.NickName = convert.EmptyStringToNull(user.NickName)
 	updateUser.Phone = convert.EmptyStringToNull(user.Phone)
 
-	updateUser.Interesting = convert.EmptyArrayStringToNullArray(user.Interesting)
+	updateUser.Interests = convert.EmptyArrayStringToNullArray(user.Interests)
 
 	logrus.Info("successfully password_hash")
 	return service.repo.UpdateAccount(id, updateUser, logrus)

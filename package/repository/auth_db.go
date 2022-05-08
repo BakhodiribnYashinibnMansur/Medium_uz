@@ -3,8 +3,10 @@ package repository
 import (
 	"errors"
 	"fmt"
-	"mediumuz/model"
-	"mediumuz/util/logrus"
+
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
+
 	"time"
 
 	"github.com/go-redis/redis"
@@ -23,9 +25,9 @@ func NewAuthDB(db *sqlx.DB, redis *redis.Client) *AuthDB {
 
 func (repo *AuthDB) CreateUser(user model.User, logrus *logrus.Logger) (int, error) {
 	var id int
-	query := fmt.Sprintf("INSERT INTO %s (email, password_hash,firstname,secondname,nickname,city,phone,interesting,bio) values ($1, $2, $3,$4,$5,$6,$7,$8,$9) RETURNING id", usersTable)
+	query := fmt.Sprintf("INSERT INTO %s (email, password_hash,firstname,secondname,nickname,city,phone,interests,bio) values ($1, $2, $3,$4,$5,$6,$7,$8,$9) RETURNING id", usersTable)
 
-	row := repo.db.QueryRow(query, user.Email, user.Password, user.FirstName, user.SecondName, user.NickName, user.City, user.Phone, pq.Array(user.Interesting), user.Bio)
+	row := repo.db.QueryRow(query, user.Email, user.Password, user.FirstName, user.SecondName, user.NickName, user.City, user.Phone, pq.Array(user.Interests), user.Bio)
 
 	if err := row.Scan(&id); err != nil {
 		logrus.Infof("ERROR:PSQL Insert error %s", err.Error())

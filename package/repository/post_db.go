@@ -2,9 +2,10 @@ package repository
 
 import (
 	"fmt"
-	"mediumuz/model"
-	"mediumuz/util/logrus"
 	"time"
+
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 
 	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"

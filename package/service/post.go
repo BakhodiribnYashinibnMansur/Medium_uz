@@ -1,10 +1,10 @@
 package service
 
 import (
-	"mediumuz/model"
-	"mediumuz/package/repository"
-	"mediumuz/util/convert"
-	"mediumuz/util/logrus"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/repository"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/convert"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 )
 
 type PostService struct {

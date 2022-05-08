@@ -1,7 +1,7 @@
 package error
 
 import (
-	"mediumuz/util/logrus"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 
 	"github.com/gin-gonic/gin"
 )

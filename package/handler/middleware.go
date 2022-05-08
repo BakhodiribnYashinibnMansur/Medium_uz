@@ -2,8 +2,8 @@ package handler
 
 import (
 	"errors"
-	errs "mediumuz/util/error"
-	"mediumuz/util/logrus"
+	errs "github.com/BakhodiribnYashinibnMansur/Medium_uz/util/error"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 	"net/http"
 	"strings"
 

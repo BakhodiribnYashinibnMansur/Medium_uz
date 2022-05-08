@@ -2,7 +2,8 @@ package repository
 
 import (
 	"fmt"
-	"mediumuz/util/logrus"
+
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 
 	"github.com/jmoiron/sqlx"
 )

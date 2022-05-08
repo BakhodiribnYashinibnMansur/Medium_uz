@@ -2,12 +2,12 @@ package handler
 
 import (
 	"fmt"
-	"mediumuz/docs"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/docs"
 
-	"mediumuz/package/service"
-	"mediumuz/util/logrus"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/service"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 
-	"mediumuz/configs"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/configs"
 
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -59,7 +59,10 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 			post.GET("/get/:id", handler.getPostID)              //DONE
 			post.PATCH("/upload-image", handler.uploadImagePost) //DONE
 			post.PUT("/update", handler.updatePost)              //DONE
-			post.DELETE("/delete", handler.deletePost)
+			post.DELETE("/delete", handler.deletePost)           //DONE
+			post.GET("/search", handler.searchAll)               //PROCESS ADVANCED SEARCH
+			post.GET("/like")                                    //PROCESS
+			post.GET("/view")                                    //PROCESS
 		}
 	}
 	return router
