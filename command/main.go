@@ -57,7 +57,9 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services, logrus, configs)
 	port := os.Getenv("APP_PORT")
-
+	if len(port) == 0 {
+		port = "8080"
+	}
 	server := new(server.Server)
 	err = server.Run(port, handlers.InitRoutes())
 	if err != nil {
