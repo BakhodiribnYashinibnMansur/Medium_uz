@@ -59,7 +59,7 @@ func main() {
 	port := os.Getenv("APP_PORT")
 
 	server := new(server.Server)
-	err = server.Run("8080", handlers.InitRoutes())
+	err = server.Run(port, handlers.InitRoutes())
 	if err != nil {
 		logrus.Fatalf("error occurred while running http server: %s", err.Error())
 	}
