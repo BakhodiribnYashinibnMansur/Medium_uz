@@ -13,6 +13,7 @@ type Configs struct {
 	ServiceHost     string
 	HTTPPort        string
 	Version         string
+	DBURL           string
 	DBHost          string
 	DBPort          string
 	DBUsername      string
@@ -49,6 +50,7 @@ func InitConfig() (cfg *Configs, err error) {
 		ServiceHost:     viper.GetString("app.host"),
 		HTTPPort:        viper.GetString("app.port"),
 		Version:         viper.GetString("app.version"),
+		DBURL:           os.Getenv("DB_URL"),
 		DBHost:          viper.GetString("db.host"),
 		DBPort:          viper.GetString("db.port"),
 		DBUsername:      viper.GetString("db.username"),

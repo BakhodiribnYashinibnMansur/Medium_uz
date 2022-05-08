@@ -1,15 +1,15 @@
 app:
-  name: github.com/BakhodiribnYashinibnMansur/Medium_uz
+  name: Medium_uz
   host: "localhost:"
   port: "8080"
   version: "1.0"
 
 db:
-  dbname: mediumuz
-  host: localhost
-  port: "2001"
-  sslmode: disable
-  username: postgres
+  dbname: "dd3jlput8sprfr"
+  host: "ec2-35-168-194-15.compute-1.amazonaws.com"
+  port: "5432"
+  sslmode: "require"
+  username: "enfmdlgvbodjvj"
 
 redis:
   host: localhost

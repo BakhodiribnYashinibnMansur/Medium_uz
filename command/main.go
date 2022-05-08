@@ -11,9 +11,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
-// @title github.com/BakhodiribnYashinibnMansur/Medium_uz API
+// @title MediumuZ API
 // @version 1.0
-// @description API Server for github.com/BakhodiribnYashinibnMansur/Medium_uz Application
+// @description API Server for MediumuZ Application
 //@termsOfService https://github.com/BakhodiribnYashinibnMansur/Medium_uz
 // @host localhost:8080
 // @BasePath /
