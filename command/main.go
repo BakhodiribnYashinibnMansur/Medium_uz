@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/configs"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/handler"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/repository"
@@ -61,6 +63,6 @@ func main() {
 	if err != nil {
 		logrus.Fatalf("error occurred while running http server: %s", err.Error())
 	}
-
-	defer logrus.Infof("run server port:%v", configs.HTTPPort)
+	port := os.Getenv("APP_PORT")
+	defer logrus.Infof("run server port:%v", port)
 }
