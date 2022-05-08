@@ -1,7 +1,7 @@
 app:
   name: Medium_uz
   host: "localhost:"
-  port: "5000"
+  port: "8080"
   version: "1.0"
 
 db:
