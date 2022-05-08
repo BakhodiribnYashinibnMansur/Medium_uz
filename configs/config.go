@@ -48,7 +48,7 @@ func InitConfig() (cfg *Configs, err error) {
 	cfg = &Configs{
 		AppName:         viper.GetString("app.name"),
 		ServiceHost:     viper.GetString("app.host"),
-		HTTPPort:        os.Getenv("APP_PORT"),
+		HTTPPort:        os.Getenv("PORT"),
 		Version:         viper.GetString("app.version"),
 		DBURL:           os.Getenv("DB_URL"),
 		DBHost:          viper.GetString("db.host"),
