@@ -60,6 +60,7 @@ func main() {
 	if len(port) == 0 {
 		port = "8080"
 	}
+	logrus.Infof("Server Port : %s :", port)
 	server := new(server.Server)
 	err = server.Run(port, handlers.InitRoutes())
 	if err != nil {
