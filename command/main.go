@@ -56,13 +56,13 @@ func main() {
 	repos := repository.NewRepository(db, redis)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services, logrus, configs)
+	port := os.Getenv("APP_PORT")
 
 	server := new(server.Server)
-	err = server.Run(configs.HTTPPort, handlers.InitRoutes())
-
+	err = server.Run(port, handlers.InitRoutes())
 	if err != nil {
 		logrus.Fatalf("error occurred while running http server: %s", err.Error())
 	}
-	port := os.Getenv("APP_PORT")
+
 	defer logrus.Infof("run server port:%v", port)
 }
