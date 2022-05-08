@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/docs"
 
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/service"
@@ -33,6 +34,8 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.New()
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	router.GET("/", handler.testHttpsHandler)
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-up", handler.signUp) //DONE
