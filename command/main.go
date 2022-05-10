@@ -33,7 +33,11 @@ func main() {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
 	logrus.Info("successfull checked configs.")
-
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "8080"
+		logrus.Infof("$PORT : %s", port)
+	}
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     configs.DBHost,
 		Port:     configs.DBPort,
@@ -56,10 +60,7 @@ func main() {
 	repos := repository.NewRepository(db, redis)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services, logrus, configs)
-	port := os.Getenv("APP_PORT")
-	if len(port) == 0 {
-		port = "8080"
-	}
+
 	logrus.Infof("Server Port : %s :", port)
 	server := new(server.Server)
 	err = server.Run(port, handlers.InitRoutes())

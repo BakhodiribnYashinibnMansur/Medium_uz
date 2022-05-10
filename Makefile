@@ -26,4 +26,7 @@ migrate-down:
 	migrate -path ./schema -database 'postgresql://postgres:0224@localhost:2001/mediumuz?sslmode=disable' down
 
 docker-image:
-	sudo docker build -t mediumuz_go .
+	sudo docker build -t mediumuz .
+
+docker-container:
+	sudo docker run -it --name heroku2  -p 8080:8080 medium

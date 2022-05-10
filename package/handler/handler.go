@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"fmt"
-
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/docs"
 
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/service"
@@ -27,7 +25,6 @@ func NewHandler(services *service.Service, logrus *logrus.Logger, config *config
 
 func (handler *Handler) InitRoutes() *gin.Engine {
 	config := handler.config
-	fmt.Println(config)
 	docs.SwaggerInfo.Title = config.AppName
 	docs.SwaggerInfo.Version = config.Version
 	docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
