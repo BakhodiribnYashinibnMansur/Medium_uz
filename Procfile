@@ -1,2 +1,2 @@
 
-web: MediumUZ --port $PORT
+web:  --port $PORT
