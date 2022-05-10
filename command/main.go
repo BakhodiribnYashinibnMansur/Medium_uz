@@ -15,7 +15,7 @@ import (
 // @version 1.0
 // @description API Server for MediumuZ Application
 //@termsOfService https://github.com/BakhodiribnYashinibnMansur/Medium_uz
-// @host https://stormy-harbor-46091.herokuapp.com
+// @host https://mediumuz.herokuapp.com
 // @BasePath /
 // @contact.name   Bakhodir Yashin Mansur
 // @contact.email  phapp0224mb@gmail.com
@@ -32,13 +32,6 @@ func main() {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
 	logrus.Info("successfull checked configs.")
-
-	// port := os.Getenv("PORT")
-
-	// if len(port) == 0 {
-	// 	port = "8080"
-	// 	logrus.Infof(" HEROKU $PORT : %s", port)
-	// }
 
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     configs.DBHost,
