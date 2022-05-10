@@ -1,6 +1,6 @@
 app:
   name: Medium_uz
-  host: "https://stormy-harbor-46091.herokuapp.com:"
+  host: "stormy-harbor-46091.herokuapp.com:"
   port: "8080"
   version: "1.0"
 
