@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS post (
 id SERIAL NOT NULL  UNIQUE,
 post_title VARCHAR(255) NOT NULL,
-post_image_path VARCHAR(255) NOT NULL,
+post_image_path VARCHAR(255)   NULL,
 post_body TEXT NOT NULL,
 post_views_count INTEGER NOT NULL DEFAULT 0,
 post_like_count INTEGER NOT NULL DEFAULT 0,
