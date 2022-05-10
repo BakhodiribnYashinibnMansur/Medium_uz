@@ -23,7 +23,7 @@ func NewPostDB(db *sqlx.DB, redis *redis.Client) *PostDB {
 
 func (repo *PostDB) CreatePost(post model.Post, logrus *logrus.Logger) (int, error) {
 	var id int
-	query := fmt.Sprintf("INSERT INTO %s (post_title  , post_body , post_tags) VALUES ($1, $2, $3,$4)  RETURNING id", postTable)
+	query := fmt.Sprintf("INSERT INTO %s (post_title  , post_body , post_tags) VALUES ($1, $2, $3)  RETURNING id", postTable)
 
 	row := repo.db.QueryRow(query, post.Title, post.Body, pq.Array(post.Tags))
 
