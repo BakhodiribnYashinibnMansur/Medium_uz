@@ -36,7 +36,7 @@ func main() {
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
 		port = "8080"
-		logrus.Infof("$PORT : %s", port)
+		logrus.Infof(" HEROKU $PORT : %s", port)
 	}
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     configs.DBHost,
