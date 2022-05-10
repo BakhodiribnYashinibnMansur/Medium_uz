@@ -20,10 +20,10 @@ swag:
 	swag init -g  command/main.go
 
 migrate-up:
-	migrate -path ./schema -database 'postgresql://postgres:0224@localhost:2001/mediumuz?sslmode=disable' up
+	migrate -path ./schema -database 'postgres://quffklnl:YuXp2n2HtszNTlB85lE75QJ8xZ0aLbXP@heffalump.db.elephantsql.com/quffklnl?sslmode=disable' up
 
 migrate-down:
-	migrate -path ./schema -database 'postgresql://postgres:0224@localhost:2001/mediumuz?sslmode=disable' down
+	migrate -path ./schema -database 'postgres://quffklnl:YuXp2n2HtszNTlB85lE75QJ8xZ0aLbXP@heffalump.db.elephantsql.com/quffklnl?sslmode=disable' down
 
 docker-image:
 	sudo docker build -t mediumuz .

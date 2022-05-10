@@ -17,7 +17,7 @@ import (
 // @version 1.0
 // @description API Server for MediumuZ Application
 //@termsOfService https://github.com/BakhodiribnYashinibnMansur/Medium_uz
-// @host localhost:8080
+// @host https://stormy-harbor-46091.herokuapp.com
 // @BasePath /
 // @contact.name   Bakhodir Yashin Mansur
 // @contact.email  phapp0224mb@gmail.com
