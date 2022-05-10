@@ -1,8 +1,6 @@
 package main
 
 import (
-	"os"
-
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/configs"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/handler"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/repository"
@@ -27,17 +25,21 @@ import (
 func main() {
 
 	logrus := logrus.GetLogger()
+
 	configs, err := configs.InitConfig()
 	logrus.Infof("configs %v", configs)
 	if err != nil {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
 	logrus.Info("successfull checked configs.")
-	port := os.Getenv("PORT")
-	if len(port) == 0 {
-		port = "8080"
-		logrus.Infof(" HEROKU $PORT : %s", port)
-	}
+
+	// port := os.Getenv("PORT")
+
+	// if len(port) == 0 {
+	// 	port = "8080"
+	// 	logrus.Infof(" HEROKU $PORT : %s", port)
+	// }
+
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     configs.DBHost,
 		Port:     configs.DBPort,
@@ -61,12 +63,11 @@ func main() {
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services, logrus, configs)
 
-	logrus.Infof("Server Port : %s :", port)
 	server := new(server.Server)
-	err = server.Run(port, handlers.InitRoutes())
+	err = server.Run(configs.HTTPPort, handlers.InitRoutes())
 	if err != nil {
 		logrus.Fatalf("error occurred while running http server: %s", err.Error())
 	}
 
-	defer logrus.Infof("run server port:%v", port)
+	defer logrus.Infof("run server port:%v", configs.HTTPPort)
 }
