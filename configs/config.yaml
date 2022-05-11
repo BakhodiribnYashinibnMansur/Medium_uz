@@ -2,7 +2,7 @@ app:
   name: Medium_uz
   #////   For HEROKU
   host: "mediumuz.herokuapp.com"
-  port: "8080"
+  port: ""
   # host: "localhost:"
   # port: "8080"
   version: "1.0"
