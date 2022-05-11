@@ -77,14 +77,14 @@ definitions:
         default: HERO
         type: string
     type: object
-host: localhost:8080
+host: https://mediumuz.herokuapp.com
 info:
   contact:
     email: phapp0224mb@gmail.com
     name: Bakhodir Yashin Mansur
-  description: API Server for github.com/BakhodiribnYashinibnMansur/Medium_uz Application
+  description: API Server for MediumuZ Application
   termsOfService: https://github.com/BakhodiribnYashinibnMansur/Medium_uz
-  title: github.com/BakhodiribnYashinibnMansur/Medium_uz API
+  title: MediumuZ API
   version: "1.0"
 paths:
   /api/account/get:

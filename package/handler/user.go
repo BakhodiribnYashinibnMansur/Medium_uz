@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
-	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/error"
 	"net/http"
 	"strconv"
+
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/error"
 
 	"github.com/gin-gonic/gin"
 )
@@ -120,13 +121,13 @@ func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
 		return
 	}
 
-	filePath, err := handler.services.UploadImage(file, header, logrus)
+	imageURL, err := handler.services.UploadImage(file, header, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
 
-	effectedRowsNum, err := handler.services.UpdateAccountImage(id, filePath, logrus)
+	effectedRowsNum, err := handler.services.UpdateAccountImage(id, imageURL, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
@@ -136,7 +137,7 @@ func (handler *Handler) uploadAccountImage(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "User not found", logrus)
 		return
 	}
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: filePath})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: imageURL})
 }
 
 // @Summary Update Account

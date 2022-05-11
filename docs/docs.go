@@ -1228,11 +1228,11 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "localhost:8080",
+	Host:             "https://mediumuz.herokuapp.com",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "github.com/BakhodiribnYashinibnMansur/Medium_uz API",
-	Description:      "API Server for github.com/BakhodiribnYashinibnMansur/Medium_uz Application",
+	Title:            "MediumuZ API",
+	Description:      "API Server for MediumuZ Application",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

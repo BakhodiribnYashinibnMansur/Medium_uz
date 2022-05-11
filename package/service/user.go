@@ -5,6 +5,7 @@ import (
 	"mime/multipart"
 	"os"
 
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/configs"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/package/repository"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/convert"
@@ -69,7 +70,13 @@ func (service *UserService) UploadImage(file multipart.File, header *multipart.F
 		logrus.Errorf("ERROR: Failed copy %s", err)
 		return "", err
 	}
-	return filePath, nil
+	configs, err := configs.InitConfig()
+	logrus.Infof("configs %v", configs)
+	if err != nil {
+		logrus.Fatalf("error initializing configs: %s", err.Error())
+	}
+	imageURL := configs.ServiceHost + configs.HTTPPort + "/" + filePath
+	return imageURL, nil
 }
 
 func (service *UserService) UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error) {

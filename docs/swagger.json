@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "API Server for github.com/BakhodiribnYashinibnMansur/Medium_uz Application",
-        "title": "github.com/BakhodiribnYashinibnMansur/Medium_uz API",
+        "description": "API Server for MediumuZ Application",
+        "title": "MediumuZ API",
         "termsOfService": "https://github.com/BakhodiribnYashinibnMansur/Medium_uz",
         "contact": {
             "name": "Bakhodir Yashin Mansur",
@@ -10,7 +10,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "https://mediumuz.herokuapp.com",
     "basePath": "/",
     "paths": {
         "/api/account/get": {

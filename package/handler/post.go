@@ -1,10 +1,11 @@
 package handler
 
 import (
-	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
-	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/error"
 	"net/http"
 	"strconv"
+
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
+	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/error"
 
 	"github.com/gin-gonic/gin"
 )
@@ -125,13 +126,13 @@ func (handler *Handler) uploadImagePost(ctx *gin.Context) {
 		return
 	}
 
-	filePath, err := handler.services.UploadImage(file, header, logrus)
+	imageURL, err := handler.services.UploadImage(file, header, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
 
-	effectedRowsNum, err := handler.services.UpdatePostImage(postId, filePath, logrus)
+	effectedRowsNum, err := handler.services.UpdatePostImage(postId, imageURL, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
@@ -142,7 +143,7 @@ func (handler *Handler) uploadImagePost(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: filePath})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: imageURL})
 }
 
 // @Summary Update  Post By ID

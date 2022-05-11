@@ -27,13 +27,14 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	config := handler.config
 	docs.SwaggerInfo.Title = config.AppName
 	docs.SwaggerInfo.Version = config.Version
-	docs.SwaggerInfo.Host = config.ServiceHost
+	docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.New()
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.GET("/test", handler.testHttpsHandler)
-	router.Static("/Content", "./public")
+	// router.Static("/Content", "./public")
+	router.Static("/public", "./public/")
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-up", handler.signUp) //DONE
@@ -52,7 +53,6 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 			account.PUT("/update", handler.updateAccount)              //DONE
 			account.GET("/get", handler.getUser)                       //DONE
 			account.PATCH("/upload-image", handler.uploadAccountImage) //DONE
-
 		}
 		post := api.Group("/post")
 		{
