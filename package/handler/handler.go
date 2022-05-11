@@ -27,13 +27,15 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	config := handler.config
 	docs.SwaggerInfo.Title = config.AppName
 	docs.SwaggerInfo.Version = config.Version
-	docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
+	// docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
+
+	// FOR HEROKU
+	docs.SwaggerInfo.Host = config.ServiceHost
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.New()
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.GET("/test", handler.testHttpsHandler)
-	// router.Static("/Content", "./public")
 	router.Static("/public", "./public/")
 	auth := router.Group("/auth")
 	{
