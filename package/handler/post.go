@@ -176,12 +176,16 @@ func (handler *Handler) uploadImagePost(ctx *gin.Context) {
 //@Security ApiKeyAuth
 func (handler *Handler) updatePost(ctx *gin.Context) {
 	logrus := handler.logrus
+	userID, err := getUserId(ctx, logrus)
+	if err != nil {
+		return
+	}
 	paramID := ctx.Query("id")
 	if paramID == "" {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
 		return
 	}
-	id, err := strconv.Atoi(paramID)
+	postID, err := strconv.Atoi(paramID)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
@@ -193,7 +197,18 @@ func (handler *Handler) updatePost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	result, err := handler.services.UpdatePost(id, input, logrus)
+
+	check, err := handler.services.CheckAuthPostId(userID, postID, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	if check == 0 {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID Not Fount", logrus)
+		return
+	}
+
+	result, err := handler.services.UpdatePost(userID, postID, input, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
@@ -203,7 +218,7 @@ func (handler *Handler) updatePost(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: id})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: postID})
 }
 
 // @Summary Search  Post By search text

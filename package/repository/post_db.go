@@ -102,10 +102,11 @@ func (repo *PostDB) UpdatePostImage(userID, postID int, filePath string, logrus 
 
 }
 
-func (repo *PostDB) UpdatePost(id int, post model.UpdatePost, logrus *logrus.Logger) (int64, error) {
+func (repo *PostDB) UpdatePost(userID, postID int, post model.UpdatePost, logrus *logrus.Logger) (int64, error) {
 	tm := time.Now()
-	updateQuery := fmt.Sprintf(" UPDATE %s SET  post_title=COALESCE($1,post_title) ,post_body=COALESCE($2,post_body), post_tags=COALESCE($3,post_tags) , updated_at=$4 WHERE id=$5 RETURNING id", postTable)
-	rows, err := repo.db.Exec(updateQuery, post.Title, post.Body, pq.Array(post.Tags), tm, id)
+	updateQuery := fmt.Sprintf("UPDATE %s pl SET  post_title=COALESCE($1,post_title) ,post_body=COALESCE($2,post_body), post_tags=COALESCE($3,post_tags) , updated_at=$4 FROM %s upl   WHERE pl.id = upl.post_id AND upl.post_author_id = $5 AND upl.post_id = $6 RETURNING pl.id", postTable, postUserTable)
+
+	rows, err := repo.db.Exec(updateQuery, post.Title, post.Body, pq.Array(post.Tags), tm, userID, postID)
 
 	if err != nil {
 		logrus.Errorf("ERROR: Update Post : %v", err)

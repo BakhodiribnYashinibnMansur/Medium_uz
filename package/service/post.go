@@ -40,12 +40,12 @@ func (service *PostService) UpdatePostImage(userID, postID int, filePath string,
 
 }
 
-func (service *PostService) UpdatePost(id int, input model.Post, logrus *logrus.Logger) (int64, error) {
+func (service *PostService) UpdatePost(userID, postID int, input model.Post, logrus *logrus.Logger) (int64, error) {
 	var post model.UpdatePost
 	post.Title = convert.EmptyStringToNull(input.Title)
 	post.Body = convert.EmptyStringToNull(input.Body)
 	post.Tags = convert.EmptyArrayStringToNullArray(input.Tags)
-	return service.repo.UpdatePost(id, post, logrus)
+	return service.repo.UpdatePost(userID, postID, post, logrus)
 }
 
 func (service *PostService) DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error) {
