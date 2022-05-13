@@ -43,7 +43,7 @@ func SendCodeToEmail(email string, userName string, logrus *logrus.Logger) (stri
 	m := gomail.NewMessage()
 	m.SetHeader("From", configs.SMTPsenderEmail)
 	m.SetHeader("To", email)
-	m.SetHeader("Subject", "github.com/BakhodiribnYashinibnMansur/Medium_uz Email Verification")
+	m.SetHeader("Subject", "MEDIUM UZ Email Verification")
 	m.SetBody("text/html", parseTemplate)
 
 	dial := gomail.NewDialer(configs.SMTPHost, configs.SMTPPort, configs.SMTPsenderEmail, configs.STMPappPassword)

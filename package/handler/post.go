@@ -233,19 +233,24 @@ func (handler *Handler) searchAll(ctx *gin.Context) {
 // @Router /api/post/delete [DELETE]
 //@Security ApiKeyAuth
 func (handler *Handler) deletePost(ctx *gin.Context) {
+
 	logrus := handler.logrus
+	userID, err := getUserId(ctx, logrus)
+	if err != nil {
+		return
+	}
 	paramID := ctx.Query("id")
 	if paramID == "" {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
 		return
 	}
-	id, err := strconv.Atoi(paramID)
+	postID, err := strconv.Atoi(paramID)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
 
-	check, err := handler.services.CheckPostId(id, logrus)
+	check, err := handler.services.CheckAuthPostId(userID, postID, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
@@ -254,7 +259,7 @@ func (handler *Handler) deletePost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID Not Fount", logrus)
 		return
 	}
-	deletePostResult, deletePostUserResult, err := handler.services.DeletePost(id, logrus)
+	deletePostResult, deletePostUserResult, err := handler.services.DeletePost(userID, postID, logrus)
 	if err != nil {
 		if err != nil {
 			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
@@ -265,5 +270,5 @@ func (handler *Handler) deletePost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Not Deleted", logrus)
 		return
 	}
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Deleted", Data: id})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Deleted", Data: postID})
 }

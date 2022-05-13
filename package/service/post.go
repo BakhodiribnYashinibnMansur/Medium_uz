@@ -47,6 +47,10 @@ func (service *PostService) UpdatePost(id int, input model.Post, logrus *logrus.
 	return service.repo.UpdatePost(id, post, logrus)
 }
 
-func (service *PostService) DeletePost(id int, logrus *logrus.Logger) (int64, int64, error) {
-	return service.repo.DeletePost(id, logrus)
+func (service *PostService) DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error) {
+	return service.repo.DeletePost(userID, postID, logrus)
+}
+
+func (service *PostService) CheckAuthPostId(userID, postID int, logrus *logrus.Logger) (int, error) {
+	return service.repo.CheckAuthPostId(userID, postID, logrus)
 }

@@ -60,10 +60,21 @@ func (repo *PostDB) GetPostById(id int, logrus *logrus.Logger) (post model.PostF
 
 func (repo *PostDB) CheckPostId(id int, logrus *logrus.Logger) (int, error) {
 	var postNumber int
-	queryID := fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE id=$1 AND deleted_at IS NULL", postTable)
+	queryID := fmt.Sprintf("SELECT COUNT(id) FROM %s WHERE id=$1 AND deleted_at IS NULL", postTable)
 	err := repo.db.Get(&postNumber, queryID, id)
 	if err != nil {
-		logrus.Infof("ERROR:Email query error: %s", err.Error())
+		logrus.Infof("ERROR:check post id query error: %s", err.Error())
+		return -1, err
+	}
+	return postNumber, nil
+}
+
+func (repo *PostDB) CheckAuthPostId(userID, postID int, logrus *logrus.Logger) (int, error) {
+	var postNumber int
+	queryID := fmt.Sprintf("SELECT COUNT(pl.id) FROM %s pl INNER JOIN %s upl  ON pl.id = upl.post_id WHERE  upl.post_author_id = $1 AND upl.post_id = $2 AND pl.deleted_at IS NULL ", postTable, postUserTable)
+	err := repo.db.Get(&postNumber, queryID, userID, postID)
+	if err != nil {
+		logrus.Infof("ERROR:Check auth post id query error: %s", err.Error())
 		return -1, err
 	}
 	return postNumber, nil
@@ -110,10 +121,11 @@ func (repo *PostDB) UpdatePost(id int, post model.UpdatePost, logrus *logrus.Log
 	return effectedRowsNum, nil
 }
 
-func (repo *PostDB) DeletePost(id int, logrus *logrus.Logger) (int64, int64, error) {
+func (repo *PostDB) DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error) {
 	tm := time.Now()
-	deletePostQuery := fmt.Sprintf("UPDATE %s SET deleted_at = $1 WHERE id = $2 RETURNING id", postTable)
-	deletePostRow, err := repo.db.Exec(deletePostQuery, tm, id)
+
+	deletePostQuery := fmt.Sprintf("UPDATE %s pl SET deleted_at = $1 FROM %s upl   WHERE pl.id = upl.post_id AND upl.post_author_id = $2 AND upl.post_id = $3 RETURNING pl.id", postTable, postUserTable)
+	deletePostRow, err := repo.db.Exec(deletePostQuery, tm, userID, postID)
 
 	if err != nil {
 		logrus.Errorf("ERROR: Deleted Post : %v", err)
@@ -127,7 +139,7 @@ func (repo *PostDB) DeletePost(id int, logrus *logrus.Logger) (int64, int64, err
 		return -1, -1, err
 	}
 	deletePostUserQuery := fmt.Sprintf("UPDATE %s SET deleted_at = $1 WHERE post_id = $2 RETURNING id", postUserTable)
-	deletePostUserRow, err := repo.db.Exec(deletePostUserQuery, tm, id)
+	deletePostUserRow, err := repo.db.Exec(deletePostUserQuery, tm, userID)
 
 	if err != nil {
 		logrus.Errorf("ERROR: Deleted Post : %v", err)

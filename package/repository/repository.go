@@ -31,7 +31,8 @@ type Post interface {
 	CheckPostId(id int, logrus *logrus.Logger) (int, error)
 	UpdatePostImage(id int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdatePost(id int, input model.UpdatePost, logrus *logrus.Logger) (int64, error)
-	DeletePost(id int, logrus *logrus.Logger) (int64, int64, error)
+	DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error)
+	CheckAuthPostId(userID, postID int, logrus *logrus.Logger) (int, error)
 }
 
 type Repository struct {
