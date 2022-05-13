@@ -112,9 +112,12 @@ func (handler *Handler) getPostID(ctx *gin.Context) {
 //@Security ApiKeyAuth
 func (handler *Handler) uploadImagePost(ctx *gin.Context) {
 	logrus := handler.logrus
-
+	userID, err := getUserId(ctx, logrus)
+	if err != nil {
+		return
+	}
 	id := ctx.Query("id")
-	postId, err := strconv.Atoi(id)
+	postID, err := strconv.Atoi(id)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
@@ -126,13 +129,23 @@ func (handler *Handler) uploadImagePost(ctx *gin.Context) {
 		return
 	}
 
+	check, err := handler.services.CheckAuthPostId(userID, postID, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	if check == 0 {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID Not Fount", logrus)
+		return
+	}
+
 	imageURL, err := handler.services.UploadImage(file, header, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
 
-	effectedRowsNum, err := handler.services.UpdatePostImage(postId, imageURL, logrus)
+	effectedRowsNum, err := handler.services.UpdatePostImage(userID, postID, imageURL, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return

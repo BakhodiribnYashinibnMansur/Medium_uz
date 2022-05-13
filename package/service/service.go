@@ -29,7 +29,7 @@ type Post interface {
 	CreatePost(userId int, post model.Post, logrus *logrus.Logger) (int, error)
 	GetPostById(id int, logrus *logrus.Logger) (post model.PostFull, err error)
 	CheckPostId(id int, logrus *logrus.Logger) (int, error)
-	UpdatePostImage(id int, filePath string, logrus *logrus.Logger) (int64, error)
+	UpdatePostImage(userID, postID int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdatePost(id int, input model.Post, logrus *logrus.Logger) (int64, error)
 	DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error)
 	CheckAuthPostId(userID, postID int, logrus *logrus.Logger) (int, error)

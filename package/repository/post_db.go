@@ -80,10 +80,11 @@ func (repo *PostDB) CheckAuthPostId(userID, postID int, logrus *logrus.Logger) (
 	return postNumber, nil
 }
 
-func (repo *PostDB) UpdatePostImage(id int, filePath string, logrus *logrus.Logger) (int64, error) {
+func (repo *PostDB) UpdatePostImage(userID, postID int, filePath string, logrus *logrus.Logger) (int64, error) {
 	tm := time.Now()
-	query := fmt.Sprintf("	UPDATE %s SET post_image_path=$1,updated_at=$2	WHERE id = $3  RETURNING id ", postTable)
-	rows, err := repo.db.Exec(query, filePath, tm, id)
+	query := fmt.Sprintf("UPDATE %s pl SET post_image_path = $1,updated_at=$2 FROM %s upl   WHERE pl.id = upl.post_id AND upl.post_author_id = $3 AND upl.post_id = $4 RETURNING pl.id", postTable, postUserTable)
+
+	rows, err := repo.db.Exec(query, filePath, tm, userID, postID)
 
 	if err != nil {
 		logrus.Errorf("ERROR: Update PostImage : %v", err)

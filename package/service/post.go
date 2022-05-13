@@ -35,8 +35,9 @@ func (service *PostService) CheckPostId(id int, logrus *logrus.Logger) (int, err
 	return service.repo.CheckPostId(id, logrus)
 }
 
-func (service *PostService) UpdatePostImage(id int, filePath string, logrus *logrus.Logger) (int64, error) {
-	return service.repo.UpdatePostImage(id, filePath, logrus)
+func (service *PostService) UpdatePostImage(userID, postID int, filePath string, logrus *logrus.Logger) (int64, error) {
+	return service.repo.UpdatePostImage(userID, postID, filePath, logrus)
+
 }
 
 func (service *PostService) UpdatePost(id int, input model.Post, logrus *logrus.Logger) (int64, error) {
