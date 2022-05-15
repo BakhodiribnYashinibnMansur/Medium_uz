@@ -22,7 +22,7 @@ type UpdatePost struct {
 type PostFull struct {
 	ID             int            `json:"id" db:"id"`
 	PostTitle      string         `json:"post_title" db:"post_title"`
-	PostImagePath  string         `json:"image" db:"post_image_path"`
+	PostImagePath  sql.NullString `json:"image" db:"post_image_path"`
 	PostBody       string         `json:"post_body" db:"post_body"`
 	PostViewsCount int            `json:"post_views_count" db:"post_views_count"`
 	PostLikeCount  int            `json:"post_like_count" db:"post_like_count"`

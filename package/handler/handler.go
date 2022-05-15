@@ -7,7 +7,7 @@ import (
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
 
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/configs"
-
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -34,6 +34,12 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	docs.SwaggerInfo.Host = config.ServiceHost
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.New()
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
+		AllowHeaders: []string{"Content-Type,access-control-allow-origin, access-control-allow-headers"},
+	}))
+
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.GET("/test", handler.testHttpsHandler)

@@ -4,7 +4,6 @@ app:
   host: "mediumuz.herokuapp.com"
   # LOCAL
   # host: "localhost:"
-  # port: "8080"
   version: "1.0"
 
 db:
