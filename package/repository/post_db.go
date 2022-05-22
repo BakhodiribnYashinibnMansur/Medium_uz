@@ -70,9 +70,7 @@ func (repo *PostDB) UpdatePostImage(userID, postID int, filePath string, logrus 
 	rows, err := repo.db.Exec(query, filePath, tm, userID, postID)
 
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return 0, errors.New("ID not found")
-		}
+
 		logrus.Errorf("ERROR: Update PostImage : %v", err)
 		return 0, err
 	}
@@ -95,9 +93,7 @@ func (repo *PostDB) UpdatePost(userID, postID int, post model.UpdatePost, logrus
 	rows, err := repo.db.Exec(updateQuery, post.Title, post.Body, pq.Array(post.Tags), tm, userID, postID)
 
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return 0, errors.New("ID not found")
-		}
+
 		logrus.Errorf("ERROR: Update Post : %v", err)
 		return 0, err
 	}
@@ -119,9 +115,6 @@ func (repo *PostDB) DeletePost(userID, postID int, logrus *logrus.Logger) (int64
 	deletePostRow, err := repo.db.Exec(deletePostQuery, tm, userID, postID)
 
 	if err != nil {
-		if err == sql.ErrNoRows {
-			return -1, -1, errors.New("ID not found")
-		}
 		logrus.Errorf("ERROR: Deleted Post : %v", err)
 		return -1, -1, err
 	}

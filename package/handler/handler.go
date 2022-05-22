@@ -43,6 +43,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.GET("/test", handler.testHttpsHandler)
 	router.Static("/public", "./public/")
+
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-up", handler.signUp) //DONE
@@ -52,6 +53,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 		auth.GET("/recovery-verify", handler.recoveryCheckEmailCode)
 		auth.GET("/recovery-password", handler.recoveryPassword)
 	}
+
 	api := router.Group("/api")
 	{
 		auth := api.Group("/", handler.userIdentity)
