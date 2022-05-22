@@ -22,17 +22,14 @@ type User interface {
 	UploadImage(file multipart.File, header *multipart.FileHeader, logrus *logrus.Logger) (filePath string, err error)
 	UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdateAccount(id int, user model.User, logrus *logrus.Logger) (int64, error)
-	CheckUserId(id int, logrus *logrus.Logger) (int, error)
 }
 
 type Post interface {
 	CreatePost(userId int, post model.Post, logrus *logrus.Logger) (int, error)
 	GetPostById(id int, logrus *logrus.Logger) (post model.PostFull, err error)
-	CheckPostId(id int, logrus *logrus.Logger) (int, error)
 	UpdatePostImage(userID, postID int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdatePost(userID, postID int, post model.Post, logrus *logrus.Logger) (int64, error)
 	DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error)
-	CheckAuthPostId(userID, postID int, logrus *logrus.Logger) (int, error)
 }
 type Service struct {
 	Authorization

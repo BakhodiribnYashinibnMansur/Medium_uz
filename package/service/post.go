@@ -31,10 +31,6 @@ func (service *PostService) GetPostById(id int, logrus *logrus.Logger) (post mod
 	return service.repo.GetPostById(id, logrus)
 }
 
-func (service *PostService) CheckPostId(id int, logrus *logrus.Logger) (int, error) {
-	return service.repo.CheckPostId(id, logrus)
-}
-
 func (service *PostService) UpdatePostImage(userID, postID int, filePath string, logrus *logrus.Logger) (int64, error) {
 	return service.repo.UpdatePostImage(userID, postID, filePath, logrus)
 
@@ -50,8 +46,4 @@ func (service *PostService) UpdatePost(userID, postID int, input model.Post, log
 
 func (service *PostService) DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error) {
 	return service.repo.DeletePost(userID, postID, logrus)
-}
-
-func (service *PostService) CheckAuthPostId(userID, postID int, logrus *logrus.Logger) (int, error) {
-	return service.repo.CheckAuthPostId(userID, postID, logrus)
 }

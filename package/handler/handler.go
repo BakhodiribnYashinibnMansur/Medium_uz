@@ -28,10 +28,10 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	docs.SwaggerInfo.Title = config.AppName
 	docs.SwaggerInfo.Version = config.Version
 	// LOCAL
-	// docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
+	docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
 
 	// FOR HEROKU
-	docs.SwaggerInfo.Host = config.ServiceHost
+	// docs.SwaggerInfo.Host = config.ServiceHost
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.New()
 	router.Use(cors.New(cors.Config{
@@ -41,7 +41,6 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	}))
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	router.GET("/test", handler.testHttpsHandler)
 	router.Static("/public", "./public/")
 	auth := router.Group("/auth")
@@ -53,26 +52,37 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 		auth.GET("/recovery-verify", handler.recoveryCheckEmailCode)
 		auth.GET("/recovery-password", handler.recoveryPassword)
 	}
-	api := router.Group("/api", handler.userIdentity)
+	api := router.Group("/api")
 	{
-		account := api.Group("/account")
+		auth := api.Group("/", handler.userIdentity)
 		{
-			account.GET("/sendcode", handler.sendCodeToEmail)          //DONE
-			account.GET("/verify", handler.verifyEmail)                //DONE
-			account.PUT("/update", handler.updateAccount)              //DONE
-			account.GET("/get", handler.getUser)                       //DONE
-			account.PATCH("/upload-image", handler.uploadAccountImage) //DONE
+			account := auth.Group("/account")
+			{
+				account.GET("/sendcode", handler.sendCodeToEmail)          //DONE
+				account.GET("/verify", handler.verifyEmail)                //DONE
+				account.PUT("/update", handler.updateAccount)              //DONE
+				account.GET("/get", handler.getUser)                       //DONE
+				account.PATCH("/upload-image", handler.uploadAccountImage) //DONE
+			}
+
+			post := auth.Group("/post")
+			{
+				post.POST("/create", handler.createPost)             //DONE
+				post.PATCH("/upload-image", handler.uploadImagePost) //DONE
+				post.PUT("/update", handler.updatePost)              //DONE
+				post.DELETE("/delete", handler.deletePost)           //DONE
+				post.GET("/search", handler.searchAll)               //PROCESS ADVANCED SEARCH
+				post.GET("/like")                                    //PROCESS
+				post.GET("/view")                                    //PROCESS
+			}
 		}
-		post := api.Group("/post")
+		ghost := api.Group("/ghost")
 		{
-			post.POST("/create", handler.createPost)             //DONE
-			post.GET("/get/:id", handler.getPostID)              //DONE
-			post.PATCH("/upload-image", handler.uploadImagePost) //DONE
-			post.PUT("/update", handler.updatePost)              //DONE
-			post.DELETE("/delete", handler.deletePost)           //DONE
-			post.GET("/search", handler.searchAll)               //PROCESS ADVANCED SEARCH
-			post.GET("/like")                                    //PROCESS
-			post.GET("/view")                                    //PROCESS
+			post := ghost.Group("/post")
+			{
+				post.GET("/get/:id", handler.getPostID) //DONE
+			}
+
 		}
 	}
 	return router

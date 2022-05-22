@@ -58,8 +58,8 @@ func (handler *Handler) createPost(ctx *gin.Context) {
 // @Failure 409 {object} error.errorResponseData
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router /api/post/get/{id} [GET]
-//@Security ApiKeyAuth
+// @Router /api/ghost/get/{id} [GET]
+
 func (handler *Handler) getPostID(ctx *gin.Context) {
 	logrus := handler.logrus
 	paramID := ctx.Param("id")
@@ -70,15 +70,6 @@ func (handler *Handler) getPostID(ctx *gin.Context) {
 	id, err := strconv.Atoi(paramID)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-		return
-	}
-	check, err := handler.services.CheckPostId(id, logrus)
-	if err != nil {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-		return
-	}
-	if check == 0 {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID Not Fount", logrus)
 		return
 	}
 	resp, err := handler.services.GetPostById(id, logrus)
@@ -126,16 +117,6 @@ func (handler *Handler) uploadImagePost(ctx *gin.Context) {
 	file, header, err := ctx.Request.FormFile("file")
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-		return
-	}
-
-	check, err := handler.services.CheckAuthPostId(userID, postID, logrus)
-	if err != nil {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-		return
-	}
-	if check == 0 {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID Not Fount", logrus)
 		return
 	}
 
@@ -198,23 +179,13 @@ func (handler *Handler) updatePost(ctx *gin.Context) {
 		return
 	}
 
-	check, err := handler.services.CheckAuthPostId(userID, postID, logrus)
-	if err != nil {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-		return
-	}
-	if check == 0 {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID Not Fount", logrus)
-		return
-	}
-
 	result, err := handler.services.UpdatePost(userID, postID, input, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
 	if result == 0 {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "User not found", logrus)
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "NOT UPDATED", logrus)
 		return
 	}
 
@@ -275,16 +246,6 @@ func (handler *Handler) deletePost(ctx *gin.Context) {
 	postID, err := strconv.Atoi(paramID)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-		return
-	}
-
-	check, err := handler.services.CheckAuthPostId(userID, postID, logrus)
-	if err != nil {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-		return
-	}
-	if check == 0 {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID Not Fount", logrus)
 		return
 	}
 	deletePostResult, deletePostUserResult, err := handler.services.DeletePost(userID, postID, logrus)

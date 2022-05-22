@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"time"
@@ -27,6 +28,9 @@ func (repo *UserDB) GetUserData(id string, logrus *logrus.Logger) (model.UserFul
 	query := fmt.Sprintf("SELECT  	id,	email,	firstname,secondname,nickname,		city,	is_verified,	bio,interests,account_image_path,	phone,	rating,	post_views_count,	follower_count, following_count,like_count,is_super_user	FROM %s WHERE id=$1 ", usersTable)
 	err := repo.db.Get(&user, query, id)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return user, errors.New("ID not found")
+		}
 		logrus.Errorf("ERROR: don't get users %s", err)
 		return user, err
 	}
@@ -86,19 +90,6 @@ func (repo *UserDB) UpdateAccount(id int, user model.UpdateUser, logrus *logrus.
 	}
 	logrus.Info("DONE:Update verify email")
 	return effectedRowsNum, nil
-}
-
-func (repo *UserDB) CheckUserId(id int, logrus *logrus.Logger) (int, error) {
-	var countID int
-	query := fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE id=$1", usersTable)
-	err := repo.db.Get(&countID, query, id)
-
-	if err != nil {
-		logrus.Infof("ERROR:Email query error: %s", err.Error())
-		return -1, err
-	}
-
-	return countID, nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -21,18 +21,15 @@ type User interface {
 	UpdateUserVerified(id string, logrus *logrus.Logger) (int64, error)
 	UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdateAccount(id int, user model.UpdateUser, logrus *logrus.Logger) (int64, error)
-	CheckUserId(id int, logrus *logrus.Logger) (int, error)
 }
 
 type Post interface {
 	CreatePost(post model.Post, logrus *logrus.Logger) (int, error)
 	CreatePostUser(userId, postId int, logrus *logrus.Logger) (int, error)
 	GetPostById(id int, logrus *logrus.Logger) (model.PostFull, error)
-	CheckPostId(id int, logrus *logrus.Logger) (int, error)
 	UpdatePostImage(userID, postID int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdatePost(userID, postID int, post model.UpdatePost, logrus *logrus.Logger) (int64, error)
 	DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error)
-	CheckAuthPostId(userID, postID int, logrus *logrus.Logger) (int, error)
 }
 
 type Repository struct {

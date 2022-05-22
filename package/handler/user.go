@@ -218,18 +218,8 @@ func (handler *Handler) getUser(ctx *gin.Context) {
 	}
 	userId := strconv.Itoa(authID)
 	if id != "" {
-		idInt, err := strconv.Atoi(id)
 		if err != nil {
 			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-			return
-		}
-		count, err := handler.services.CheckUserId(idInt, logrus)
-		if err != nil {
-			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-			return
-		}
-		if count == 0 {
-			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID Not Found", logrus)
 			return
 		}
 	}
@@ -242,5 +232,5 @@ func (handler *Handler) getUser(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "GETTED", Data: user})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "GOT", Data: user})
 }

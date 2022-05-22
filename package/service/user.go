@@ -100,7 +100,3 @@ func (service *UserService) UpdateAccount(id int, user model.User, logrus *logru
 	logrus.Info("successfully password_hash")
 	return service.repo.UpdateAccount(id, updateUser, logrus)
 }
-
-func (service *UserService) CheckUserId(id int, logrus *logrus.Logger) (int, error) {
-	return service.repo.CheckUserId(id, logrus)
-}

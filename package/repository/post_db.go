@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 
@@ -51,33 +53,14 @@ func (repo *PostDB) GetPostById(id int, logrus *logrus.Logger) (post model.PostF
 	query := fmt.Sprintf("SELECT id , post_title ,post_image_path, post_body, post_views_count, post_like_count, post_rated, post_vote, post_tags,  post_date, is_new, is_top_read FROM %s WHERE id = $1 AND deleted_at IS NULL", postTable)
 	err = repo.db.Get(&post, query, id)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return post, errors.New("ID not found")
+		}
 		logrus.Errorf("ERROR: don't get users %s", err)
 		return post, err
 	}
 	logrus.Info("DONE:get user data from psql")
 	return post, err
-}
-
-func (repo *PostDB) CheckPostId(id int, logrus *logrus.Logger) (int, error) {
-	var postNumber int
-	queryID := fmt.Sprintf("SELECT COUNT(id) FROM %s WHERE id=$1 AND deleted_at IS NULL", postTable)
-	err := repo.db.Get(&postNumber, queryID, id)
-	if err != nil {
-		logrus.Infof("ERROR:check post id query error: %s", err.Error())
-		return -1, err
-	}
-	return postNumber, nil
-}
-
-func (repo *PostDB) CheckAuthPostId(userID, postID int, logrus *logrus.Logger) (int, error) {
-	var postNumber int
-	queryID := fmt.Sprintf("SELECT COUNT(pl.id) FROM %s pl INNER JOIN %s upl  ON pl.id = upl.post_id WHERE  upl.post_author_id = $1 AND upl.post_id = $2 AND pl.deleted_at IS NULL ", postTable, postUserTable)
-	err := repo.db.Get(&postNumber, queryID, userID, postID)
-	if err != nil {
-		logrus.Infof("ERROR:Check auth post id query error: %s", err.Error())
-		return -1, err
-	}
-	return postNumber, nil
 }
 
 func (repo *PostDB) UpdatePostImage(userID, postID int, filePath string, logrus *logrus.Logger) (int64, error) {
@@ -87,6 +70,9 @@ func (repo *PostDB) UpdatePostImage(userID, postID int, filePath string, logrus 
 	rows, err := repo.db.Exec(query, filePath, tm, userID, postID)
 
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return 0, errors.New("ID not found")
+		}
 		logrus.Errorf("ERROR: Update PostImage : %v", err)
 		return 0, err
 	}
@@ -109,6 +95,9 @@ func (repo *PostDB) UpdatePost(userID, postID int, post model.UpdatePost, logrus
 	rows, err := repo.db.Exec(updateQuery, post.Title, post.Body, pq.Array(post.Tags), tm, userID, postID)
 
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return 0, errors.New("ID not found")
+		}
 		logrus.Errorf("ERROR: Update Post : %v", err)
 		return 0, err
 	}
@@ -130,6 +119,9 @@ func (repo *PostDB) DeletePost(userID, postID int, logrus *logrus.Logger) (int64
 	deletePostRow, err := repo.db.Exec(deletePostQuery, tm, userID, postID)
 
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return -1, -1, errors.New("ID not found")
+		}
 		logrus.Errorf("ERROR: Deleted Post : %v", err)
 		return -1, -1, err
 	}
