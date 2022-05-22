@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/error"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -76,13 +77,9 @@ func (handler *Handler) signIn(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	checkedUser, err := handler.services.CheckDataExistsEmailNickName(input.Email, "", logrus)
+	err := handler.services.CheckDataExistsEmailPassword(input.Email, input.Password, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-		return
-	}
-	if checkedUser.Email {
-		error.NewHandlerErrorResponse(ctx, http.StatusConflict, "email  not  exist", logrus)
 		return
 	}
 	token, err := handler.services.Authorization.GenerateToken(input.Email, logrus)

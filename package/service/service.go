@@ -13,6 +13,7 @@ type Authorization interface {
 	GenerateToken(email string, logrus *logrus.Logger) (string, error)
 	SendMessageEmail(email, username string, logrus *logrus.Logger) error
 	CheckDataExistsEmailNickName(email, nickname string, logrus *logrus.Logger) (model.UserCheck, error)
+	CheckDataExistsEmailPassword(email, password string, logrus *logrus.Logger) error
 	ParseToken(token string) (int, error)
 }
 

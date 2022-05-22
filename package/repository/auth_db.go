@@ -37,11 +37,25 @@ func (repo *AuthDB) CreateUser(user model.User, logrus *logrus.Logger) (int, err
 	return id, nil
 }
 
+func (repo *AuthDB) CheckDataExistsEmailPassword(email, password string, logrus *logrus.Logger) (int, error) {
+	var countUser int
+
+	queryEmail := fmt.Sprintf("SELECT COUNT(id) FROM %s WHERE email=$1 AND password_hash=$2", usersTable)
+	err := repo.db.Get(&countUser, queryEmail, email, password)
+
+	if err != nil {
+		logrus.Infof("ERROR:Email query error: %s", err.Error())
+		return -1, err
+	}
+
+	return countUser, nil
+}
+
 func (repo *AuthDB) CheckDataExistsEmailNickName(email, nickname string, logrus *logrus.Logger) (int, int, error) {
 	var countEmail int
 	var countNickName int
 
-	queryEmail := fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE email=$1", usersTable)
+	queryEmail := fmt.Sprintf("SELECT COUNT(id) FROM %s WHERE email=$1", usersTable)
 	err := repo.db.Get(&countEmail, queryEmail, email)
 
 	if err != nil {
@@ -49,7 +63,7 @@ func (repo *AuthDB) CheckDataExistsEmailNickName(email, nickname string, logrus 
 		return -1, -1, err
 	}
 
-	queryNickName := fmt.Sprintf("SELECT COUNT(*) FROM %s WHERE nickname=$1", usersTable)
+	queryNickName := fmt.Sprintf("SELECT COUNT(id) FROM %s WHERE nickname=$1", usersTable)
 	err = repo.db.Get(&countNickName, queryNickName, nickname)
 
 	if err != nil {

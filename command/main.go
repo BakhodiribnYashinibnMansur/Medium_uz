@@ -31,7 +31,7 @@ func main() {
 	if err != nil {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
-	logrus.Info("successfull checked configs.")
+	logrus.Info("successful checked configs.")
 
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     configs.DBHost,
@@ -46,7 +46,7 @@ func main() {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
 
-	logrus.Info("successfull connection DB")
+	logrus.Info("successful connection DB")
 	redis, err := repository.NewRedisDB(&repository.RedisConfig{Host: configs.RedisHost, Port: configs.RedisPort, Password: configs.RedisPassword, DB: configs.RedisDB}, logrus)
 	if err != nil {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())

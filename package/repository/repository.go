@@ -11,6 +11,7 @@ import (
 type Authorization interface {
 	CreateUser(user model.User, logrus *logrus.Logger) (int, error)
 	GetUserID(email string, logrus *logrus.Logger) (int, error)
+	CheckDataExistsEmailPassword(email, password string, logrus *logrus.Logger) (int, error)
 	CheckDataExistsEmailNickName(email, nickname string, logrus *logrus.Logger) (int, int, error)
 	SaveVerificationCode(email, code string, logrus *logrus.Logger) error
 }

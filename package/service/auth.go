@@ -28,6 +28,18 @@ func (service *AuthService) CreateUser(user model.User, logrus *logrus.Logger) (
 	return id, err
 }
 
+func (service *AuthService) CheckDataExistsEmailPassword(email, password string, logrus *logrus.Logger) error {
+	passwordHash := generatePasswordHash(password)
+	logrus.Info("successfully password_hash")
+	userCount, err := service.repo.CheckDataExistsEmailPassword(email, passwordHash, logrus)
+	if err != nil {
+		return err
+	}
+	if userCount == 0 {
+		return errors.New("Email or Password is inCorrect")
+	}
+	return nil
+}
 func (service *AuthService) CheckDataExistsEmailNickName(email, nickname string, logrus *logrus.Logger) (model.UserCheck, error) {
 	var checkUser model.UserCheck
 	countEmail, countNickName, err := service.repo.CheckDataExistsEmailNickName(email, nickname, logrus)
