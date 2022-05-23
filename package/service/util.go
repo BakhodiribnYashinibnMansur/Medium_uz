@@ -31,7 +31,7 @@ func SendCodeToEmail(email string, userName string, logrus *logrus.Logger) (stri
 		logrus.Errorf("error initializing configs: %s", err.Error())
 		return "", err
 	}
-	logrus.Info("successfull checked configs.")
+	logrus.Info("successful checked configs.")
 	verificationCode := generateCode()
 	logrus.Info("DONE : generateCode")
 	parseTemplate, err := parseTemplate("template/email.html", TemplateData{UserName: userName, VerificationCode: verificationCode})

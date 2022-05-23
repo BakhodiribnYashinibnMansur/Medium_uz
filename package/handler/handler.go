@@ -73,8 +73,9 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.PATCH("/upload-image", handler.uploadImagePost) //DONE
 				post.PUT("/update", handler.updatePost)              //DONE
 				post.DELETE("/delete", handler.deletePost)           //DONE
-				post.GET("/like", handler.likePost)                  //PROCESS
-				post.GET("/view")                                    //FUTURE
+				post.GET("/like", handler.likePost)                  //DONE
+				post.GET("/unlike", handler.unLikePost)              //DONE
+				post.GET("/view")                                    //PROSES
 			}
 		}
 		ghost := api.Group("/ghost")

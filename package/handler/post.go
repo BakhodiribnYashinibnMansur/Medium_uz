@@ -275,3 +275,51 @@ func (handler *Handler) likePost(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Liked Post", Data: result})
 }
+
+// @Summary UnLike  Post By ID
+// @Tags Post
+// @Description UnLike post by id
+// @ID unlike-post-id
+// @Accept  json
+// @Produce  json
+// @Param        id   query  int     true "Param ID"
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/post/unlike [GET]
+//@Security ApiKeyAuth
+func (handler *Handler) unLikePost(ctx *gin.Context) {
+	logrus := handler.logrus
+	userID, err := getUserId(ctx, logrus)
+	if err != nil {
+		return
+	}
+	paramID := ctx.Query("id")
+
+	if paramID == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
+		return
+	}
+
+	postID, err := strconv.Atoi(paramID)
+
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	effectedRowsNum, err := handler.services.UnlikePost(userID, postID, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	if effectedRowsNum == 0 {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "NOT UNLIKE not found", logrus)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " UnLiked Post", Data: effectedRowsNum})
+}

@@ -153,3 +153,21 @@ func (repo *PostDB) LikePost(userID, postID int, logrus *logrus.Logger) (int, er
 	logrus.Info("DONE: INSERTED  LIKE Data PSQL")
 	return id, nil
 }
+
+func (repo *PostDB) UnlikePost(userID, postID int, logrus *logrus.Logger) (int64, error) {
+	query := fmt.Sprintf("	UPDATE %s SET deleted_at=NOW()	WHERE reader_id = $1 AND post_id = $2   RETURNING id ", postLikeTable)
+	rows, err := repo.db.Exec(query, userID, postID)
+
+	if err != nil {
+		logrus.Errorf("ERROR: Update Update account image : %v", err)
+		return 0, err
+	}
+
+	effectedRowsNum, err := rows.RowsAffected()
+	if err != nil {
+		logrus.Errorf("ERROR: Update Update account image effectedRowsNum : %v", err)
+		return 0, err
+	}
+	logrus.Info("DONE:Update account image")
+	return effectedRowsNum, nil
+}

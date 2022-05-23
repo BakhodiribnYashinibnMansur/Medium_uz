@@ -32,6 +32,7 @@ type Post interface {
 	UpdatePost(userID, postID int, post model.UpdatePost, logrus *logrus.Logger) (int64, error)
 	DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error)
 	LikePost(userID, postID int, logrus *logrus.Logger) (int, error)
+	UnlikePost(userID, postID int, logrus *logrus.Logger) (int64, error)
 }
 type Search interface {
 	SearchPost(search string, logrus *logrus.Logger) ([]model.PostFull, error)

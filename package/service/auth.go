@@ -40,6 +40,7 @@ func (service *AuthService) CheckDataExistsEmailPassword(email, password string,
 	}
 	return nil
 }
+
 func (service *AuthService) CheckDataExistsEmailNickName(email, nickname string, logrus *logrus.Logger) (model.UserCheck, error) {
 	var checkUser model.UserCheck
 	countEmail, countNickName, err := service.repo.CheckDataExistsEmailNickName(email, nickname, logrus)
