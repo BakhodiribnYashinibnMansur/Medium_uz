@@ -34,7 +34,7 @@ type Post interface {
 }
 type Search interface {
 	SearchPost(search string, logrus *logrus.Logger) ([]model.PostFull, error)
-	SearchUser(search string, logrus *logrus.Logger) ([]model.PostFull, error)
+	SearchUser(search string, logrus *logrus.Logger) ([]model.UserFull, error)
 }
 
 type Repository struct {

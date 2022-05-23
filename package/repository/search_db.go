@@ -25,6 +25,9 @@ func (repo *SearchDB) SearchPost(search string, logrus *logrus.Logger) ([]model.
 	return searchPost, err
 }
 
-func (repo *SearchDB) SearchUser(search string, logrus *logrus.Logger) ([]model.PostFull, error) {
-
+func (repo *SearchDB) SearchUser(search string, logrus *logrus.Logger) ([]model.UserFull, error) {
+	var searchUser []model.UserFull
+	query := fmt.Sprintf("SELECT  	id,	email,	firstname,secondname,nickname,		city,	is_verified,	bio,interests,account_image_path,	phone,	rating,	post_views_count,	follower_count, following_count,like_count,is_super_user	FROM %s WHERE firstname ~* $1 OR secondname ~* $2 AND deleted_at IS NULL ", usersTable)
+	err := repo.db.Select(&searchUser, query, search, search)
+	return searchUser, err
 }

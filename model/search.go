@@ -1,6 +1,6 @@
 package model
 
 type Search struct {
-	Person []PostFull `json:"person"`
-	Post   []PostFull `json:"post"`
+	User []UserFull `json:"user"`
+	Post []PostFull `json:"post"`
 }

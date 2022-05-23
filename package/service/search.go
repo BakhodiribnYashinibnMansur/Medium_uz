@@ -22,12 +22,19 @@ func (service *SearchService) UniversalSearch(search string, logrus *logrus.Logg
 	logrus.Info(searchArray)
 	for _, keyword := range searchArray {
 		logrus.Info(keyword)
-		resultArray, err := service.repo.SearchPost(keyword, logrus)
+		postArray, err := service.repo.SearchPost(keyword, logrus)
 		if err != nil {
 			return resultSearch, err
 		}
-		for _, value := range resultArray {
+		for _, value := range postArray {
 			resultSearch.Post = append(resultSearch.Post, value)
+		}
+		userArray, err := service.repo.SearchUser(keyword, logrus)
+		if err != nil {
+			return resultSearch, err
+		}
+		for _, value := range userArray {
+			resultSearch.User = append(resultSearch.User, value)
 		}
 	}
 	return resultSearch, err
