@@ -46,3 +46,7 @@ func (service *PostService) UpdatePost(userID, postID int, input model.Post, log
 func (service *PostService) DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error) {
 	return service.repo.DeletePost(userID, postID, logrus)
 }
+
+func (service *PostService) LikePost(userID, postID int, logrus *logrus.Logger) (int, error) {
+	return service.repo.LikePost(userID, postID, logrus)
+}

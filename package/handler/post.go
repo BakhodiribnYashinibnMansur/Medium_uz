@@ -58,8 +58,7 @@ func (handler *Handler) createPost(ctx *gin.Context) {
 // @Failure 409 {object} error.errorResponseData
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router /api/ghost/get/{id} [GET]
-
+// @Router /api/ghost/post/get/{id} [GET]
 func (handler *Handler) getPostID(ctx *gin.Context) {
 	logrus := handler.logrus
 	paramID := ctx.Param("id")
@@ -235,4 +234,44 @@ func (handler *Handler) deletePost(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Deleted", Data: postID})
+}
+
+// @Summary Like  Post By ID
+// @Tags Post
+// @Description Like post by id
+// @ID like-post-id
+// @Accept  json
+// @Produce  json
+// @Param        id   query  int     true "Param ID"
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/post/like [GET]
+//@Security ApiKeyAuth
+func (handler *Handler) likePost(ctx *gin.Context) {
+
+	logrus := handler.logrus
+	userID, err := getUserId(ctx, logrus)
+	if err != nil {
+		return
+	}
+	paramID := ctx.Query("id")
+	if paramID == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
+		return
+	}
+	postID, err := strconv.Atoi(paramID)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	result, err := handler.services.LikePost(userID, postID, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Liked Post", Data: result})
 }

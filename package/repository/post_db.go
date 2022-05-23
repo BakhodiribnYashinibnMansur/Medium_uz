@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
@@ -64,10 +63,10 @@ func (repo *PostDB) GetPostById(id int, logrus *logrus.Logger) (post model.PostF
 }
 
 func (repo *PostDB) UpdatePostImage(userID, postID int, filePath string, logrus *logrus.Logger) (int64, error) {
-	tm := time.Now()
-	query := fmt.Sprintf("UPDATE %s pl SET post_image_path = $1,updated_at=$2 FROM %s upl   WHERE pl.id = upl.post_id AND upl.post_author_id = $3 AND upl.post_id = $4 RETURNING pl.id", postTable, postUserTable)
 
-	rows, err := repo.db.Exec(query, filePath, tm, userID, postID)
+	query := fmt.Sprintf("UPDATE %s pl SET post_image_path = $1,updated_at=NOW() FROM %s upl   WHERE pl.id = upl.post_id AND upl.post_author_id = $2 AND upl.post_id = $3 RETURNING pl.id", postTable, postUserTable)
+
+	rows, err := repo.db.Exec(query, filePath, userID, postID)
 
 	if err != nil {
 
@@ -87,10 +86,9 @@ func (repo *PostDB) UpdatePostImage(userID, postID int, filePath string, logrus 
 }
 
 func (repo *PostDB) UpdatePost(userID, postID int, post model.UpdatePost, logrus *logrus.Logger) (int64, error) {
-	tm := time.Now()
-	updateQuery := fmt.Sprintf("UPDATE %s pl SET  post_title=COALESCE($1,post_title) ,post_body=COALESCE($2,post_body), post_tags=COALESCE($3,post_tags) , updated_at=$4 FROM %s upl   WHERE pl.id = upl.post_id AND upl.post_author_id = $5 AND upl.post_id = $6 RETURNING pl.id", postTable, postUserTable)
+	updateQuery := fmt.Sprintf("UPDATE %s pl SET  post_title=COALESCE($1,post_title) ,post_body=COALESCE($2,post_body), post_tags=COALESCE($3,post_tags) , updated_at=NOW() FROM %s upl   WHERE pl.id = upl.post_id AND upl.post_author_id = $4 AND upl.post_id = $5 RETURNING pl.id", postTable, postUserTable)
 
-	rows, err := repo.db.Exec(updateQuery, post.Title, post.Body, pq.Array(post.Tags), tm, userID, postID)
+	rows, err := repo.db.Exec(updateQuery, post.Title, post.Body, pq.Array(post.Tags), userID, postID)
 
 	if err != nil {
 
@@ -109,10 +107,9 @@ func (repo *PostDB) UpdatePost(userID, postID int, post model.UpdatePost, logrus
 }
 
 func (repo *PostDB) DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error) {
-	tm := time.Now()
 
-	deletePostQuery := fmt.Sprintf("UPDATE %s pl SET deleted_at = $1 FROM %s upl   WHERE pl.id = upl.post_id AND upl.post_author_id = $2 AND upl.post_id = $3 RETURNING pl.id", postTable, postUserTable)
-	deletePostRow, err := repo.db.Exec(deletePostQuery, tm, userID, postID)
+	deletePostQuery := fmt.Sprintf("UPDATE %s pl SET deleted_at = NOW() FROM %s upl   WHERE pl.id = upl.post_id AND upl.post_author_id = $1 AND upl.post_id = $2 RETURNING pl.id", postTable, postUserTable)
+	deletePostRow, err := repo.db.Exec(deletePostQuery, userID, postID)
 
 	if err != nil {
 		logrus.Errorf("ERROR: Deleted Post : %v", err)
@@ -125,8 +122,8 @@ func (repo *PostDB) DeletePost(userID, postID int, logrus *logrus.Logger) (int64
 		logrus.Errorf("ERROR: Deleted Post  effectedRowsNum : %v", err)
 		return -1, -1, err
 	}
-	deletePostUserQuery := fmt.Sprintf("UPDATE %s SET deleted_at = $1 WHERE post_id = $2 RETURNING id", postUserTable)
-	deletePostUserRow, err := repo.db.Exec(deletePostUserQuery, tm, userID)
+	deletePostUserQuery := fmt.Sprintf("UPDATE %s SET deleted_at = NOW() WHERE post_id = $1 RETURNING id", postUserTable)
+	deletePostUserRow, err := repo.db.Exec(deletePostUserQuery, userID)
 
 	if err != nil {
 		logrus.Errorf("ERROR: Deleted Post : %v", err)
@@ -141,4 +138,18 @@ func (repo *PostDB) DeletePost(userID, postID int, logrus *logrus.Logger) (int64
 	}
 	logrus.Info("DONE:Deleted Post ")
 	return deletedPost, deletedPostUser, nil
+}
+
+func (repo *PostDB) LikePost(userID, postID int, logrus *logrus.Logger) (int, error) {
+	var id int
+	query := fmt.Sprintf("INSERT INTO %s (reader_id  , post_id ) VALUES ($1, $2)  RETURNING id", postLikeTable)
+
+	row := repo.db.QueryRow(query, userID, postID)
+
+	if err := row.Scan(&id); err != nil {
+		logrus.Infof("ERROR:PSQL Insert LIKE error %s", err.Error())
+		return 0, err
+	}
+	logrus.Info("DONE: INSERTED  LIKE Data PSQL")
+	return id, nil
 }

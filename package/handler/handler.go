@@ -73,8 +73,8 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.PATCH("/upload-image", handler.uploadImagePost) //DONE
 				post.PUT("/update", handler.updatePost)              //DONE
 				post.DELETE("/delete", handler.deletePost)           //DONE
-				post.GET("/like")                                    //PROCESS
-				post.GET("/view")                                    //PROCESS
+				post.GET("/like", handler.likePost)                  //PROCESS
+				post.GET("/view")                                    //FUTURE
 			}
 		}
 		ghost := api.Group("/ghost")
@@ -86,7 +86,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 
 			search := ghost.Group("/")
 			{
-				search.GET("/search", handler.searchAll) //PROCESS ADVANCED SEARCH
+				search.GET("/search", handler.searchAll) //DONE
 			}
 		}
 	}

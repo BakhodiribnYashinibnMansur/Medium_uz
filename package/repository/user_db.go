@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/model"
 	"github.com/BakhodiribnYashinibnMansur/Medium_uz/util/logrus"
@@ -39,9 +38,8 @@ func (repo *UserDB) GetUserData(id string, logrus *logrus.Logger) (model.UserFul
 }
 
 func (repo *UserDB) UpdateUserVerified(id string, logrus *logrus.Logger) (effectedRowsNum int64, err error) {
-	tm := time.Now()
-	query := fmt.Sprintf("	UPDATE %s SET is_verified = true,verification_date=$1,updated_at=$2	WHERE id = $3  RETURNING id ", usersTable)
-	rows, err := repo.db.Exec(query, tm, tm, id)
+	query := fmt.Sprintf("	UPDATE %s SET is_verified = true,verification_date=NOW(),updated_at=NOW() WHERE id = $1  RETURNING id ", usersTable)
+	rows, err := repo.db.Exec(query, id)
 
 	if err != nil {
 		logrus.Errorf("ERROR: Update verificationCode : %v", err)
@@ -57,9 +55,8 @@ func (repo *UserDB) UpdateUserVerified(id string, logrus *logrus.Logger) (effect
 }
 
 func (repo *UserDB) UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error) {
-	tm := time.Now()
-	query := fmt.Sprintf("	UPDATE %s SET account_image_path=$1,updated_at=$2	WHERE id = $3  RETURNING id ", usersTable)
-	rows, err := repo.db.Exec(query, filePath, tm, id)
+	query := fmt.Sprintf("	UPDATE %s SET account_image_path=$1,updated_at=NOW()	WHERE id = $1  RETURNING id ", usersTable)
+	rows, err := repo.db.Exec(query, filePath, id)
 
 	if err != nil {
 		logrus.Errorf("ERROR: Update Update account image : %v", err)
@@ -75,9 +72,8 @@ func (repo *UserDB) UpdateAccountImage(id int, filePath string, logrus *logrus.L
 }
 
 func (repo *UserDB) UpdateAccount(id int, user model.UpdateUser, logrus *logrus.Logger) (int64, error) {
-	tm := time.Now()
-	query := fmt.Sprintf("	UPDATE %s SET 	firstname = COALESCE($1,firstname), 	secondname  = COALESCE($2,secondname), 	email = COALESCE($3,email), 	nickname = COALESCE( $4,nickname), 	password_hash = COALESCE($5,password_hash),  	interests = COALESCE($6, interests), 	bio = COALESCE($7,bio), 	city = COALESCE($8,city), 	phone = COALESCE($9,phone),  	updated_at=$10		WHERE id = $11 	 RETURNING id ", usersTable)
-	rows, err := repo.db.Exec(query, user.FirstName, user.SecondName, user.Email, user.NickName, user.Password, pq.Array(user.Interests), user.Bio, user.City, user.Phone, tm, id)
+	query := fmt.Sprintf("	UPDATE %s SET 	firstname = COALESCE($1,firstname), 	secondname  = COALESCE($2,secondname), 	email = COALESCE($3,email), 	nickname = COALESCE( $4,nickname), 	password_hash = COALESCE($5,password_hash),  	interests = COALESCE($6, interests), 	bio = COALESCE($7,bio), 	city = COALESCE($8,city), 	phone = COALESCE($9,phone),  	updated_at=NOW()		WHERE id = $10 	 RETURNING id ", usersTable)
+	rows, err := repo.db.Exec(query, user.FirstName, user.SecondName, user.Email, user.NickName, user.Password, pq.Array(user.Interests), user.Bio, user.City, user.Phone, id)
 
 	if err != nil {
 		logrus.Errorf("ERROR: Update verificationCode : %v", err)
