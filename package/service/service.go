@@ -36,6 +36,7 @@ type Post interface {
 type Search interface {
 	UniversalSearch(search string, logrus *logrus.Logger) (model.Search, error)
 }
+
 type Service struct {
 	Authorization
 	User
