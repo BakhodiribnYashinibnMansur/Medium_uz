@@ -192,31 +192,6 @@ func (handler *Handler) updatePost(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Uploaded", Data: postID})
 }
 
-// @Summary Search  Post By search text
-// @Tags Post
-// @Description Search post by search text
-// @ID search-post
-// @Accept  json
-// @Produce  json
-// @Param        search   query  string     true "search text"
-// @Success 200 {object} model.ResponseSuccess
-// @Failure 400,404 {object} error.errorResponse
-// @Failure 409 {object} error.errorResponseData
-// @Failure 500 {object} error.errorResponse
-// @Failure default {object} error.errorResponse
-// @Router /api/post/search [GET]
-//@Security ApiKeyAuth
-func (handler *Handler) searchAll(ctx *gin.Context) {
-	logrus := handler.logrus
-	search := ctx.Query("search")
-	if search == "" {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Search text is empty", logrus)
-		return
-	}
-
-	ctx.JSON(http.StatusOK, model.Search{})
-}
-
 // @Summary Delete  Post By ID
 // @Tags Post
 // @Description Delete post by id

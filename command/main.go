@@ -23,9 +23,7 @@ import (
 // @in header
 // @name Authorization
 func main() {
-
 	logrus := logrus.GetLogger()
-
 	configs, err := configs.InitConfig()
 	logrus.Infof("configs %v", configs)
 	if err != nil {

@@ -428,18 +428,18 @@ paths:
       summary: Verification Email
       tags:
       - Account
-  /api/ghost/get/{id}:
+  /api/ghost/search:
     get:
       consumes:
       - application/json
-      description: get post by id
-      operationId: get-post-id
+      description: Search post by search text
+      operationId: search-universal
       parameters:
-      - description: Param ID
-        in: path
-        name: id
+      - description: search text
+        in: query
+        name: search
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -467,11 +467,9 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/error.errorResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Get  Post By ID
+      summary: Search  Post By search text
       tags:
-      - Post
+      - Search
   /api/post/create:
     post:
       consumes:
@@ -559,50 +557,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Delete  Post By ID
-      tags:
-      - Post
-  /api/post/search:
-    get:
-      consumes:
-      - application/json
-      description: Search post by search text
-      operationId: search-post
-      parameters:
-      - description: search text
-        in: query
-        name: search
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.ResponseSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/error.errorResponseData'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Search  Post By search text
       tags:
       - Post
   /api/post/update:

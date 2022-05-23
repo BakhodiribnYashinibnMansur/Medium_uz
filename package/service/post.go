@@ -33,7 +33,6 @@ func (service *PostService) GetPostById(id int, logrus *logrus.Logger) (post mod
 
 func (service *PostService) UpdatePostImage(userID, postID int, filePath string, logrus *logrus.Logger) (int64, error) {
 	return service.repo.UpdatePostImage(userID, postID, filePath, logrus)
-
 }
 
 func (service *PostService) UpdatePost(userID, postID int, input model.Post, logrus *logrus.Logger) (int64, error) {

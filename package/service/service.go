@@ -32,12 +32,17 @@ type Post interface {
 	UpdatePost(userID, postID int, post model.Post, logrus *logrus.Logger) (int64, error)
 	DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error)
 }
+
+type Search interface {
+	UniversalSearch(search string, logrus *logrus.Logger) (model.Search, error)
+}
 type Service struct {
 	Authorization
 	User
 	Post
+	Search
 }
 
 func NewService(repos *repository.Repository) *Service {
-	return &Service{Authorization: NewAuthService(repos.Authorization), User: NewUserService(repos.User), Post: NewPostService(repos.Post)}
+	return &Service{Authorization: NewAuthService(repos.Authorization), User: NewUserService(repos.User), Post: NewPostService(repos.Post), Search: NewSearchService(repos.Search)}
 }

@@ -73,7 +73,6 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.PATCH("/upload-image", handler.uploadImagePost) //DONE
 				post.PUT("/update", handler.updatePost)              //DONE
 				post.DELETE("/delete", handler.deletePost)           //DONE
-				post.GET("/search", handler.searchAll)               //PROCESS ADVANCED SEARCH
 				post.GET("/like")                                    //PROCESS
 				post.GET("/view")                                    //PROCESS
 			}
@@ -85,6 +84,10 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.GET("/get/:id", handler.getPostID) //DONE
 			}
 
+			search := ghost.Group("/")
+			{
+				search.GET("/search", handler.searchAll) //PROCESS ADVANCED SEARCH
+			}
 		}
 	}
 	return router

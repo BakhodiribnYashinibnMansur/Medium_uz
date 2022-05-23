@@ -32,13 +32,16 @@ type Post interface {
 	UpdatePost(userID, postID int, post model.UpdatePost, logrus *logrus.Logger) (int64, error)
 	DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error)
 }
+type Search interface {
+}
 
 type Repository struct {
 	Authorization
 	User
 	Post
+	Search
 }
 
 func NewRepository(db *sqlx.DB, redis *redis.Client) *Repository {
-	return &Repository{Authorization: NewAuthDB(db, redis), User: NewUserDB(db, redis), Post: NewPostDB(db, redis)}
+	return &Repository{Authorization: NewAuthDB(db, redis), User: NewUserDB(db, redis), Post: NewPostDB(db, redis), Search: NewSearchDB(db)}
 }

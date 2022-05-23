@@ -541,14 +541,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/ghost/get/{id}": {
+        "/api/ghost/search": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "get post by id",
+                "description": "Search post by search text",
                 "consumes": [
                     "application/json"
                 ],
@@ -556,16 +551,16 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Post"
+                    "Search"
                 ],
-                "summary": "Get  Post By ID",
-                "operationId": "get-post-id",
+                "summary": "Search  Post By search text",
+                "operationId": "search-universal",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Param ID",
-                        "name": "id",
-                        "in": "path",
+                        "type": "string",
+                        "description": "search text",
+                        "name": "search",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -703,74 +698,6 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "Param ID",
                         "name": "id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.ResponseSuccess"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/error.errorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/error.errorResponse"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/error.errorResponseData"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/error.errorResponse"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/error.errorResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/post/search": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Search post by search text",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Post"
-                ],
-                "summary": "Search  Post By search text",
-                "operationId": "search-post",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "search text",
-                        "name": "search",
                         "in": "query",
                         "required": true
                     }
