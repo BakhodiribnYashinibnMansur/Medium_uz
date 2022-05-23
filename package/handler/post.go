@@ -323,3 +323,47 @@ func (handler *Handler) unLikePost(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " UnLiked Post", Data: effectedRowsNum})
 }
+
+// @Summary View  Post By ID
+// @Tags Post
+// @Description View post by id
+// @ID view-post-id
+// @Accept  json
+// @Produce  json
+// @Param        id   query  int     true "Param ID"
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/post/view [GET]
+//@Security ApiKeyAuth
+func (handler *Handler) viewPost(ctx *gin.Context) {
+	logrus := handler.logrus
+	userID, err := getUserId(ctx, logrus)
+	if err != nil {
+		return
+	}
+
+	paramID := ctx.Query("id")
+
+	if paramID == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
+		return
+	}
+
+	postID, err := strconv.Atoi(paramID)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	result, err := handler.services.ViewPost(userID, postID, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " UnLiked Post", Data: result})
+
+}

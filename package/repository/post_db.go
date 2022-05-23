@@ -171,3 +171,18 @@ func (repo *PostDB) UnlikePost(userID, postID int, logrus *logrus.Logger) (int64
 	logrus.Info("DONE:Update account image")
 	return effectedRowsNum, nil
 }
+
+func (repo *PostDB) ViewPost(userID, postID int, logrus *logrus.Logger) (int, error) {
+
+	var id int
+	query := fmt.Sprintf("INSERT INTO %s (reader_id  , post_id ) VALUES ($1, $2)  RETURNING id", postViewTable)
+
+	row := repo.db.QueryRow(query, userID, postID)
+
+	if err := row.Scan(&id); err != nil {
+		logrus.Infof("ERROR:PSQL Insert VIEW error %s", err.Error())
+		return 0, err
+	}
+	logrus.Info("DONE: INSERTED  VIEW Data PSQL")
+	return id, nil
+}

@@ -75,7 +75,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.DELETE("/delete", handler.deletePost)           //DONE
 				post.GET("/like", handler.likePost)                  //DONE
 				post.GET("/unlike", handler.unLikePost)              //DONE
-				post.GET("/view")                                    //PROSES
+				post.GET("/view", handler.viewPost)                  //PROSES
 			}
 		}
 		ghost := api.Group("/ghost")

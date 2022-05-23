@@ -54,3 +54,7 @@ func (service *PostService) LikePost(userID, postID int, logrus *logrus.Logger) 
 func (service *PostService) UnlikePost(userID, postID int, logrus *logrus.Logger) (int64, error) {
 	return service.repo.UnlikePost(userID, postID, logrus)
 }
+
+func (service *PostService) ViewPost(userID, postID int, logrus *logrus.Logger) (int, error) {
+	return service.repo.ViewPost(userID, postID, logrus)
+}
