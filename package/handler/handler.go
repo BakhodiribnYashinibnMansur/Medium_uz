@@ -65,7 +65,8 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				account.PUT("/update", handler.updateAccount)              //DONE
 				account.GET("/get", handler.getUser)                       //DONE
 				account.PATCH("/upload-image", handler.uploadAccountImage) //DONE
-				account.GET("/following")
+				account.GET("/following", handler.followingUser)
+				account.GET("/follower", handler.followerUser)
 			}
 
 			post := auth.Group("/post")
@@ -77,6 +78,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.GET("/like", handler.likePost)                  //DONE
 				post.GET("/view", handler.viewPost)                  //DONE
 				post.GET("/rating", handler.ratedPost)               //
+
 			}
 
 		}

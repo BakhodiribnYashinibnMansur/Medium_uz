@@ -22,6 +22,8 @@ type User interface {
 	UpdateUserVerified(id string, logrus *logrus.Logger) (int64, error)
 	UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdateAccount(id int, user model.UpdateUser, logrus *logrus.Logger) (int64, error)
+	FollowingAccount(userID, followingID int, logrus *logrus.Logger) (int64, error)
+	FollowerAccount(userID, followerID int, logrus *logrus.Logger) (int64, error)
 }
 
 type Post interface {

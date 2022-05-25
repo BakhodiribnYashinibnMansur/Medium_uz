@@ -23,6 +23,8 @@ type User interface {
 	UploadImage(file multipart.File, header *multipart.FileHeader, logrus *logrus.Logger) (filePath string, err error)
 	UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdateAccount(id int, user model.User, logrus *logrus.Logger) (int64, error)
+	FollowingAccount(userID, followingID int, logrus *logrus.Logger) (int64, error)
+	FollowerAccount(userID, followerID int, logrus *logrus.Logger) (int64, error)
 }
 
 type Post interface {

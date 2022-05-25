@@ -83,3 +83,106 @@ UPDATE  liked_post SET deleted_at = NOW() WHERE reader_id = user_id AND post_id 
    END IF;
   END
 $$;
+
+-- //////////////////////////////////////////////////////////////////////////
+--  FOLLOWING FUNCTION
+-- /////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE  FUNCTION toggle_following_user(account_id_func INTEGER,following_id_func INTEGER) RETURNS VOID LANGUAGE PLPGSQL AS
+$$
+  BEGIN
+IF  EXISTS (SELECT id  FROM followings  WHERE account_id =account_id_func AND following_id=following_id_func AND deleted_at IS NULL)
+THEN
+UPDATE  followings SET deleted_at = NOW() WHERE account_id = account_id_func AND following_id = following_id_func  ;
+   ELSE
+   INSERT INTO followings (account_id  , following_id ) VALUES (account_id_func  , following_id_func)  ;
+   END IF;
+  END
+$$;
+
+-- //////////////////////////////////////////////////////////////////////////
+--  FOLLOWER FUNCTION
+-- /////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE  FUNCTION toggle_follower_user(account_id_func INTEGER,follower_id_func INTEGER) RETURNS VOID LANGUAGE PLPGSQL AS
+$$
+  BEGIN
+IF  EXISTS (SELECT id  FROM followers  WHERE account_id =account_id_func AND follower_id=follower_id_func AND deleted_at IS NULL)
+THEN
+UPDATE  followers SET deleted_at = NOW() WHERE account_id = account_id_func AND follower_id = follower_id_func  ;
+   ELSE
+   INSERT INTO followers (account_id  , follower_id ) VALUES (account_id_func  , follower_id_func)  ;
+   END IF;
+  END
+$$;
+
+
+-- //////////////////////////////////////////////////////////////////////////
+-- FOLLOWING  TRIGGER
+-- /////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE FUNCTION following_account() RETURNS TRIGGER LANGUAGE PLPGSQL AS
+$$
+  BEGIN
+    UPDATE users SET following_count = following_count + 1,
+    updated_at = NOW()
+    WHERE id = NEW.account_id;
+    RETURN NEW;
+  END;
+$$;
+
+CREATE TRIGGER following_account_trigger AFTER INSERT ON followings
+FOR EACH ROW EXECUTE PROCEDURE following_account();
+
+
+-- //////////////////////////////////////////////////////////////////////////
+-- UNFOLLOWING  TRIGGER
+-- /////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE FUNCTION unfollowing_account() RETURNS TRIGGER LANGUAGE PLPGSQL AS
+$$
+  BEGIN
+    UPDATE users SET following_count = following_count - 1,
+    updated_at = NOW()
+    WHERE id = NEW.account_id;
+    RETURN NEW;
+  END;
+$$;
+
+CREATE TRIGGER unfollowing_account_trigger AFTER UPDATE ON followings
+FOR EACH ROW EXECUTE PROCEDURE unfollowing_account();
+
+-- //////////////////////////////////////////////////////////////////////////
+-- FOLLOWER TRIGGER
+-- /////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE FUNCTION follower_account() RETURNS TRIGGER LANGUAGE PLPGSQL AS
+$$
+  BEGIN
+    UPDATE users SET follower_count = follower_count + 1,
+    updated_at = NOW()
+    WHERE id = NEW.account_id;
+    RETURN NEW;
+  END;
+$$;
+
+CREATE TRIGGER follower_account_trigger AFTER INSERT ON followers
+FOR EACH ROW EXECUTE PROCEDURE follower_account();
+
+
+-- //////////////////////////////////////////////////////////////////////////
+-- UNFOLLOWER  TRIGGER
+-- /////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE FUNCTION unfollower_account() RETURNS TRIGGER LANGUAGE PLPGSQL AS
+$$
+  BEGIN
+    UPDATE users SET follower_count = follower_count - 1,
+    updated_at = NOW()
+    WHERE id = NEW.account_id;
+    RETURN NEW;
+  END;
+$$;
+
+CREATE TRIGGER unfollower_account_trigger AFTER UPDATE ON followers
+FOR EACH ROW EXECUTE PROCEDURE unfollower_account();

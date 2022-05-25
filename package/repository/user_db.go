@@ -88,6 +88,49 @@ func (repo *UserDB) UpdateAccount(id int, user model.UpdateUser, logrus *logrus.
 	return effectedRowsNum, nil
 }
 
+func (repo *UserDB) FollowingAccount(userID, followingID int, logrus *logrus.Logger) (int64, error) {
+
+	followingQuery := fmt.Sprintln("SELECT toggle_following_user($1,$2)")
+
+	row, err := repo.db.Exec(followingQuery, userID, followingID)
+
+	if err != nil {
+		logrus.Info("DONE: ERROR  Following Data PSQL %s ", err)
+		return -1, err
+	}
+
+	numRowEffected, err := row.RowsAffected()
+	if err != nil {
+		logrus.Info("DONE: ERROR  Following Data PSQL %s ", err)
+		return -1, err
+	}
+
+	logrus.Info("DONE: INSERTED  Following Data PSQL")
+	return numRowEffected, nil
+
+}
+
+func (repo *UserDB) FollowerAccount(userID, followerID int, logrus *logrus.Logger) (int64, error) {
+
+	followerQuery := fmt.Sprintln("SELECT toggle_follower_user($1,$2)")
+
+	row, err := repo.db.Exec(followerQuery, userID, followerID)
+
+	if err != nil {
+		logrus.Info("DONE: ERROR  Following Data PSQL %s ", err)
+		return -1, err
+	}
+
+	numRowEffected, err := row.RowsAffected()
+	if err != nil {
+		logrus.Info("DONE: ERROR  Following Data PSQL %s ", err)
+		return -1, err
+	}
+
+	logrus.Info("DONE: INSERTED  Following Data PSQL")
+	return numRowEffected, nil
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // REDIS

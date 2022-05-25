@@ -100,3 +100,11 @@ func (service *UserService) UpdateAccount(id int, user model.User, logrus *logru
 	logrus.Info("successfully password_hash")
 	return service.repo.UpdateAccount(id, updateUser, logrus)
 }
+
+func (service *UserService) FollowingAccount(userID, followingID int, logrus *logrus.Logger) (int64, error) {
+	return service.repo.FollowingAccount(userID, followingID, logrus)
+}
+
+func (service *UserService) FollowerAccount(userID, followerID int, logrus *logrus.Logger) (int64, error) {
+	return service.repo.FollowerAccount(userID, followerID, logrus)
+}

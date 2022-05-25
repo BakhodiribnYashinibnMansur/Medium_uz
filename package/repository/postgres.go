@@ -23,7 +23,7 @@ func NewPostgresDB(cfg Config, logrus *logrus.Logger) (*sqlx.DB, error) {
 		cfg.Host, cfg.Port, cfg.Username, cfg.DBName, cfg.Password, cfg.SSLMode))
 	logrus.Infof("check db configs %v", cfg)
 	if err != nil {
-		logrus.Fatalf("failed check db confis.%v", err)
+		logrus.Fatalf("failed check db configs.%v", err)
 		return nil, err
 	}
 	logrus.Info("success checked configs.")
@@ -34,6 +34,6 @@ func NewPostgresDB(cfg Config, logrus *logrus.Logger) (*sqlx.DB, error) {
 		return nil, err
 	}
 	logrus.Info("success ping data. ")
-	logrus.Info("successfull connect database")
+	logrus.Info("successful connect database")
 	return db, nil
 }

@@ -142,7 +142,7 @@ func (repo *PostDB) DeletePost(userID, postID int, logrus *logrus.Logger) (int64
 
 func (repo *PostDB) LikePost(userID, postID int, logrus *logrus.Logger) (int64, error) {
 
-	likeQuery := fmt.Sprint("SELECT toggle_comment_like($1,$2)")
+	likeQuery := fmt.Sprintln("SELECT toggle_comment_like($1,$2)")
 
 	row, err := repo.db.Exec(likeQuery, userID, postID)
 

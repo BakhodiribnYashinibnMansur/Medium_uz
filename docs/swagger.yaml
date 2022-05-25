@@ -87,6 +87,94 @@ info:
   title: MediumuZ API
   version: "1.0"
 paths:
+  /api/account/follower:
+    get:
+      consumes:
+      - application/json
+      description: Follower user
+      operationId: follower-account
+      parameters:
+      - description: Param ID
+        in: query
+        name: followerID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Add Follower
+      tags:
+      - Account
+  /api/account/following:
+    get:
+      consumes:
+      - application/json
+      description: Following user
+      operationId: following-account
+      parameters:
+      - description: Param ID
+        in: query
+        name: followingID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Add Following
+      tags:
+      - Account
   /api/account/get:
     get:
       consumes:
@@ -645,16 +733,21 @@ paths:
       summary: Like  Post By ID
       tags:
       - Post
-  /api/post/unlike:
+  /api/post/rating:
     get:
       consumes:
       - application/json
-      description: UnLike post by id
-      operationId: unlike-post-id
+      description: Rated post by id
+      operationId: rated-post-id
       parameters:
       - description: Param ID
         in: query
         name: id
+        required: true
+        type: integer
+      - description: Rating Number
+        in: query
+        name: rating
         required: true
         type: integer
       produces:
@@ -686,7 +779,7 @@ paths:
             $ref: '#/definitions/error.errorResponse'
       security:
       - ApiKeyAuth: []
-      summary: UnLike  Post By ID
+      summary: Rated  Post By ID
       tags:
       - Post
   /api/post/update:
