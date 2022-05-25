@@ -27,7 +27,7 @@ type PostFull struct {
 	PostViewsCount int            `json:"post_views_count" db:"post_views_count"`
 	PostLikeCount  int            `json:"post_like_count" db:"post_like_count"`
 	PostRated      float32        `json:"post_rating" db:"post_rated"`
-	PostVote       int            `json:"post_vote" db:"post_vote"`
+	PostVoteCount  int            `json:"post_vote_count" db:"post_vote_count"`
 	PostTags       pq.StringArray `json:"post_tags" db:"post_tags"`
 	PostDate       string         `json:"post_date" db:"post_date"`
 	IsNew          bool           `json:"is_empty" db:"is_new"`

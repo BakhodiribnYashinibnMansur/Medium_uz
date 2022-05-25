@@ -31,9 +31,9 @@ type Post interface {
 	UpdatePostImage(userID, postID int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdatePost(userID, postID int, post model.Post, logrus *logrus.Logger) (int64, error)
 	DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error)
-	LikePost(userID, postID int, logrus *logrus.Logger) (int, error)
-	UnlikePost(userID, postID int, logrus *logrus.Logger) (int64, error)
+	LikePost(userID, postID int, logrus *logrus.Logger) (int64, error)
 	ViewPost(userID, postID int, logrus *logrus.Logger) (int, error)
+	RatingPost(userID, postID, userRating int, logrus *logrus.Logger)
 }
 
 type Search interface {

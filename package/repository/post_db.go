@@ -140,36 +140,24 @@ func (repo *PostDB) DeletePost(userID, postID int, logrus *logrus.Logger) (int64
 	return deletedPost, deletedPostUser, nil
 }
 
-func (repo *PostDB) LikePost(userID, postID int, logrus *logrus.Logger) (int, error) {
-	var id int
-	query := fmt.Sprintf("INSERT INTO %s (reader_id  , post_id ) VALUES ($1, $2)  RETURNING id", postLikeTable)
+func (repo *PostDB) LikePost(userID, postID int, logrus *logrus.Logger) (int64, error) {
 
-	row := repo.db.QueryRow(query, userID, postID)
+	likeQuery := fmt.Sprint("SELECT toggle_comment_like($1,$2)")
 
-	if err := row.Scan(&id); err != nil {
-		logrus.Infof("ERROR:PSQL Insert LIKE error %s", err.Error())
-		return 0, err
+	row, err := repo.db.Exec(likeQuery, userID, postID)
+
+	if err != nil {
+		logrus.Info("DONE: ERROR  LIKE Data PSQL %s ", err)
+		return -1, err
+	}
+	numRowEffected, err := row.RowsAffected()
+	if err != nil {
+		logrus.Info("DONE: ERROR  LIKE Data PSQL %s ", err)
+
+		return -1, err
 	}
 	logrus.Info("DONE: INSERTED  LIKE Data PSQL")
-	return id, nil
-}
-
-func (repo *PostDB) UnlikePost(userID, postID int, logrus *logrus.Logger) (int64, error) {
-	query := fmt.Sprintf("	UPDATE %s SET deleted_at=NOW()	WHERE reader_id = $1 AND post_id = $2   RETURNING id ", postLikeTable)
-	rows, err := repo.db.Exec(query, userID, postID)
-
-	if err != nil {
-		logrus.Errorf("ERROR: Update Update account image : %v", err)
-		return 0, err
-	}
-
-	effectedRowsNum, err := rows.RowsAffected()
-	if err != nil {
-		logrus.Errorf("ERROR: Update Update account image effectedRowsNum : %v", err)
-		return 0, err
-	}
-	logrus.Info("DONE:Update account image")
-	return effectedRowsNum, nil
+	return numRowEffected, nil
 }
 
 func (repo *PostDB) ViewPost(userID, postID int, logrus *logrus.Logger) (int, error) {
@@ -186,3 +174,5 @@ func (repo *PostDB) ViewPost(userID, postID int, logrus *logrus.Logger) (int, er
 	logrus.Info("DONE: INSERTED  VIEW Data PSQL")
 	return id, nil
 }
+
+func (repo *PostDB) RatingPost(userID, postID, userRating int, logrus *logrus.Logger) {}

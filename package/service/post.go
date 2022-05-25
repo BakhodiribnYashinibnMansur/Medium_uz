@@ -47,14 +47,11 @@ func (service *PostService) DeletePost(userID, postID int, logrus *logrus.Logger
 	return service.repo.DeletePost(userID, postID, logrus)
 }
 
-func (service *PostService) LikePost(userID, postID int, logrus *logrus.Logger) (int, error) {
+func (service *PostService) LikePost(userID, postID int, logrus *logrus.Logger) (int64, error) {
 	return service.repo.LikePost(userID, postID, logrus)
-}
-
-func (service *PostService) UnlikePost(userID, postID int, logrus *logrus.Logger) (int64, error) {
-	return service.repo.UnlikePost(userID, postID, logrus)
 }
 
 func (service *PostService) ViewPost(userID, postID int, logrus *logrus.Logger) (int, error) {
 	return service.repo.ViewPost(userID, postID, logrus)
 }
+func (service *PostService) RatingPost(userID, postID, userRating int, logrus *logrus.Logger) {}
