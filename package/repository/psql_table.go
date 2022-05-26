@@ -8,4 +8,6 @@ const (
 	postViewTable      = "viewed_post"
 	userFollowingTable = "followings"
 	userFollowerTable  = "followers"
+	postCommitTable    = "review_post"
+	postRatingTabel    = "rating_post"
 )

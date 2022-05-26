@@ -290,6 +290,49 @@ func (handler *Handler) likePost(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Liked Post", Data: result})
 }
 
+// @Summary Commit  Post
+// @Tags Post
+// @Description Commit post by user
+// @ID commit-post-id
+// @Accept  json
+// @Produce  json
+// @Param input body model.CommitPost true "commit info"
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/post/commit [POST]
+//@Security ApiKeyAuth
+func (handler *Handler) commitPost(ctx *gin.Context) {
+	logrus := handler.logrus
+
+	var input model.CommitPost
+	err := ctx.BindJSON(&input)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	userID, err := getUserId(ctx, logrus)
+	if err != nil {
+		if err != nil {
+			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+			return
+		}
+		return
+	}
+
+	input.ReaderID = userID
+	commitID, err := handler.services.CommitPost(input, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " Committed Post Post", Data: commitID})
+
+}
+
 // @Summary View  Post By ID
 // @Tags Post
 // @Description View post by id
@@ -334,7 +377,7 @@ func (handler *Handler) viewPost(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " UnLiked Post", Data: result})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " View Post", Data: result})
 
 }
 

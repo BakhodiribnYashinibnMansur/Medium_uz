@@ -55,3 +55,7 @@ func (service *PostService) ViewPost(userID, postID int, logrus *logrus.Logger) 
 	return service.repo.ViewPost(userID, postID, logrus)
 }
 func (service *PostService) RatingPost(userID, postID, userRating int, logrus *logrus.Logger) {}
+
+func (service *PostService) CommitPost(input model.CommitPost, logrus *logrus.Logger) (int, error) {
+	return service.repo.CommitPost(input, logrus)
+}

@@ -33,3 +33,17 @@ type PostFull struct {
 	IsNew          bool           `json:"is_empty" db:"is_new"`
 	IsTopRead      bool           `json:"is_top_read" db:"is_top_read"`
 }
+
+type CommitPost struct {
+	ReaderID   int    `json:"-" db:"reader_id"`
+	PostID     int    `json:"post_id" db:"post_id"`
+	PostCommit string `json:"post_commit" db:"commits" default:"Wonderful"`
+}
+
+type CommitFull struct {
+	UserID     int    `json:"reader_id" db:"reader_id"`
+	FirstName  string `json:"first_name" db:"firstname"`
+	SecondName string `json:"second_name" db:"secondname"`
+	PostID     int    `json:"post_id" db:"post_id"`
+	PostCommit string `json:"post_commit" db:"commits" `
+}

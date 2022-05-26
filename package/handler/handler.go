@@ -67,8 +67,8 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				account.PATCH("/upload-image", handler.uploadAccountImage) //DONE
 				account.GET("/following", handler.followingUser)           //DONE
 				account.GET("/follower", handler.followerUser)             //DONE
-				account.GET("/get-followings", handler.getFollowings)
-				account.GET("/get-followers", handler.getFollowers)
+				account.GET("/get-followings", handler.getFollowings)      //DONE
+				account.GET("/get-followers", handler.getFollowers)        //DONE
 			}
 
 			post := auth.Group("/post")
@@ -80,7 +80,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.GET("/like", handler.likePost)                  //DONE
 				post.GET("/view", handler.viewPost)                  //DONE
 				post.GET("/rating", handler.ratedPost)               //
-				post.POST("/commit")
+				post.POST("/commit", handler.commitPost)
 				post.GET("/get-commit")
 			}
 

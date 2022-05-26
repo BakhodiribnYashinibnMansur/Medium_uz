@@ -176,3 +176,17 @@ func (repo *PostDB) ViewPost(userID, postID int, logrus *logrus.Logger) (int, er
 }
 
 func (repo *PostDB) RatingPost(userID, postID, userRating int, logrus *logrus.Logger) {}
+
+func (repo *PostDB) CommitPost(input model.CommitPost, logrus *logrus.Logger) (int, error) {
+	var id int
+	query := fmt.Sprintf("INSERT INTO %s (reader_id,post_id,commits) VALUES ($1, $2, $3)  RETURNING id", postCommitTable)
+
+	row := repo.db.QueryRow(query, input.ReaderID, input.PostID, input.PostCommit)
+
+	if err := row.Scan(&id); err != nil {
+		logrus.Infof("ERROR:PSQL Insert error %s", err.Error())
+		return 0, err
+	}
+	logrus.Info("DONE: INSERTED Data PSQL")
+	return id, nil
+}

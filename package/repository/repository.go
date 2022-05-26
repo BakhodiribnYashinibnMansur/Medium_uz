@@ -38,6 +38,7 @@ type Post interface {
 	LikePost(userID, postID int, logrus *logrus.Logger) (int64, error)
 	ViewPost(userID, postID int, logrus *logrus.Logger) (int, error)
 	RatingPost(userID, postID, userRating int, logrus *logrus.Logger)
+	CommitPost(input model.CommitPost, logrus *logrus.Logger) (int, error)
 }
 
 type Search interface {

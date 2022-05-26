@@ -11,6 +11,14 @@ definitions:
       message:
         type: string
     type: object
+  model.CommitPost:
+    properties:
+      post_commit:
+        default: Wonderful
+        type: string
+      post_id:
+        type: integer
+    type: object
   model.Post:
     properties:
       tags:
@@ -261,7 +269,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Follower user
+      description: Followings user
       operationId: get-following-account
       produces:
       - application/json
@@ -676,6 +684,51 @@ paths:
       summary: Search  Post By search text
       tags:
       - Search
+  /api/post/commit:
+    post:
+      consumes:
+      - application/json
+      description: Commit post by user
+      operationId: commit-post-id
+      parameters:
+      - description: commit info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.CommitPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Commit  Post
+      tags:
+      - Post
   /api/post/create:
     post:
       consumes:
