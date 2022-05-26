@@ -108,3 +108,10 @@ func (service *UserService) FollowingAccount(userID, followingID int, logrus *lo
 func (service *UserService) FollowerAccount(userID, followerID int, logrus *logrus.Logger) (int64, error) {
 	return service.repo.FollowerAccount(userID, followerID, logrus)
 }
+
+func (service *UserService) GetFollowers(userID int, logrus *logrus.Logger) (user []model.UserFull, err error) {
+	return service.repo.GetFollowers(userID, logrus)
+}
+func (service *UserService) GetFollowings(userID int, logrus *logrus.Logger) (user []model.UserFull, err error) {
+	return service.repo.GetFollowings(userID, logrus)
+}

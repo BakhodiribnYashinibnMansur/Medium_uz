@@ -326,3 +326,60 @@ func (handler *Handler) followerUser(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Follower User", Data: result})
 }
+
+// @Summary Get Account Follower
+// @Tags Account
+// @Description Follower user
+// @ID get-follower-account
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/account/get-followers [GET]
+// @Security ApiKeyAuth
+func (handler *Handler) getFollowers(ctx *gin.Context) {
+
+	logrus := handler.logrus
+	userID, err := getUserId(ctx, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	result, err := handler.services.GetFollowers(userID, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Follower User", Data: result})
+}
+
+// @Summary Get Account Following
+// @Tags Account
+// @Description Followings user
+// @ID get-following-account
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/account/get-followings [GET]
+// @Security ApiKeyAuth
+func (handler *Handler) getFollowings(ctx *gin.Context) {
+	logrus := handler.logrus
+	userID, err := getUserId(ctx, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	result, err := handler.services.GetFollowings(userID, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Following User", Data: result})
+}

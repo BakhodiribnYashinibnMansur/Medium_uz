@@ -25,6 +25,8 @@ type User interface {
 	UpdateAccount(id int, user model.User, logrus *logrus.Logger) (int64, error)
 	FollowingAccount(userID, followingID int, logrus *logrus.Logger) (int64, error)
 	FollowerAccount(userID, followerID int, logrus *logrus.Logger) (int64, error)
+	GetFollowers(userID int, logrus *logrus.Logger) (user []model.UserFull, err error)
+	GetFollowings(userID int, logrus *logrus.Logger) (user []model.UserFull, err error)
 }
 
 type Post interface {
