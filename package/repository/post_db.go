@@ -190,3 +190,11 @@ func (repo *PostDB) CommitPost(input model.CommitPost, logrus *logrus.Logger) (i
 	logrus.Info("DONE: INSERTED Data PSQL")
 	return id, nil
 }
+
+func (repo *PostDB) GetCommitPost(postID int, pagination model.Pagination, logrus *logrus.Logger) (commits []model.CommitFull, err error) {
+	query := fmt.Sprintf("SELECT 	u.id,		u.firstname, u.secondname,u.nickname,	u.account_image_path,cmt.commits	 FROM %s u INNER JOIN %s cmt on u.id =cmt.reader_id WHERE cmt.post_id = $1 AND cmt.deleted_at IS NULL OFFSET $2 LIMIT $3",
+		usersTable, postCommitTable)
+	err = repo.db.Select(&commits, query, postID, pagination.Offset, pagination.Limit)
+	return commits, err
+
+}

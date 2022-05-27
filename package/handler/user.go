@@ -333,6 +333,8 @@ func (handler *Handler) followerUser(ctx *gin.Context) {
 // @ID get-follower-account
 // @Accept  json
 // @Produce  json
+// @Param        offset   query  int     false "Offset "
+// @Param        limit   query  int     false "Limit "
 // @Success 200 {object} model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
 // @Failure 409 {object} error.errorResponseData
@@ -348,7 +350,33 @@ func (handler *Handler) getFollowers(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	result, err := handler.services.GetFollowers(userID, logrus)
+	var pagination model.Pagination
+	offsetQuery := ctx.DefaultQuery("offset", "0")
+	if offsetQuery == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
+		return
+	}
+
+	offset, err := strconv.Atoi(offsetQuery)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	limitQuery := ctx.DefaultQuery("limit", "10")
+
+	if limitQuery == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
+		return
+	}
+
+	limit, err := strconv.Atoi(limitQuery)
+	pagination.Offset = offset
+	pagination.Limit = limit
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	result, err := handler.services.GetFollowers(userID, pagination, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
@@ -362,6 +390,8 @@ func (handler *Handler) getFollowers(ctx *gin.Context) {
 // @ID get-following-account
 // @Accept  json
 // @Produce  json
+// @Param        offset   query  int     false "Offset "
+// @Param        limit   query  int     false "Limit "
 // @Success 200 {object} model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
 // @Failure 409 {object} error.errorResponseData
@@ -376,7 +406,33 @@ func (handler *Handler) getFollowings(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	result, err := handler.services.GetFollowings(userID, logrus)
+	var pagination model.Pagination
+	offsetQuery := ctx.DefaultQuery("offset", "0")
+	if offsetQuery == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
+		return
+	}
+
+	offset, err := strconv.Atoi(offsetQuery)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	limitQuery := ctx.DefaultQuery("limit", "10")
+
+	if limitQuery == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
+		return
+	}
+
+	limit, err := strconv.Atoi(limitQuery)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	pagination.Offset = offset
+	pagination.Limit = limit
+	result, err := handler.services.GetFollowings(userID, pagination, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return

@@ -233,6 +233,15 @@ paths:
       - application/json
       description: Follower user
       operationId: get-follower-account
+      parameters:
+      - description: 'Offset '
+        in: query
+        name: offset
+        type: integer
+      - description: 'Limit '
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
@@ -271,6 +280,15 @@ paths:
       - application/json
       description: Followings user
       operationId: get-following-account
+      parameters:
+      - description: 'Offset '
+        in: query
+        name: offset
+        type: integer
+      - description: 'Limit '
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
@@ -600,6 +618,56 @@ paths:
       summary: Verification Email
       tags:
       - Account
+  /api/ghost/post/get-commit:
+    get:
+      consumes:
+      - application/json
+      description: get commits
+      operationId: get-commits
+      parameters:
+      - description: 'Offset '
+        in: query
+        name: offset
+        type: integer
+      - description: 'Limit '
+        in: query
+        name: limit
+        type: integer
+      - description: 'postID '
+        in: query
+        name: postID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Get Commit
+      tags:
+      - Post
   /api/ghost/post/get/{id}:
     get:
       consumes:
@@ -649,6 +717,14 @@ paths:
       description: Search post by search text
       operationId: search-universal
       parameters:
+      - description: 'Offset '
+        in: query
+        name: offset
+        type: integer
+      - description: 'Limit '
+        in: query
+        name: limit
+        type: integer
       - description: search text
         in: query
         name: search

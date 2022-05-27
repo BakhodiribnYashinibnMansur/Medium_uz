@@ -59,3 +59,7 @@ func (service *PostService) RatingPost(userID, postID, userRating int, logrus *l
 func (service *PostService) CommitPost(input model.CommitPost, logrus *logrus.Logger) (int, error) {
 	return service.repo.CommitPost(input, logrus)
 }
+
+func (service *PostService) GetCommitPost(postID int, pagination model.Pagination, logrus *logrus.Logger) ([]model.CommitFull, error) {
+	return service.repo.GetCommitPost(postID, pagination, logrus)
+}

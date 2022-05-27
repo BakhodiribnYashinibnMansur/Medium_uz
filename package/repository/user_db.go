@@ -131,18 +131,19 @@ func (repo *UserDB) FollowerAccount(userID, followerID int, logrus *logrus.Logge
 	return numRowEffected, nil
 }
 
-func (repo *UserDB) GetFollowers(userID int, logrus *logrus.Logger) (user []model.UserFull, err error) {
+func (repo *UserDB) GetFollowers(userID int, pagination model.Pagination, logrus *logrus.Logger) (user []model.UserFull, err error) {
 
-	query := fmt.Sprintf("SELECT 	u.id,	u.email,	u.firstname,u.secondname,u.nickname,		city,	u.is_verified,	u.bio,u.interests,u.account_image_path,	u.phone,	u.rating,	u.post_views_count,	u.follower_count, u.following_count,u.like_count,u.is_super_user FROM %s u INNER JOIN %s uf on u.id = uf.follower_id WHERE uf.account_id = $1 AND uf.deleted_at IS NULL",
+	query := fmt.Sprintf("SELECT 	u.id,	u.email,	u.firstname,u.secondname,u.nickname,		u.city,	u.is_verified,	u.bio,u.interests,u.account_image_path,	u.phone,	u.rating,	u.post_views_count,	u.follower_count, u.following_count,u.like_count,u.is_super_user FROM %s u INNER JOIN %s uf on u.id = uf.follower_id WHERE uf.account_id = $1 AND uf.deleted_at IS NULL  OFFSET $2 LIMIT $3",
 		usersTable, userFollowerTable)
-	err = repo.db.Select(&user, query, userID)
+	err = repo.db.Select(&user, query, userID, pagination.Offset, pagination.Limit)
 
 	return user, err
 }
-func (repo *UserDB) GetFollowings(userID int, logrus *logrus.Logger) (user []model.UserFull, err error) {
-	query := fmt.Sprintf("SELECT 	u.id,	u.email,	u.firstname,u.secondname,u.nickname,		city,	u.is_verified,	u.bio,u.interests,u.account_image_path,	u.phone,	u.rating,	u.post_views_count,	u.follower_count, u.following_count,u.like_count,u.is_super_user FROM %s u INNER JOIN %s uf on u.id = uf.following_id WHERE uf.account_id = $1 AND uf.deleted_at IS NULL",
+
+func (repo *UserDB) GetFollowings(userID int, pagination model.Pagination, logrus *logrus.Logger) (user []model.UserFull, err error) {
+	query := fmt.Sprintf("SELECT 	u.id,	u.email,	u.firstname,u.secondname,u.nickname,		u.city,	u.is_verified,	u.bio,u.interests,u.account_image_path,	u.phone,	u.rating,	u.post_views_count,	u.follower_count, u.following_count,u.like_count,u.is_super_user FROM %s u INNER JOIN %s uf on u.id = uf.following_id WHERE uf.account_id = $1 AND uf.deleted_at IS NULL OFFSET $2 LIMIT $3",
 		usersTable, userFollowingTable)
-	err = repo.db.Select(&user, query, userID)
+	err = repo.db.Select(&user, query, userID, pagination.Offset, pagination.Limit)
 
 	return user, err
 }

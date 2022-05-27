@@ -109,9 +109,9 @@ func (service *UserService) FollowerAccount(userID, followerID int, logrus *logr
 	return service.repo.FollowerAccount(userID, followerID, logrus)
 }
 
-func (service *UserService) GetFollowers(userID int, logrus *logrus.Logger) (user []model.UserFull, err error) {
-	return service.repo.GetFollowers(userID, logrus)
+func (service *UserService) GetFollowers(userID int, pagination model.Pagination, logrus *logrus.Logger) (user []model.UserFull, err error) {
+	return service.repo.GetFollowers(userID, pagination, logrus)
 }
-func (service *UserService) GetFollowings(userID int, logrus *logrus.Logger) (user []model.UserFull, err error) {
-	return service.repo.GetFollowings(userID, logrus)
+func (service *UserService) GetFollowings(userID int, pagination model.Pagination, logrus *logrus.Logger) (user []model.UserFull, err error) {
+	return service.repo.GetFollowings(userID, pagination, logrus)
 }

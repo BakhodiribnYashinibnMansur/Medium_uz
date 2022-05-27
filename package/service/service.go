@@ -25,8 +25,8 @@ type User interface {
 	UpdateAccount(id int, user model.User, logrus *logrus.Logger) (int64, error)
 	FollowingAccount(userID, followingID int, logrus *logrus.Logger) (int64, error)
 	FollowerAccount(userID, followerID int, logrus *logrus.Logger) (int64, error)
-	GetFollowers(userID int, logrus *logrus.Logger) (user []model.UserFull, err error)
-	GetFollowings(userID int, logrus *logrus.Logger) (user []model.UserFull, err error)
+	GetFollowers(userID int, pagination model.Pagination, logrus *logrus.Logger) (user []model.UserFull, err error)
+	GetFollowings(userID int, pagination model.Pagination, logrus *logrus.Logger) (user []model.UserFull, err error)
 }
 
 type Post interface {
@@ -39,10 +39,11 @@ type Post interface {
 	ViewPost(userID, postID int, logrus *logrus.Logger) (int, error)
 	RatingPost(userID, postID, userRating int, logrus *logrus.Logger)
 	CommitPost(input model.CommitPost, logrus *logrus.Logger) (int, error)
+	GetCommitPost(postID int, pagination model.Pagination, logrus *logrus.Logger) ([]model.CommitFull, error)
 }
 
 type Search interface {
-	UniversalSearch(search string, logrus *logrus.Logger) (model.Search, error)
+	UniversalSearch(search string, pagination model.Pagination, logrus *logrus.Logger) (model.Search, error)
 }
 
 type Service struct {

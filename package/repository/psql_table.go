@@ -9,5 +9,5 @@ const (
 	userFollowingTable = "followings"
 	userFollowerTable  = "followers"
 	postCommitTable    = "review_post"
-	postRatingTabel    = "rating_post"
+	postRatingTable    = "rating_post"
 )

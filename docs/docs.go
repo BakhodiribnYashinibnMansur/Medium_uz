@@ -242,6 +242,20 @@ const docTemplate = `{
                 ],
                 "summary": "Get Account Follower",
                 "operationId": "get-follower-account",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Offset ",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit ",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -301,6 +315,20 @@ const docTemplate = `{
                 ],
                 "summary": "Get Account Following",
                 "operationId": "get-following-account",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Offset ",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit ",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -795,6 +823,81 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/ghost/post/get-commit": {
+            "get": {
+                "description": "get commits",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Post"
+                ],
+                "summary": "Get Commit",
+                "operationId": "get-commits",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Offset ",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit ",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "postID ",
+                        "name": "postID",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponseData"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/ghost/post/get/{id}": {
             "get": {
                 "description": "get post by id",
@@ -873,6 +976,18 @@ const docTemplate = `{
                 "summary": "Search  Post By search text",
                 "operationId": "search-universal",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Offset ",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit ",
+                        "name": "limit",
+                        "in": "query"
+                    },
                     {
                         "type": "string",
                         "description": "search text",

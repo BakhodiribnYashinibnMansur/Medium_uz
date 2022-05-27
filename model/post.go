@@ -41,9 +41,10 @@ type CommitPost struct {
 }
 
 type CommitFull struct {
-	UserID     int    `json:"reader_id" db:"reader_id"`
-	FirstName  string `json:"first_name" db:"firstname"`
-	SecondName string `json:"second_name" db:"secondname"`
-	PostID     int    `json:"post_id" db:"post_id"`
-	PostCommit string `json:"post_commit" db:"commits" `
+	UserID       int            `json:"reader_id" db:"id"`
+	FirstName    string         `json:"first_name" db:"firstname"`
+	SecondName   string         `json:"second_name" db:"secondname"`
+	UserNickname string         `json:"user_nickname" db:"nickname"`
+	UserImage    sql.NullString `json:"user_image" db:"account_image_path"`
+	PostCommit   string         `json:"post_commit" db:"commits" `
 }
