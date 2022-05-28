@@ -49,7 +49,8 @@ func (repo *PostDB) CreatePostUser(userId, postId int, logrus *logrus.Logger) (i
 }
 
 func (repo *PostDB) GetPostById(id int, logrus *logrus.Logger) (post model.PostFull, err error) {
-	query := fmt.Sprintf("SELECT id , post_title ,post_image_path, post_body, post_views_count, post_like_count, post_rated, post_vote, post_tags,  post_date, is_new, is_top_read FROM %s WHERE id = $1 AND deleted_at IS NULL", postTable)
+
+	query := fmt.Sprintf("SELECT u.id , u.post_title ,u.post_image_path, u.post_body, u.post_views_count, u.post_like_count, u.post_rated, u.post_vote_count, u.post_tags, u. post_date, u.is_new, u.is_top_read,up.post_author_id FROM %s u INNER JOIN %s up on u.id =up.post_id WHERE up.post_id = $1 AND up.deleted_at IS NULL ", postTable, postUserTable)
 	err = repo.db.Get(&post, query, id)
 	if err != nil {
 		if err == sql.ErrNoRows {

@@ -186,3 +186,28 @@ $$;
 
 CREATE TRIGGER unfollower_account_trigger AFTER UPDATE ON followers
 FOR EACH ROW EXECUTE PROCEDURE unfollower_account();
+
+
+
+
+-- //////////////////////////////////////////////////////////////////////////
+-- ADD RATING FUNCTION
+-- /////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE  FUNCTION add_rating(user_id INTEGER,rating_post_id INTEGER,reader_rate_func INTEGER ) RETURNS VOID LANGUAGE PLPGSQL AS
+$$
+  BEGIN
+IF  EXISTS (SELECT id  FROM rating_post  WHERE reader_id =user_id AND post_id=rating_post_id AND deleted_at IS NULL)
+THEN
+UPDATE  rating_post SET reader_rate =  reader_rate_func  WHERE reader_id = user_id AND post_id = rating_post_id  ;
+   ELSE
+   INSERT INTO rating_post (reader_id  , post_id ,reader_rate ) VALUES (user_id  , rating_post_id , reader_rate_func)  ;
+   END IF;
+  END
+$$;
+
+
+reader_id INTEGER   REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+post_id INTEGER REFERENCES post(id) ON DELETE CASCADE NOT NULL,
+reader_rate INTEGER NOT NULL,
+rate_data TIMESTAMP DEFAULT (NOW()),

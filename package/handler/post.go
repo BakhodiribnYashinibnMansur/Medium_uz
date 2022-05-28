@@ -64,7 +64,7 @@ func (handler *Handler) getPostID(ctx *gin.Context) {
 	logrus := handler.logrus
 	paramID := ctx.Param("id")
 	if paramID == "" {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID is empty", logrus)
 		return
 	}
 	id, err := strconv.Atoi(paramID)
@@ -78,7 +78,6 @@ func (handler *Handler) getPostID(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Data: resp, Message: "DONE"})
-
 }
 
 // @Summary Upload Post Image

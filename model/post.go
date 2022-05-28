@@ -19,8 +19,10 @@ type UpdatePost struct {
 	Body  sql.NullString   `json:"text" default:"Hello World"`
 	Tags  []sql.NullString `json:"tags" default:["Devs"] `
 }
+
 type PostFull struct {
 	ID             int            `json:"id" db:"id"`
+	AuthorID       int            `json:"post_author_id" db:"post_author_id"`
 	PostTitle      string         `json:"post_title" db:"post_title"`
 	PostImagePath  sql.NullString `json:"image" db:"post_image_path"`
 	PostBody       string         `json:"post_body" db:"post_body"`
