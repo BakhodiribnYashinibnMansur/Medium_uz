@@ -947,7 +947,7 @@ paths:
       parameters:
       - description: Param ID
         in: query
-        name: id
+        name: postID
         required: true
         type: integer
       - description: Rating Number

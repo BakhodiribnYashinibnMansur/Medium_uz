@@ -286,6 +286,12 @@ func (handler *Handler) likePost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
+	if result == 0 {
+		if err != nil {
+			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "DO NOT WORK", logrus)
+			return
+		}
+	}
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Liked Post", Data: result})
 }
 
@@ -327,6 +333,12 @@ func (handler *Handler) commitPost(ctx *gin.Context) {
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
+	}
+	if commitID == 0 {
+		if err != nil {
+			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "DO NOT WORK", logrus)
+			return
+		}
 	}
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " Committed Post Post", Data: commitID})
 
@@ -375,7 +387,12 @@ func (handler *Handler) viewPost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-
+	if result == 0 {
+		if err != nil {
+			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "DO NOT WORK", logrus)
+			return
+		}
+	}
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " View Post", Data: result})
 
 }
@@ -386,7 +403,7 @@ func (handler *Handler) viewPost(ctx *gin.Context) {
 // @ID rated-post-id
 // @Accept  json
 // @Produce  json
-// @Param        id   query  int     true "Param ID"
+// @Param        postID   query  int     true "Param ID"
 // @Param        rating   query  int     true "Rating Number"
 // @Success 200 {object} model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
@@ -396,46 +413,52 @@ func (handler *Handler) viewPost(ctx *gin.Context) {
 // @Router /api/post/rating [GET]
 //@Security ApiKeyAuth
 func (handler *Handler) ratedPost(ctx *gin.Context) {
-	// logrus := handler.logrus
-	// userID, err := getUserId(ctx, logrus)
+	logrus := handler.logrus
+	userID, err := getUserId(ctx, logrus)
 
-	// if err != nil {
-	// 	error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-	// 	return
-	// }
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
 
-	// paramID := ctx.Query("id")
+	postIDQuery := ctx.Query("postID")
 
-	// if paramID == "" {
-	// 	error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param ID is empty", logrus)
-	// 	return
-	// }
+	if postIDQuery == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param ID is empty", logrus)
+		return
+	}
 
-	// paramRating := ctx.Query("id")
+	paramRating := ctx.Query("rating")
 
-	// if paramRating == "" {
-	// 	error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param Rating is empty", logrus)
-	// 	return
-	// }
+	if paramRating == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param Rating is empty", logrus)
+		return
+	}
 
-	// postID, err := strconv.Atoi(paramID)
-	// if err != nil {
-	// 	error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-	// 	return
-	// }
+	postID, err := strconv.Atoi(postIDQuery)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
 
-	// userRating, err := strconv.Atoi(paramRating)
-	// if err != nil {
-	// 	error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-	// 	return
-	// }
+	userRating, err := strconv.Atoi(paramRating)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
 
-	// if err != nil {
-	// 	error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-	// 	return
-	// }
-
-	// ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " UnRating Post", Data: userRating})
+	result, err := handler.services.RatingPost(userID, postID, userRating, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	if result == 0 {
+		if err != nil {
+			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "DO NOT WORK", logrus)
+			return
+		}
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " Rating Post", Data: ""})
 
 }
 

@@ -176,7 +176,25 @@ func (repo *PostDB) ViewPost(userID, postID int, logrus *logrus.Logger) (int, er
 	return id, nil
 }
 
-func (repo *PostDB) RatingPost(userID, postID, userRating int, logrus *logrus.Logger) {}
+func (repo *PostDB) RatingPost(userID, postID, userRating int, logrus *logrus.Logger) (int64, error) {
+
+	likeQuery := fmt.Sprintln("SELECT add_rating($1,$2,$3)")
+
+	row, err := repo.db.Exec(likeQuery, userID, postID, userRating)
+
+	if err != nil {
+		logrus.Info("DONE: ERROR  Rating Data PSQL %s ", err)
+		return -1, err
+	}
+	numRowEffected, err := row.RowsAffected()
+	if err != nil {
+		logrus.Info("DONE: ERROR  Rating Data PSQL %s ", err)
+
+		return -1, err
+	}
+	logrus.Info("DONE: INSERTED  Rating Data PSQL")
+	return numRowEffected, nil
+}
 
 func (repo *PostDB) CommitPost(input model.CommitPost, logrus *logrus.Logger) (int, error) {
 	var id int

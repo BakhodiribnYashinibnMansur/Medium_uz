@@ -1335,7 +1335,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "Param ID",
-                        "name": "id",
+                        "name": "postID",
                         "in": "query",
                         "required": true
                     },

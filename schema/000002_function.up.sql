@@ -7,7 +7,7 @@ $$
   BEGIN
     UPDATE post SET post_like_count = post_like_count + 1,
     updated_at = NOW()
-    WHERE id = NEW.post_id;
+    WHERE id = NEW.post_id AND deleted_at IS NULL ;
     RETURN NEW;
   END;
 $$;
@@ -24,7 +24,7 @@ $$
   BEGIN
     UPDATE post SET post_like_count = post_like_count - 1,
     updated_at = NOW()
-    WHERE id = NEW.post_id;
+    WHERE id = NEW.post_id AND deleted_at IS NULL ;
     RETURN NEW;
   END;
 $$;
@@ -42,7 +42,7 @@ $$
   BEGIN
     UPDATE post SET post_views_count = post_views_count + 1,
     updated_at = NOW()
-    WHERE id = NEW.post_id;
+    WHERE id = NEW.post_id AND deleted_at IS NULL ;
     RETURN NEW;
   END;
 $$;
@@ -59,7 +59,7 @@ $$
   BEGIN
     UPDATE post SET post_vote_count = post_vote_count + 1,
     updated_at = NOW()
-    WHERE id = NEW.post_id;
+    WHERE id = NEW.post_id AND deleted_at IS NULL ;
     RETURN NEW;
   END;
 $$;
@@ -77,7 +77,7 @@ $$
   BEGIN
 IF  EXISTS (SELECT id  FROM liked_post  WHERE reader_id =user_id AND post_id=like_post_id AND deleted_at IS NULL)
 THEN
-UPDATE  liked_post SET deleted_at = NOW() WHERE reader_id = user_id AND post_id = like_post_id  ;
+UPDATE  liked_post SET deleted_at = NOW() WHERE reader_id = user_id AND post_id = like_post_id  AND deleted_at IS NULL ;
    ELSE
    INSERT INTO liked_post (reader_id  , post_id ) VALUES (user_id  , like_post_id)  ;
    END IF;
@@ -93,9 +93,9 @@ $$
   BEGIN
 IF  EXISTS (SELECT id  FROM followings  WHERE account_id =account_id_func AND following_id=following_id_func AND deleted_at IS NULL)
 THEN
-UPDATE  followings SET deleted_at = NOW() WHERE account_id = account_id_func AND following_id = following_id_func  ;
+UPDATE  followings SET deleted_at = NOW() WHERE account_id = account_id_func AND following_id = following_id_func AND deleted_at IS NULL  ;
    ELSE
-   INSERT INTO followings (account_id  , following_id ) VALUES (account_id_func  , following_id_func)  ;
+   INSERT INTO followings (account_id  , following_id ) VALUES (account_id_func  , following_id_func)   ;
    END IF;
   END
 $$;
@@ -109,7 +109,7 @@ $$
   BEGIN
 IF  EXISTS (SELECT id  FROM followers  WHERE account_id =account_id_func AND follower_id=follower_id_func AND deleted_at IS NULL)
 THEN
-UPDATE  followers SET deleted_at = NOW() WHERE account_id = account_id_func AND follower_id = follower_id_func  ;
+UPDATE  followers SET deleted_at = NOW() WHERE account_id = account_id_func AND follower_id = follower_id_func AND deleted_at IS NULL  ;
    ELSE
    INSERT INTO followers (account_id  , follower_id ) VALUES (account_id_func  , follower_id_func)  ;
    END IF;
@@ -126,7 +126,7 @@ $$
   BEGIN
     UPDATE users SET following_count = following_count + 1,
     updated_at = NOW()
-    WHERE id = NEW.account_id;
+    WHERE id = NEW.account_id AND deleted_at IS NULL ;
     RETURN NEW;
   END;
 $$;
@@ -144,7 +144,7 @@ $$
   BEGIN
     UPDATE users SET following_count = following_count - 1,
     updated_at = NOW()
-    WHERE id = NEW.account_id;
+    WHERE id = NEW.account_id AND deleted_at IS NULL ;
     RETURN NEW;
   END;
 $$;
@@ -161,7 +161,7 @@ $$
   BEGIN
     UPDATE users SET follower_count = follower_count + 1,
     updated_at = NOW()
-    WHERE id = NEW.account_id;
+    WHERE id = NEW.account_id AND deleted_at IS NULL ;
     RETURN NEW;
   END;
 $$;
@@ -179,7 +179,7 @@ $$
   BEGIN
     UPDATE users SET follower_count = follower_count - 1,
     updated_at = NOW()
-    WHERE id = NEW.account_id;
+    WHERE id = NEW.account_id AND deleted_at IS NULL ;
     RETURN NEW;
   END;
 $$;
@@ -199,7 +199,7 @@ $$
   BEGIN
 IF  EXISTS (SELECT id  FROM rating_post  WHERE reader_id =user_id AND post_id=rating_post_id AND deleted_at IS NULL)
 THEN
-UPDATE  rating_post SET reader_rate =  reader_rate_func  WHERE reader_id = user_id AND post_id = rating_post_id  ;
+UPDATE  rating_post SET reader_rate =  reader_rate_func  WHERE reader_id = user_id AND post_id = rating_post_id AND deleted_at IS NULL   ;
    ELSE
    INSERT INTO rating_post (reader_id  , post_id ,reader_rate ) VALUES (user_id  , rating_post_id , reader_rate_func)  ;
    END IF;
@@ -207,7 +207,23 @@ UPDATE  rating_post SET reader_rate =  reader_rate_func  WHERE reader_id = user_
 $$;
 
 
-reader_id INTEGER   REFERENCES users(id) ON DELETE CASCADE NOT NULL,
-post_id INTEGER REFERENCES post(id) ON DELETE CASCADE NOT NULL,
-reader_rate INTEGER NOT NULL,
-rate_data TIMESTAMP DEFAULT (NOW()),
+
+
+-- //////////////////////////////////////////////////////////////////////////
+-- OVERALL RATING  TRIGGER
+-- /////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE FUNCTION overall_rating() RETURNS TRIGGER LANGUAGE PLPGSQL AS
+$$
+DECLARE
+overall_rating REAL :=( SELECT AVG(reader_rate ) FROM rating_post WHERE deleted_at IS  NULL) ;
+  BEGIN
+    UPDATE post SET post_rated = overall_rating ,
+    updated_at = NOW()
+    WHERE id = NEW.post_id AND deleted_at IS NULL ;
+    RETURN NEW;
+  END;
+$$;
+
+CREATE TRIGGER overall_rating_trigger AFTER INSERT OR UPDATE ON rating_post
+FOR EACH ROW EXECUTE PROCEDURE overall_rating();
