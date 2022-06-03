@@ -80,6 +80,39 @@ func (handler *Handler) getPostID(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Data: resp, Message: "DONE"})
 }
 
+// @Summary Get  Post Body By ID
+// @Tags Post
+// @Description get post body by id
+// @ID get-post-body-id
+// @Accept  json
+// @Produce  json
+// @Param        id   path  int     true "Param ID"
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/ghost/post/get-body/{id} [GET]
+func (handler *Handler) getPostBodyID(ctx *gin.Context) {
+	logrus := handler.logrus
+	paramID := ctx.Param("id")
+	if paramID == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID is empty", logrus)
+		return
+	}
+	id, err := strconv.Atoi(paramID)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	resp, err := handler.services.GetPostBodyById(id, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Data: resp, Message: "DONE"})
+}
+
 // @Summary Upload Post Image
 // @Description Upload Post Image
 // @ID upload-image-post
@@ -122,7 +155,6 @@ func (handler *Handler) uploadImagePost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-
 	imageURL, err := handler.services.UploadImage(file, header, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
@@ -136,7 +168,7 @@ func (handler *Handler) uploadImagePost(ctx *gin.Context) {
 	}
 
 	if effectedRowsNum == 0 {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "User not found", logrus)
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "NOT UPDATE ", logrus)
 		return
 	}
 

@@ -50,7 +50,21 @@ func (repo *PostDB) CreatePostUser(userId, postId int, logrus *logrus.Logger) (i
 
 func (repo *PostDB) GetPostById(id int, logrus *logrus.Logger) (post model.PostFull, err error) {
 
-	query := fmt.Sprintf("SELECT u.id , u.post_title ,u.post_image_path, u.post_body, u.post_views_count, u.post_like_count, u.post_rated, u.post_vote_count, u.post_tags, u. post_date, u.is_new, u.is_top_read,up.post_author_id FROM %s u INNER JOIN %s up on u.id =up.post_id WHERE up.post_id = $1 AND up.deleted_at IS NULL ", postTable, postUserTable)
+	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id FROM %s p INNER JOIN %s pu on p.id =pu.post_id WHERE pu.post_id = $1 AND pu.deleted_at IS NULL ", postTable, postUserTable)
+	err = repo.db.Get(&post, query, id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return post, errors.New("ID not found")
+		}
+		logrus.Errorf("ERROR: don't get users %s", err)
+		return post, err
+	}
+	logrus.Info("DONE:get user data from psql")
+	return post, err
+}
+func (repo *PostDB) GetPostBodyById(id int, logrus *logrus.Logger) (post model.PostFull, err error) {
+
+	query := fmt.Sprintf("SELECT p.id , p.post_body FROM %s p INNER JOIN %s pu on p.id =pu.post_id WHERE pu.post_id = $1 AND pu.deleted_at IS NULL ", postTable, postUserTable)
 	err = repo.db.Get(&post, query, id)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -211,7 +225,7 @@ func (repo *PostDB) CommitPost(input model.CommitPost, logrus *logrus.Logger) (i
 }
 
 func (repo *PostDB) GetCommitPost(postID int, pagination model.Pagination, logrus *logrus.Logger) (commits []model.CommitFull, err error) {
-	query := fmt.Sprintf("SELECT 	u.id,		u.firstname, u.secondname,u.nickname,	u.account_image_path,cmt.commits	 FROM %s u INNER JOIN %s cmt on u.id =cmt.reader_id WHERE cmt.post_id = $1 AND cmt.deleted_at IS NULL OFFSET $2 LIMIT $3",
+	query := fmt.Sprintf("SELECT 	p.id,		u.firstname, u.secondname,u.nickname,	u.account_image_path,cmt.commits	 FROM %s u INNER JOIN %s cmt on u.id =cmt.reader_id WHERE cmt.post_id = $1 AND cmt.deleted_at IS NULL OFFSET $2 LIMIT $3",
 		usersTable, postCommitTable)
 	err = repo.db.Select(&commits, query, postID, pagination.Offset, pagination.Limit)
 	return commits, err

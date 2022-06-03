@@ -32,6 +32,7 @@ type Post interface {
 	CreatePost(post model.Post, logrus *logrus.Logger) (int, error)
 	CreatePostUser(userId, postId int, logrus *logrus.Logger) (int, error)
 	GetPostById(id int, logrus *logrus.Logger) (model.PostFull, error)
+	GetPostBodyById(id int, logrus *logrus.Logger) (model.PostFull, error)
 	UpdatePostImage(userID, postID int, filePath string, logrus *logrus.Logger) (int64, error)
 	UpdatePost(userID, postID int, post model.UpdatePost, logrus *logrus.Logger) (int64, error)
 	DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error)

@@ -618,6 +618,48 @@ paths:
       summary: Verification Email
       tags:
       - Account
+  /api/ghost/post/get-body/{id}:
+    get:
+      consumes:
+      - application/json
+      description: get post body by id
+      operationId: get-post-body-id
+      parameters:
+      - description: Param ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Get  Post Body By ID
+      tags:
+      - Post
   /api/ghost/post/get-commit:
     get:
       consumes:

@@ -75,8 +75,9 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.DELETE("/delete", handler.deletePost)           //DONE
 				post.GET("/like", handler.likePost)                  //DONE
 				post.GET("/view", handler.viewPost)                  //DONE
-				post.GET("/rating", handler.ratedPost)               //
+				post.GET("/rating", handler.ratedPost)               // DONE
 				post.POST("/commit", handler.commitPost)             //DONE
+				post.GET("/get-user-post")
 			}
 
 		}
@@ -84,8 +85,9 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 		{
 			post := ghost.Group("/post")
 			{
-				post.GET("/get/:id", handler.getPostID) //DONE
-				post.GET("/get-commit", handler.getCommits)
+				post.GET("/get/:id", handler.getPostID)     //DONE
+				post.GET("/get-commit", handler.getCommits) //DONE
+				post.GET("/get-body/:id", handler.getPostBodyID)
 			}
 
 			search := ghost.Group("/")
