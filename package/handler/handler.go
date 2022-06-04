@@ -28,10 +28,10 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	docs.SwaggerInfo.Title = config.AppName
 	docs.SwaggerInfo.Version = config.Version
 	// LOCAL
-	docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
+	// docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
 
 	// FOR HEROKU
-	// docs.SwaggerInfo.Host = config.ServiceHost
+	docs.SwaggerInfo.Host = config.ServiceHost
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.New()
 	router.Use(cors.CORSMiddleware())
@@ -77,8 +77,8 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.GET("/view", handler.viewPost)                  //DONE
 				post.GET("/rating", handler.ratedPost)               // DONE
 				post.POST("/commit", handler.commitPost)             //DONE
+				post.GET("/user-interesting")                        //
 			}
-
 		}
 		ghost := api.Group("/ghost")
 		{
@@ -87,7 +87,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.GET("/get/:id", handler.getPostID)          //DONE
 				post.GET("/get-commit", handler.getCommits)      //DONE
 				post.GET("/get-body/:id", handler.getPostBodyID) //DONE
-				post.GET("/get-user-post", handler.getUserPost)
+				post.GET("/get-user-post", handler.getUserPost)  //DONE
 			}
 
 			search := ghost.Group("/")
