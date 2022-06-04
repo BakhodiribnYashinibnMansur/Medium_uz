@@ -321,129 +321,6 @@ paths:
       summary: Get Account Following
       tags:
       - Account
-  /api/account/recovery:
-    get:
-      consumes:
-      - application/json
-      description: send code for  Recovery Password
-      operationId: recovery-password-send-code
-      parameters:
-      - description: email
-        in: query
-        name: email
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.ResponseSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-      summary: Send code for  Recovery Password
-      tags:
-      - Auth
-  /api/account/recovery-password:
-    get:
-      consumes:
-      - application/json
-      description: Recovery Password
-      operationId: recovery-password
-      parameters:
-      - description: password
-        in: query
-        name: password
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.ResponseSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-      summary: Recovery Password
-      tags:
-      - Auth
-  /api/account/recovery-verify:
-    get:
-      consumes:
-      - application/json
-      description: check code for  Recovery Password
-      operationId: recovery-code-email
-      parameters:
-      - description: code
-        in: query
-        name: code
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.ResponseSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-      summary: Check code for  Recovery Password
-      tags:
-      - Auth
   /api/account/sendcode:
     get:
       consumes:
@@ -1226,6 +1103,178 @@ paths:
       summary: View  Post By ID
       tags:
       - Post
+  /auth/recovery-check:
+    get:
+      consumes:
+      - application/json
+      description: Check Email for Recovery Password
+      operationId: recovery-check-email
+      parameters:
+      - description: email
+        in: query
+        name: email
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Check Email for Recovery Password
+      tags:
+      - Auth
+  /auth/recovery-password:
+    get:
+      consumes:
+      - application/json
+      description: Recovery Password
+      operationId: recovery-password
+      parameters:
+      - description: password
+        in: query
+        name: password
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Recovery Password
+      tags:
+      - Auth
+  /auth/recovery-send:
+    get:
+      consumes:
+      - application/json
+      description: send code for  Recovery Password
+      operationId: recovery-password-send-code
+      parameters:
+      - description: email
+        in: query
+        name: email
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Send code for  Recovery Password
+      tags:
+      - Auth
+  /auth/recovery-verify:
+    get:
+      consumes:
+      - application/json
+      description: check code for  Recovery Password
+      operationId: recovery-check-code-email
+      parameters:
+      - description: code
+        in: query
+        name: code
+        type: string
+      - description: email
+        in: query
+        name: email
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Check code for  Recovery Password
+      tags:
+      - Auth
   /auth/sign-in:
     post:
       consumes:

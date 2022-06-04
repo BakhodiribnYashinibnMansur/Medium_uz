@@ -14,6 +14,8 @@ type Authorization interface {
 	CheckDataExistsEmailPassword(email, password string, logrus *logrus.Logger) (int, error)
 	CheckDataExistsEmailNickName(email, nickname string, logrus *logrus.Logger) (int, int, error)
 	SaveVerificationCode(email, code string, logrus *logrus.Logger) error
+	RecoveryCheckEmailCode(email string, code string, logrus *logrus.Logger) error
+	UpdateAccountPassword(email string, password string, logrus *logrus.Logger) (int64, error)
 }
 
 type User interface {

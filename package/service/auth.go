@@ -111,3 +111,17 @@ func (service *AuthService) SendMessageEmail(email, username string, logrus *log
 	}
 	return nil
 }
+
+func (service *AuthService) RecoveryCheckEmailCode(email string, code string, logrus *logrus.Logger) error {
+	err := service.repo.RecoveryCheckEmailCode(email, code, logrus)
+	if err != nil {
+		logrus.Errorf("ERROR: check error code : %v", err)
+		return err
+	}
+	return nil
+}
+
+func (service *AuthService) UpdateAccountPassword(email string, password string, logrus *logrus.Logger) (int64, error) {
+	passwordHash := generatePasswordHash(password)
+	return service.repo.UpdateAccountPassword(email, passwordHash, logrus)
+}

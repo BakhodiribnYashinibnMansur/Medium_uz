@@ -15,6 +15,8 @@ type Authorization interface {
 	CheckDataExistsEmailNickName(email, nickname string, logrus *logrus.Logger) (model.UserCheck, error)
 	CheckDataExistsEmailPassword(email, password string, logrus *logrus.Logger) error
 	ParseToken(token string) (int, error)
+	RecoveryCheckEmailCode(email string, code string, logrus *logrus.Logger) error
+	UpdateAccountPassword(email string, password string, logrus *logrus.Logger) (int64, error)
 }
 
 type User interface {

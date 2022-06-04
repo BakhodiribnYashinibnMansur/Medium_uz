@@ -90,6 +90,38 @@ func (handler *Handler) signIn(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.ResponseSign{Token: token})
 }
 
+// @Summary Check Email for Recovery Password
+// @Description Check Email for Recovery Password
+// @ID recovery-check-email
+// @Tags   Auth
+// @Accept       json
+// @Produce      json
+// @Param email query string false "email"
+// @Success      200   {object}      model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router       /auth/recovery-check [GET]
+func (handler *Handler) recoveryCheckEmail(ctx *gin.Context) {
+	logrus := handler.logrus
+	userEmail := ctx.Query("email")
+	if userEmail == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Email is empty", logrus)
+		return
+	}
+	checkedUser, err := handler.services.CheckDataExistsEmailNickName(userEmail, "", logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	if checkedUser.Email {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Email Not Found", logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "DONE", Data: checkedUser.Email})
+}
+
 // @Summary Send code for  Recovery Password
 // @Description send code for  Recovery Password
 // @ID recovery-password-send-code
@@ -102,27 +134,56 @@ func (handler *Handler) signIn(ctx *gin.Context) {
 // @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router       /api/account/recovery [GET]
-func (handler *Handler) recoveryForMessageToEmail(ctx *gin.Context) {
-	// logrus := handler.logrus
+// @Router       /auth/recovery-send [GET]
+func (handler *Handler) recoverySendEmail(ctx *gin.Context) {
+	logrus := handler.logrus
+	userEmail := ctx.Query("email")
+	if userEmail == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Email is empty", logrus)
+		return
+	}
+	logrus.Infof(userEmail)
+	err := handler.services.SendMessageEmail(userEmail, "", logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "DONE"})
 }
 
 // @Summary Check code for  Recovery Password
 // @Description check code for  Recovery Password
-// @ID recovery-code-email
+// @ID recovery-check-code-email
 // @Tags   Auth
 // @Accept       json
 // @Produce      json
 // @Param code query string false "code"
+// @Param email query string false "email"
 // @Success      200   {object}      model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
 // @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router       /api/account/recovery-verify [GET]
+// @Router       /auth/recovery-verify [GET]
 func (handler *Handler) recoveryCheckEmailCode(ctx *gin.Context) {
-	// logrus := handler.logrus
+	logrus := handler.logrus
+	code := ctx.Query("code")
+	if code == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Code is empty", logrus)
+		return
+	}
+	userEmail := ctx.Query("email")
+	if userEmail == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Email is empty", logrus)
+		return
+	}
+	err := handler.services.RecoveryCheckEmailCode(userEmail, code, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
 
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "VERIFIED"})
 }
 
 // @Summary   Recovery Password
@@ -132,13 +193,34 @@ func (handler *Handler) recoveryCheckEmailCode(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param password query string false "password"
+// @Param email query string false "email"
 // @Success      200   {object}      model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
 // @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router       /api/account/recovery-password [GET]
+// @Router       /auth/recovery-password [GET]
 func (handler *Handler) recoveryPassword(ctx *gin.Context) {
-	// logrus := handler.logrus
+	logrus := handler.logrus
+	password := ctx.Query("password")
+	if password == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Password is empty", logrus)
+		return
+	}
+	email := ctx.Query("email")
+	if email == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Email is empty", logrus)
+		return
+	}
+	effectedRowsNum, err := handler.services.UpdateAccountPassword(email, password, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
 
+	if effectedRowsNum == 0 {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "User not found", logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Updated Account Password"})
 }

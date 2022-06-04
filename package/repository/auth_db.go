@@ -85,6 +85,23 @@ func (repo *AuthDB) GetUserID(email string, logrus *logrus.Logger) (int, error) 
 	return id, nil
 }
 
+func (repo *AuthDB) UpdateAccountPassword(email string, password string, logrus *logrus.Logger) (int64, error) {
+	query := fmt.Sprintf("	UPDATE %s SET password_hash=$1,updated_at=NOW() WHERE email=$2  RETURNING id ", usersTable)
+	rows, err := repo.db.Exec(query, password, email)
+
+	if err != nil {
+		logrus.Errorf("ERROR: Update Account Password : %v", err)
+		return 0, err
+	}
+	effectedRowsNum, err := rows.RowsAffected()
+	if err != nil {
+		logrus.Errorf("ERROR: Update Account Password effectedRowsNum : %v", err)
+		return 0, err
+	}
+	logrus.Info("DONE:Update Account Password ")
+	return effectedRowsNum, nil
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // REDIS
@@ -97,5 +114,18 @@ func (repo *AuthDB) SaveVerificationCode(email, code string, logrus *logrus.Logg
 		logrus.Errorf("ERROR:don't save code %s", err)
 		return err
 	}
+	return nil
+}
+
+func (repo *AuthDB) RecoveryCheckEmailCode(email, code string, logrus *logrus.Logger) error {
+	saveCode, err := repo.redis.Get(email).Result()
+	if err != nil {
+		logrus.Errorf("ERROR:don't save code %s", err)
+		return err
+	}
+	if saveCode != code {
+		return errors.New("code not found ")
+	}
+	logrus.Info("DONE: verify code")
 	return nil
 }

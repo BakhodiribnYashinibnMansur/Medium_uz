@@ -28,10 +28,10 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	docs.SwaggerInfo.Title = config.AppName
 	docs.SwaggerInfo.Version = config.Version
 	// LOCAL
-	// docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
+	docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
 
 	// FOR HEROKU
-	docs.SwaggerInfo.Host = config.ServiceHost
+	// docs.SwaggerInfo.Host = config.ServiceHost
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.New()
 	router.Use(cors.CORSMiddleware())
@@ -45,7 +45,8 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 		auth.POST("/sign-up", handler.signUp) //DONE
 		auth.POST("/sign-in", handler.signIn) //DONE
 		// recoveryPassword
-		auth.GET("/recovery", handler.recoveryForMessageToEmail)
+		auth.GET("/recovery-check", handler.recoveryCheckEmail)
+		auth.GET("/recovery-send", handler.recoverySendEmail)
 		auth.GET("/recovery-verify", handler.recoveryCheckEmailCode)
 		auth.GET("/recovery-password", handler.recoveryPassword)
 	}
