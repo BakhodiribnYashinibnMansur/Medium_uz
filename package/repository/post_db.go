@@ -65,8 +65,8 @@ func (repo *PostDB) GetPostById(id int, logrus *logrus.Logger) (post model.PostF
 
 func (repo *PostDB) GetUserPost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
 
-	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id FROM %s p INNER JOIN %s pu on p.id =pu.post_id WHERE pu.post_author_id = $1 AND pu.deleted_at IS NULL ", postTable, postUserTable)
-	err = repo.db.Select(&posts, query, userID)
+	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id FROM %s p INNER JOIN %s pu on p.id =pu.post_id WHERE pu.post_author_id = $1 AND pu.deleted_at IS NULL  OFFSET $2 LIMIT $3 ", postTable, postUserTable)
+	err = repo.db.Select(&posts, query, userID, pagination.Offset, pagination.Limit)
 	if err != nil {
 		logrus.Errorf("ERROR: don't get users %s", err)
 		return posts, err

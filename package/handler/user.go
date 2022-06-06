@@ -494,3 +494,62 @@ func (handler *Handler) getFollowings(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Following User", Data: result})
 }
+
+// @Summary Get My Post
+// @Tags Account
+// @Description Get My Post
+// @ID get-my-post
+// @Accept  json
+// @Produce  json
+// @Param        offset   query  int     false "Offset "
+// @Param        limit   query  int     false "Limit "
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/account/get-my-post [GET]
+// @Security ApiKeyAuth
+func (handler *Handler) getMyPost(ctx *gin.Context) {
+	logrus := handler.logrus
+	userID, err := getUserId(ctx, logrus)
+
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	var pagination model.Pagination
+	offsetQuery := ctx.DefaultQuery("offset", "0")
+	if offsetQuery == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Offset is empty", logrus)
+		return
+	}
+
+	offset, err := strconv.Atoi(offsetQuery)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	limitQuery := ctx.DefaultQuery("limit", "10")
+
+	if limitQuery == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Limit is empty", logrus)
+		return
+	}
+
+	limit, err := strconv.Atoi(limitQuery)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	pagination.Offset = offset
+	pagination.Limit = limit
+
+	result, err := handler.services.GetUserPost(userID, pagination, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Post DONE User", Data: result})
+}
