@@ -48,7 +48,8 @@ type Post interface {
 }
 
 type Search interface {
-	UniversalSearch(search string, pagination model.Pagination, logrus *logrus.Logger) (model.Search, error)
+	SearchPeople(search string, pagination model.Pagination, logrus *logrus.Logger) ([]model.UserFull, error)
+	SearchPost(search string, pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
 }
 
 type Service struct {

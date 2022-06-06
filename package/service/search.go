@@ -16,26 +16,20 @@ func NewSearchService(repo repository.Search) *SearchService {
 	return &SearchService{repo: repo}
 }
 
-func (service *SearchService) UniversalSearch(search string, pagination model.Pagination, logrus *logrus.Logger) (resultSearch model.Search, err error) {
+func (service *SearchService) SearchPeople(search string, pagination model.Pagination, logrus *logrus.Logger) (resultSearch []model.UserFull, err error) {
 
 	searchArray := strings.Split(search, " ")
-	logrus.Info(searchArray)
 	for _, keyword := range searchArray {
-		logrus.Info(keyword)
-		postArray, err := service.repo.SearchPost(keyword, pagination, logrus)
-		if err != nil {
-			return resultSearch, err
-		}
-		for _, value := range postArray {
-			resultSearch.Post = append(resultSearch.Post, value)
-		}
 		userArray, err := service.repo.SearchUser(keyword, pagination, logrus)
 		if err != nil {
 			return resultSearch, err
 		}
 		for _, value := range userArray {
-			resultSearch.User = append(resultSearch.User, value)
+			resultSearch = append(resultSearch, value)
 		}
 	}
-	return resultSearch, err
+	return resultSearch, nil
+}
+func (service *SearchService) SearchPost(search string, pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error) {
+	return service.repo.SearchPost(search, pagination, logrus)
 }

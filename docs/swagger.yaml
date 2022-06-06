@@ -777,12 +777,62 @@ paths:
       summary: Get  Post By ID
       tags:
       - Post
-  /api/ghost/search:
+  /api/ghost/search/people:
+    get:
+      consumes:
+      - application/json
+      description: Search people by search text
+      operationId: search-people
+      parameters:
+      - description: 'Offset '
+        in: query
+        name: offset
+        type: integer
+      - description: 'Limit '
+        in: query
+        name: limit
+        type: integer
+      - description: search text
+        in: query
+        name: search
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Search  people By search text
+      tags:
+      - Search
+  /api/ghost/search/post:
     get:
       consumes:
       - application/json
       description: Search post by search text
-      operationId: search-universal
+      operationId: search-post
       parameters:
       - description: 'Offset '
         in: query
