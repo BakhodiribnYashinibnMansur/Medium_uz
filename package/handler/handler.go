@@ -28,27 +28,25 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	docs.SwaggerInfo.Title = config.AppName
 	docs.SwaggerInfo.Version = config.Version
 	// LOCAL
-	// docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
+	docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
 
 	// FOR HEROKU
-	docs.SwaggerInfo.Host = config.ServiceHost
+	// docs.SwaggerInfo.Host = config.ServiceHost
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.New()
 	router.Use(cors.CORSMiddleware())
-
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.GET("/test", handler.testHttpsHandler)
 	router.Static("/public", "./public/")
 
 	auth := router.Group("/auth")
 	{
-		auth.POST("/sign-up", handler.signUp) //DONE
-		auth.POST("/sign-in", handler.signIn) //DONE
-		// recoveryPassword
-		auth.GET("/recovery-check", handler.recoveryCheckEmail)
-		auth.GET("/recovery-send", handler.recoverySendEmail)
-		auth.GET("/recovery-verify", handler.recoveryCheckEmailCode)
-		auth.GET("/recovery-password", handler.recoveryPassword)
+		auth.POST("/sign-up", handler.signUp)                        //DONE
+		auth.POST("/sign-in", handler.signIn)                        //DONE
+		auth.GET("/recovery-check", handler.recoveryCheckEmail)      //DONE
+		auth.GET("/recovery-send", handler.recoverySendEmail)        //DONE
+		auth.GET("/recovery-verify", handler.recoveryCheckEmailCode) //DONE
+		auth.GET("/recovery-password", handler.recoveryPassword)     //DONE
 	}
 
 	api := router.Group("/api")
@@ -57,15 +55,17 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 		{
 			account := auth.Group("/account")
 			{
-				account.GET("/sendcode", handler.sendCodeToEmail)          //DONE
-				account.GET("/verify", handler.verifyEmail)                //DONE
-				account.PUT("/update", handler.updateAccount)              //DONE
-				account.GET("/get", handler.getUser)                       //DONE
-				account.PATCH("/upload-image", handler.uploadAccountImage) //DONE
-				account.GET("/following", handler.followingUser)           //DONE
-				account.GET("/follower", handler.followerUser)             //DONE
-				account.GET("/get-followings", handler.getFollowings)      //DONE
-				account.GET("/get-followers", handler.getFollowers)        //DONE
+				account.GET("/sendcode", handler.sendCodeToEmail)                //DONE
+				account.GET("/verify", handler.verifyEmail)                      //DONE
+				account.PUT("/update", handler.updateAccount)                    //DONE
+				account.GET("/get", handler.getUser)                             //DONE
+				account.PATCH("/upload-image", handler.uploadAccountImage)       //DONE
+				account.GET("/following", handler.followingUser)                 //DONE
+				account.GET("/follower", handler.followerUser)                   //DONE
+				account.GET("/get-followings", handler.getFollowings)            //DONE
+				account.GET("/get-followers", handler.getFollowers)              //DONE
+				account.GET("/user-interesting", handler.getUserInterestingPost) //
+				account.GET("/get-my-post")
 			}
 
 			post := auth.Group("/post")
@@ -78,9 +78,10 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.GET("/view", handler.viewPost)                  //DONE
 				post.GET("/rating", handler.ratedPost)               // DONE
 				post.POST("/commit", handler.commitPost)             //DONE
-				post.GET("/user-interesting")                        //
+
 			}
 		}
+
 		ghost := api.Group("/ghost")
 		{
 			post := ghost.Group("/post")
@@ -95,6 +96,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 			{
 				search.GET("/search", handler.searchAll) //DONE
 			}
+
 		}
 	}
 	return router

@@ -115,3 +115,7 @@ func (service *UserService) GetFollowers(userID int, pagination model.Pagination
 func (service *UserService) GetFollowings(userID int, pagination model.Pagination, logrus *logrus.Logger) (user []model.UserFull, err error) {
 	return service.repo.GetFollowings(userID, pagination, logrus)
 }
+
+func (service *UserService) GetUserInterestingPost(tag string, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
+	return service.repo.GetUserInterestingPost(tag, pagination, logrus)
+}

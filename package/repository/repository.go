@@ -28,6 +28,7 @@ type User interface {
 	FollowerAccount(userID, followerID int, logrus *logrus.Logger) (int64, error)
 	GetFollowers(userID int, pagination model.Pagination, logrus *logrus.Logger) (user []model.UserFull, err error)
 	GetFollowings(userID int, pagination model.Pagination, logrus *logrus.Logger) (user []model.UserFull, err error)
+	GetUserInterestingPost(tag string, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error)
 }
 
 type Post interface {

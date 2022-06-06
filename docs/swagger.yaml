@@ -452,6 +452,57 @@ paths:
       summary: Upload Account Image
       tags:
       - Account
+  /api/account/user-interesting:
+    get:
+      consumes:
+      - application/json
+      description: Get Account Interesting post
+      operationId: get-user-interesting
+      parameters:
+      - description: 'Offset '
+        in: query
+        name: offset
+        type: integer
+      - description: 'Limit '
+        in: query
+        name: limit
+        type: integer
+      - description: 'Tag '
+        in: query
+        name: tag
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Account Interesting post
+      tags:
+      - Account
   /api/account/verify:
     get:
       consumes:
