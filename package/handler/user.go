@@ -205,7 +205,7 @@ func (handler *Handler) updateAccount(ctx *gin.Context) {
 // @Failure 409 {object} error.errorResponse
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router       /api/account/get [GET]
+// @Router       /api/account/get-user [GET]
 //@Security ApiKeyAuth
 func (handler *Handler) getUser(ctx *gin.Context) {
 	logrus := handler.logrus
