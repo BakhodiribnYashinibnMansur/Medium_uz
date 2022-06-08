@@ -590,6 +590,8 @@ func (handler *Handler) getUserData(ctx *gin.Context) {
 // @Security ApiKeyAuth
 func (handler *Handler) getMyHistoryPost(ctx *gin.Context) {
 	logrus := handler.logrus
+	userId, err := getUserId(ctx, logrus)
+
 	var pagination model.Pagination
 	offsetQuery := ctx.DefaultQuery("offset", "0")
 	if offsetQuery == "" {
@@ -618,6 +620,12 @@ func (handler *Handler) getMyHistoryPost(ctx *gin.Context) {
 
 	pagination.Offset = offset
 	pagination.Limit = limit
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "User HIstory Post", Data: "result"})
+
+	result, err := handler.services.GetHistoryPost(userId, pagination, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "User HIstory Post", Data: result})
 
 }
