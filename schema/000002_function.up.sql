@@ -216,7 +216,7 @@ $$;
 CREATE OR REPLACE FUNCTION overall_rating() RETURNS TRIGGER LANGUAGE PLPGSQL AS
 $$
 DECLARE
-overall_rating REAL :=( SELECT AVG(reader_rate ) FROM rating_post WHERE deleted_at IS  NULL) ;
+overall_rating double precision :=( SELECT AVG(reader_rate ) FROM rating_post WHERE deleted_at  IS  NULL AND NEW.post_id) ;
   BEGIN
     UPDATE post SET post_rated = overall_rating ,
     updated_at = NOW()

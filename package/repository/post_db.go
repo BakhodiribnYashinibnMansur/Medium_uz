@@ -244,9 +244,44 @@ func (repo *PostDB) GetCommitPost(postID int, pagination model.Pagination, logru
 
 }
 
-func (repo *PostDB ) GetResentPost(pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull,err error){
+func (repo *PostDB) GetResentPost(pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
 
 	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id FROM %s p INNER JOIN %s pu on p.id =pu.post_id WHERE  pu.deleted_at IS NULL ORDER BY p.post_date DESC OFFSET $1 LIMIT $2 ", postTable, postUserTable)
+	err = repo.db.Select(&posts, query, pagination.Offset, pagination.Limit)
+	if err != nil {
+		logrus.Errorf("ERROR: don't get users %s", err)
+		return posts, err
+	}
+	logrus.Info("DONE:get user data from psql")
+	return posts, err
+}
+
+func (repo *PostDB) GetMostViewed(pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
+
+	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id FROM %s p INNER JOIN %s pu on p.id =pu.post_id WHERE  pu.deleted_at IS NULL ORDER BY p.post_views_count DESC OFFSET $1 LIMIT $2 ", postTable, postUserTable)
+	err = repo.db.Select(&posts, query, pagination.Offset, pagination.Limit)
+	if err != nil {
+		logrus.Errorf("ERROR: don't get users %s", err)
+		return posts, err
+	}
+	logrus.Info("DONE:get user data from psql")
+	return posts, err
+}
+
+func (repo *PostDB) GetMostLiked(pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
+
+	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id FROM %s p INNER JOIN %s pu on p.id =pu.post_id WHERE  pu.deleted_at IS NULL ORDER BY p.post_like_count DESC OFFSET $1 LIMIT $2 ", postTable, postUserTable)
+	err = repo.db.Select(&posts, query, pagination.Offset, pagination.Limit)
+	if err != nil {
+		logrus.Errorf("ERROR: don't get users %s", err)
+		return posts, err
+	}
+	logrus.Info("DONE:get user data from psql")
+	return posts, err
+}
+func (repo *PostDB) GetMostRated(pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
+
+	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id FROM %s p INNER JOIN %s pu on p.id =pu.post_id WHERE  pu.deleted_at IS NULL ORDER BY p.post_rated DESC OFFSET $1 LIMIT $2 ", postTable, postUserTable)
 	err = repo.db.Select(&posts, query, pagination.Offset, pagination.Limit)
 	if err != nil {
 		logrus.Errorf("ERROR: don't get users %s", err)

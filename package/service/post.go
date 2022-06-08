@@ -75,3 +75,13 @@ func (service *PostService) GetUserPost(userID int, pagination model.Pagination,
 func (service *PostService) GetResentPost(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error) {
 	return service.repo.GetResentPost(pagination, logrus)
 }
+
+func (service *PostService) GetMostViewed(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error) {
+	return service.repo.GetMostViewed(pagination, logrus)
+}
+func (service *PostService) GetMostLiked(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error) {
+	return service.repo.GetMostLiked(pagination, logrus)
+}
+func (service *PostService) GetMostRated(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error) {
+	return service.repo.GetMostRated(pagination, logrus)
+}

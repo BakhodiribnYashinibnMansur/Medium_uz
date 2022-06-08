@@ -48,6 +48,9 @@ type Post interface {
 	GetCommitPost(postID int, pagination model.Pagination, logrus *logrus.Logger) ([]model.CommitFull, error)
 	GetUserPost(userID int, pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
 	GetResentPost(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
+	GetMostViewed(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
+	GetMostLiked(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
+	GetMostRated(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
 }
 
 type Search interface {
