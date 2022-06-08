@@ -183,44 +183,6 @@ paths:
       summary: Add Following
       tags:
       - Account
-  /api/account/get:
-    get:
-      consumes:
-      - application/json
-      description: return account data.
-      operationId: get-account
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.ResponseSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-      security:
-      - ApiKeyAuth: []
-      summary: Get Account Data
-      tags:
-      - Account
   /api/account/get-followers:
     get:
       consumes:
@@ -360,6 +322,44 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get My Post
+      tags:
+      - Account
+  /api/account/get-user:
+    get:
+      consumes:
+      - application/json
+      description: return account data.
+      operationId: get-account
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Account Data
       tags:
       - Account
   /api/account/history-post:
