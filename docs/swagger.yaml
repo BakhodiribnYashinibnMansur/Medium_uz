@@ -187,14 +187,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: return account data. if you send id = "" or null return current
-        user data. if send id = number return number user data .
+      description: return account data.
       operationId: get-account
-      parameters:
-      - description: id
-        in: query
-        name: id
-        type: integer
       produces:
       - application/json
       responses:
@@ -412,7 +406,7 @@ paths:
             $ref: '#/definitions/error.errorResponse'
       security:
       - ApiKeyAuth: []
-      summary: Get My Post
+      summary: Get My History Post
       tags:
       - Account
   /api/account/sendcode:
@@ -638,6 +632,47 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Verification Email
+      tags:
+      - Account
+  /api/ghost/account/get:
+    get:
+      consumes:
+      - application/json
+      description: return account data.
+      operationId: get-account-ghost
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Get Account Data For Ghost
       tags:
       - Account
   /api/ghost/post/get-body/{id}:

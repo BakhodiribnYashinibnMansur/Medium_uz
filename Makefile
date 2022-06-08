@@ -30,3 +30,6 @@ docker-image:
 
 docker-container:
 	sudo docker run -it --name heroku2  -p 8080:8080 medium
+
+deploy-heroku:
+	git add . && git commit -m "set-up heroku" && git push origin main && git push heroku main

@@ -87,6 +87,10 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 
 		ghost := api.Group("/ghost")
 		{
+			account := ghost.Group("/account")
+			{
+				account.GET("/get", handler.getUserData)
+			}
 			post := ghost.Group("/post")
 			{
 				post.GET("/get/:id", handler.getPostID)          //DONE

@@ -163,7 +163,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "return account data. if you send id = \"\" or null return current user data. if send id = number return number user data .",
+                "description": "return account data.",
                 "consumes": [
                     "application/json"
                 ],
@@ -175,14 +175,6 @@ const docTemplate = `{
                 ],
                 "summary": "Get Account Data",
                 "operationId": "get-account",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "id",
-                        "name": "id",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -459,7 +451,7 @@ const docTemplate = `{
                 "tags": [
                     "Account"
                 ],
-                "summary": "Get My Post",
+                "summary": "Get My History Post",
                 "operationId": "get-my-post-history",
                 "parameters": [
                     {
@@ -819,6 +811,68 @@ const docTemplate = `{
                         "type": "string",
                         "description": "code",
                         "name": "code",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.ResponseSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/error.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/ghost/account/get": {
+            "get": {
+                "description": "return account data.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Get Account Data For Ghost",
+                "operationId": "get-account-ghost",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
                         "in": "query"
                     }
                 ],

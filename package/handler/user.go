@@ -195,12 +195,11 @@ func (handler *Handler) updateAccount(ctx *gin.Context) {
 }
 
 // @Summary Get Account Data
-// @Description return account data. if you send id = "" or null return current user data. if send id = number return number user data .
+// @Description return account data.
 // @ID get-account
 // @Tags   Account
 // @Accept       json
 // @Produce      json
-// @Param id query int false "id"
 // @Success      200   {object}      model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
 // @Failure 409 {object} error.errorResponse
@@ -210,19 +209,13 @@ func (handler *Handler) updateAccount(ctx *gin.Context) {
 //@Security ApiKeyAuth
 func (handler *Handler) getUser(ctx *gin.Context) {
 	logrus := handler.logrus
-	id := ctx.Query("id")
 	authID, err := getUserId(ctx, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
 	userId := strconv.Itoa(authID)
-
-	if id == "" {
-		id = userId
-	}
-
-	user, err := handler.services.GetUserData(id, logrus)
+	user, err := handler.services.GetUserData(userId, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
@@ -554,7 +547,33 @@ func (handler *Handler) getMyPost(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Post DONE User", Data: result})
 }
 
-//@Summary Get My Post
+// @Summary Get Account Data For Ghost
+// @Description return account data.
+// @ID get-account-ghost
+// @Tags   Account
+// @Accept       json
+// @Produce      json
+// @Param        id   query  int     false "id"
+// @Success      200   {object}      model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponse
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router    /api/ghost/account/get [GET]
+func (handler *Handler) getUserData(ctx *gin.Context) {
+	logrus := handler.logrus
+	id := ctx.Query("id")
+
+	user, err := handler.services.GetUserData(id, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "GOT", Data: user})
+}
+
+// @Summary Get My History Post
 // @Tags Account
 // @Description Get My Post
 // @ID get-my-post-history
@@ -583,6 +602,7 @@ func (handler *Handler) getMyHistoryPost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
+
 	limitQuery := ctx.DefaultQuery("limit", "10")
 
 	if limitQuery == "" {
@@ -595,8 +615,9 @@ func (handler *Handler) getMyHistoryPost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
+
 	pagination.Offset = offset
 	pagination.Limit = limit
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "HIstory Post", Data: "result"})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "User HIstory Post", Data: "result"})
 
 }
