@@ -7,5 +7,5 @@ import (
 )
 
 func (handler *Handler) testHttpsHandler(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, "HELLO WORLD")
+	ctx.JSON(http.StatusOK, "SUCCESSFUL TESTED")
 }
