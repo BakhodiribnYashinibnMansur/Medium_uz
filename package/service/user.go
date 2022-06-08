@@ -123,3 +123,7 @@ func (service *UserService) GetUserInterestingPost(tag string, pagination model.
 func (service *UserService) GetHistoryPost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
 	return service.repo.GetHistoryPost(userID, pagination, logrus)
 }
+
+func (service *UserService) GetLikePost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
+	return service.repo.GetLikePost(userID, pagination, logrus)
+}

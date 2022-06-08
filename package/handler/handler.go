@@ -65,9 +65,9 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				account.GET("/get-followers", handler.getFollowers)              //DONE
 				account.GET("/user-interesting", handler.getUserInterestingPost) // DONE
 				account.GET("/get-my-post", handler.getMyPost)                   // DONE
-				account.GET("/history-post", handler.getMyHistoryPost)
+				account.GET("/history-post", handler.getMyHistoryPost)           // DONE
 				account.GET("/saved-post")
-				account.GET("/get-my-like-post")
+				account.GET("/get-my-like-post", handler.getMyLikePost) // DONE
 				account.GET("/get-my-data", handler.getMyUserData) // DONE
 			}
 

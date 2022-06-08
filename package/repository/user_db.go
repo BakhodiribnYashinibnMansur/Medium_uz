@@ -180,6 +180,22 @@ func (repo *UserDB) GetHistoryPost(userID int, pagination model.Pagination, logr
 	logrus.Info("DONE:get user data from psql")
 	return posts, err
 }
+func (repo *UserDB) GetLikePost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
+
+	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p.post_date, p.is_new, p.is_top_read,pu.post_author_id   FROM %s p INNER JOIN %s pu on p.id =pu.post_id INNER JOIN %s pul  ON pul.post_id = pu.post_id  WHERE pul.reader_id = $1 AND pul.deleted_at IS NULL ORDER BY pul.like_data ASC  OFFSET $2 LIMIT $3", postTable, postUserTable, postLikeTable)
+
+	err = repo.db.Select(&posts, query, userID, pagination.Offset, pagination.Limit)
+
+	if err != nil {
+		logrus.Errorf("ERROR: don't get users %s", err)
+		return posts, err
+	}
+	if len(posts) == 0 {
+		return posts, errors.New(" no posts  ")
+	}
+	logrus.Info("DONE:get user data from psql")
+	return posts, err
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
