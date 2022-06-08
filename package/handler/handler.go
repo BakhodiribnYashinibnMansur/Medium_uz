@@ -67,8 +67,9 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				account.GET("/get-my-post", handler.getMyPost)                   // DONE
 				account.GET("/history-post", handler.getMyHistoryPost)           // DONE
 				account.GET("/saved-post")
+				account.GET("/get-my-saved-post")
 				account.GET("/get-my-like-post", handler.getMyLikePost) // DONE
-				account.GET("/get-my-data", handler.getMyUserData) // DONE
+				account.GET("/get-my-data", handler.getMyUserData)      // DONE
 			}
 
 			post := auth.Group("/post")
@@ -99,7 +100,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.GET("/get-user-post", handler.getUserPost)  //DONE
 				post.GET("/most-viewed")
 				post.GET("/most-liked")
-				post.GET("/resent")
+				post.GET("/resent", handler.getResentPost)
 			}
 
 			search := ghost.Group("/search")

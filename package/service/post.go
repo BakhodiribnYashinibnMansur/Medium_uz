@@ -72,3 +72,6 @@ func (service *PostService) GetCommitPost(postID int, pagination model.Paginatio
 func (service *PostService) GetUserPost(userID int, pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error) {
 	return service.repo.GetUserPost(userID, pagination, logrus)
 }
+func (service *PostService) GetResentPost(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error) {
+	return service.repo.GetResentPost(pagination, logrus)
+}

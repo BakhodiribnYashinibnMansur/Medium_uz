@@ -47,6 +47,7 @@ type Post interface {
 	CommitPost(input model.CommitPost, logrus *logrus.Logger) (int, error)
 	GetCommitPost(postID int, pagination model.Pagination, logrus *logrus.Logger) ([]model.CommitFull, error)
 	GetUserPost(userID int, pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
+	GetResentPost(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
 }
 
 type Search interface {

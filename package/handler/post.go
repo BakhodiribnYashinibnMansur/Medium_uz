@@ -621,3 +621,55 @@ func (handler *Handler) getUserPost(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "User Posts Body", Data: result})
 
 }
+
+// @Summary Get Resent Post
+// @Tags Post
+// @Description Get Resent Post
+// @ID get-resent-post
+// @Accept  json
+// @Produce  json
+// @Param        offset   query  int     false "Offset "
+// @Param        limit   query  int     false "Limit "
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/ghost/post/resent [GET]
+func (handler *Handler) getResentPost(ctx *gin.Context) {
+	logrus := handler.logrus
+	var pagination model.Pagination
+	offsetQuery := ctx.DefaultQuery("offset", "0")
+	if offsetQuery == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Offset is empty", logrus)
+		return
+	}
+
+	offset, err := strconv.Atoi(offsetQuery)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	limitQuery := ctx.DefaultQuery("limit", "10")
+
+	if limitQuery == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Limit is empty", logrus)
+		return
+	}
+
+	limit, err := strconv.Atoi(limitQuery)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	pagination.Offset = offset
+	pagination.Limit = limit
+	result, err := handler.services.GetResentPost(pagination, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "User Posts Body", Data: result})
+
+}
