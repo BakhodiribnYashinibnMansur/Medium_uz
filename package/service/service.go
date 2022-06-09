@@ -32,6 +32,7 @@ type User interface {
 	GetUserInterestingPost(tag string, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error)
 	GetHistoryPost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error)
 	GetLikePost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error)
+	CreateSavedPost(userID, postID int, logrus *logrus.Logger) (int64, error)
 }
 
 type Post interface {
@@ -47,10 +48,10 @@ type Post interface {
 	CommitPost(input model.CommitPost, logrus *logrus.Logger) (int, error)
 	GetCommitPost(postID int, pagination model.Pagination, logrus *logrus.Logger) ([]model.CommitFull, error)
 	GetUserPost(userID int, pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
-	GetResentPost( pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
-	GetMostViewed( pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
-	GetMostLiked( pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
-	GetMostRated( pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
+	GetResentPost(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
+	GetMostViewed(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
+	GetMostLiked(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
+	GetMostRated(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
 }
 
 type Search interface {

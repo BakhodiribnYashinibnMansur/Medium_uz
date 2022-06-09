@@ -95,6 +95,49 @@ info:
   title: MediumuZ API
   version: "1.0"
 paths:
+  /api/account/create-saved-post:
+    get:
+      consumes:
+      - application/json
+      description: Create My Saved Post
+      operationId: create-my-saved-post
+      parameters:
+      - description: POST ID
+        in: query
+        name: postID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Create My Saved Post
+      tags:
+      - Account
   /api/account/follower:
     get:
       consumes:
@@ -407,6 +450,53 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get My Post
+      tags:
+      - Account
+  /api/account/get-my-saved-post:
+    get:
+      consumes:
+      - application/json
+      description: Get My Saved Post
+      operationId: get-my-saved-post
+      parameters:
+      - description: 'Offset '
+        in: query
+        name: offset
+        type: integer
+      - description: 'Limit '
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get My Saved Post
       tags:
       - Account
   /api/account/history-post:

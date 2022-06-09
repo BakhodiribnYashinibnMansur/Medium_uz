@@ -197,6 +197,25 @@ func (repo *UserDB) GetLikePost(userID int, pagination model.Pagination, logrus 
 	return posts, err
 }
 
+func (repo *UserDB) CreateSavedPost(userID, postID int, logrus *logrus.Logger) (int64, error) {
+
+	likeQuery := fmt.Sprintln("SELECT add_saved_post($1,$2)")
+
+	row, err := repo.db.Exec(likeQuery, userID, postID)
+
+	if err != nil {
+		logrus.Info("DONE: ERROR  SavedPost Data PSQL %s ", err)
+		return -1, err
+	}
+	numRowEffected, err := row.RowsAffected()
+	if err != nil {
+		logrus.Info("DONE: ERROR  SavedPost Data PSQL %s ", err)
+		return -1, err
+	}
+	logrus.Info("DONE: INSERTED  SavedPost Data PSQL")
+	return numRowEffected, nil
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // REDIS

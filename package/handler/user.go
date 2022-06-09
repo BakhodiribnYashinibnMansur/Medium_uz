@@ -429,7 +429,7 @@ func (handler *Handler) getUserInterestingPost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Post DONE User", Data: result})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "USER INTERESTING POST", Data: result})
 }
 
 // @Summary Get Account Following
@@ -544,7 +544,7 @@ func (handler *Handler) getMyPost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Post DONE User", Data: result})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "GET MY POST", Data: result})
 }
 
 // @Summary Get Account Data For Ghost
@@ -691,11 +691,9 @@ func (handler *Handler) getMyLikePost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "User HIstory Post", Data: result})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "User History Post", Data: result})
 
 }
-
-
 
 // @Summary Get My Saved Post
 // @Tags Account
@@ -703,7 +701,8 @@ func (handler *Handler) getMyLikePost(ctx *gin.Context) {
 // @ID get-my-saved-post
 // @Accept  json
 // @Produce  json
-// @Param        postID   query  int     false "POST "
+// @Param        offset   query  int     false "Offset "
+// @Param        limit   query  int     false "Limit "
 // @Success 200 {object} model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
 // @Failure 409 {object} error.errorResponseData
@@ -752,63 +751,53 @@ func (handler *Handler) getMySavedPost(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Post DONE User", Data: result})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "GET MY SAVED POST", Data: result})
 }
 
-// @Summary Get My Saved Post
+// @Summary Create My Saved Post
 // @Tags Account
-// @Description Get My Saved Post
-// @ID get-my-saved-post
+// @Description Create My Saved Post
+// @ID create-my-saved-post
 // @Accept  json
 // @Produce  json
-// @Param        postID   query  int     false "POST "
+// @Param        postID   query  int     false "POST ID"
 // @Success 200 {object} model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
 // @Failure 409 {object} error.errorResponseData
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router /api/account/get-my-saved-post [GET]
+// @Router /api/account/create-saved-post [GET]
 // @Security ApiKeyAuth
 func (handler *Handler) createMySavedPost(ctx *gin.Context) {
 	logrus := handler.logrus
 	userID, err := getUserId(ctx, logrus)
-
+	logrus.Info("SAVED POST", userID)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
 
-	var pagination model.Pagination
-	offsetQuery := ctx.DefaultQuery("offset", "0")
-	if offsetQuery == "" {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Offset is empty", logrus)
+	postIDQuery := ctx.Query("postID")
+	if postIDQuery == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID is empty", logrus)
 		return
 	}
 
-	offset, err := strconv.Atoi(offsetQuery)
+	postID, err := strconv.Atoi(postIDQuery)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	limitQuery := ctx.DefaultQuery("limit", "10")
 
-	if limitQuery == "" {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Limit is empty", logrus)
-		return
-	}
-
-	limit, err := strconv.Atoi(limitQuery)
+	result, err := handler.services.CreateSavedPost(userID, postID, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	pagination.Offset = offset
-	pagination.Limit = limit
 
-	result, err := handler.services.GetUserPost(userID, pagination, logrus)
-	if err != nil {
-		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+	if result == 0 {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "User not found", logrus)
 		return
 	}
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Post DONE User", Data: result})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Created Saved Post DONE ", Data: "result"})
 }

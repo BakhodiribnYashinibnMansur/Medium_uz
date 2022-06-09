@@ -127,3 +127,7 @@ func (service *UserService) GetHistoryPost(userID int, pagination model.Paginati
 func (service *UserService) GetLikePost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
 	return service.repo.GetLikePost(userID, pagination, logrus)
 }
+
+func (service *UserService) CreateSavedPost(userID, postID int, logrus *logrus.Logger) (int64, error) {
+	return service.repo.CreateSavedPost(userID, postID, logrus)
+}

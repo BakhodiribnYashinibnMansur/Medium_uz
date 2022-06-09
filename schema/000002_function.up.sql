@@ -231,17 +231,52 @@ FOR EACH ROW EXECUTE PROCEDURE overall_rating();
 
 
 -- //////////////////////////////////////////////////////////////////////////
--- ADD RATING FUNCTION
+-- ADD SAVED POST FUNCTION
 -- /////////////////////////////////////////////////////////////////////////
 
-CREATE OR REPLACE  FUNCTION add_rating(user_id INTEGER,rating_post_id INTEGER,reader_rate_func INTEGER ) RETURNS VOID LANGUAGE PLPGSQL AS
+CREATE OR REPLACE  FUNCTION add_saved_post(user_id INTEGER,saved_post_id INTEGER ) RETURNS VOID LANGUAGE PLPGSQL AS
 $$
   BEGIN
-IF  EXISTS (SELECT id  FROM rating_post  WHERE reader_id =user_id AND post_id=rating_post_id AND deleted_at IS NULL)
+IF  EXISTS (SELECT id  FROM saved_post  WHERE reader_id =user_id AND post_id=saved_post_id AND deleted_at IS NULL)
 THEN
-UPDATE  rating_post SET reader_rate =  reader_rate_func  WHERE reader_id = user_id AND post_id = rating_post_id AND deleted_at IS NULL   ;
+UPDATE  saved_post SET deleted_at = NOW() WHERE reader_id = user_id AND post_id = saved_post_id AND deleted_at IS NULL   ;
    ELSE
-   INSERT INTO rating_post (reader_id  , post_id ,reader_rate ) VALUES (user_id  , rating_post_id , reader_rate_func)  ;
+   INSERT INTO saved_post (reader_id  , post_id  ) VALUES (user_id  , saved_post_id )  ;
    END IF;
   END
 $$;
+
+
+-- //////////////////////////////////////////////////////////////////////////
+-- SAVED POST  TRIGGER
+-- /////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE FUNCTION saved_post() RETURNS TRIGGER LANGUAGE PLPGSQL AS
+$$
+  BEGIN
+    UPDATE users SET saved_post_count = saved_post_count + 1,
+    updated_at = NOW()
+    WHERE id = NEW.reader_id AND deleted_at IS NULL ;
+    RETURN NEW;
+  END;
+$$;
+
+CREATE TRIGGER saved_post_trigger AFTER INSERT ON saved_post
+FOR EACH ROW EXECUTE PROCEDURE saved_post();
+
+-- //////////////////////////////////////////////////////////////////////////
+-- UNSAVED POST  TRIGGER
+-- /////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE FUNCTION unsaved_post() RETURNS TRIGGER LANGUAGE PLPGSQL AS
+$$
+  BEGIN
+    UPDATE users SET saved_post_count = saved_post_count -1,
+    updated_at = NOW()
+    WHERE id = NEW.reader_id AND deleted_at IS NULL ;
+    RETURN NEW;
+  END;
+$$;
+
+CREATE TRIGGER unsaved_post_trigger AFTER UPDATE ON saved_post
+FOR EACH ROW EXECUTE PROCEDURE unsaved_post();
