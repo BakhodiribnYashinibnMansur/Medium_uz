@@ -75,7 +75,7 @@ func (service *UserService) UploadImage(file multipart.File, header *multipart.F
 	if err != nil {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
-	imageURL := configs.ServiceHost + "/" + filePath
+	imageURL := "https://" + configs.ServiceHost + "/" + filePath
 	return imageURL, nil
 }
 
