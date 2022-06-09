@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
    follower_count INTEGER DEFAULT 0,
    following_count INTEGER DEFAULT 0,
    like_count INTEGER DEFAULT 0,
+   saved_post_count INTEGER DEFAULT 0,
    is_super_user BOOLEAN DEFAULT FALSE,
    created_at TIMESTAMP DEFAULT (NOW()),
    updated_at TIMESTAMP NULL,
@@ -65,7 +66,7 @@ CREATE TABLE IF NOT EXISTS saved_post (
 id  SERIAL NOT NULL UNIQUE,
 reader_id INTEGER   REFERENCES users(id) ON DELETE CASCADE NOT NULL,
 post_id INTEGER REFERENCES post(id) ON DELETE CASCADE NOT NULL,
-saved_data TIMESTAMP DEFAULT (NOW()),
+saved_date TIMESTAMP DEFAULT (NOW()),
 created_at TIMESTAMP  DEFAULT (NOW()),
 updated_at TIMESTAMP NULL,
 deleted_at TIMESTAMP NULL
