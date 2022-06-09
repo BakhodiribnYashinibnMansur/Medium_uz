@@ -216,6 +216,23 @@ func (repo *UserDB) CreateSavedPost(userID, postID int, logrus *logrus.Logger) (
 	return numRowEffected, nil
 }
 
+func (repo *UserDB) GetMySavedPost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
+
+	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p.post_date, p.is_new, p.is_top_read,pu.post_author_id , puv.saved_date   FROM %s p INNER JOIN %s pu on p.id =pu.post_id INNER JOIN %s puv  ON puv.post_id = pu.post_id  WHERE puv.reader_id = $1 AND puv.deleted_at IS NULL ORDER BY puv.saved_date DESC OFFSET $2 LIMIT $3", postTable, postUserTable, postSavedTable)
+
+	err = repo.db.Select(&posts, query, userID, pagination.Offset, pagination.Limit)
+
+	if err != nil {
+		logrus.Errorf("ERROR: don't get users %s", err)
+		return posts, err
+	}
+	if len(posts) == 0 {
+		return posts, errors.New(" no posts  ")
+	}
+	logrus.Info("DONE:get user data from psql")
+	return posts, err
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // REDIS

@@ -33,6 +33,7 @@ type User interface {
 	GetHistoryPost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error)
 	GetLikePost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error)
 	CreateSavedPost(userID, postID int, logrus *logrus.Logger) (int64, error)
+	GetMySavedPost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error)
 }
 
 type Post interface {

@@ -746,7 +746,7 @@ func (handler *Handler) getMySavedPost(ctx *gin.Context) {
 	pagination.Offset = offset
 	pagination.Limit = limit
 
-	result, err := handler.services.GetUserPost(userID, pagination, logrus)
+	result, err := handler.services.GetMySavedPost(userID, pagination, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return

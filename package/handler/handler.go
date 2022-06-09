@@ -28,10 +28,10 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	docs.SwaggerInfo.Title = config.AppName
 	docs.SwaggerInfo.Version = config.Version
 	// LOCAL
-	docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
+	// docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
 
 	// FOR HEROKU
-	// docs.SwaggerInfo.Host = config.ServiceHost
+	docs.SwaggerInfo.Host = config.ServiceHost
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.New()
 	router.Use(cors.CORSMiddleware())
@@ -65,9 +65,8 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				account.GET("/get-followers", handler.getFollowers)              //DONE
 				account.GET("/user-interesting", handler.getUserInterestingPost) // DONE
 				account.GET("/get-my-post", handler.getMyPost)                   // DONE
-				account.GET("/history-post", handler.getMyHistoryPost) //DONE
-				account.GET("/saved-post", handler.createMySavedPost)
-				account.GET("/create-saved-post", handler.createMySavedPost)
+				account.GET("/history-post", handler.getMyHistoryPost)           //DONE
+				account.GET("/create-saved-post", handler.createMySavedPost)     //DONE
 				account.GET("/get-my-saved-post", handler.getMySavedPost)
 				account.GET("/get-my-like-post", handler.getMyLikePost) // DONE
 				account.GET("/get-my-data", handler.getMyUserData)      // DONE

@@ -10,4 +10,5 @@ const (
 	userFollowerTable  = "followers"
 	postCommitTable    = "review_post"
 	postRatingTable    = "rating_post"
+	postSavedTable     = "saved_post"
 )
