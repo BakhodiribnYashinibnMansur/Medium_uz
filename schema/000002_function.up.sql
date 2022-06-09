@@ -227,3 +227,21 @@ $$;
 
 CREATE TRIGGER overall_rating_trigger AFTER INSERT OR UPDATE ON rating_post
 FOR EACH ROW EXECUTE PROCEDURE overall_rating();
+
+
+
+-- //////////////////////////////////////////////////////////////////////////
+-- ADD RATING FUNCTION
+-- /////////////////////////////////////////////////////////////////////////
+
+CREATE OR REPLACE  FUNCTION add_rating(user_id INTEGER,rating_post_id INTEGER,reader_rate_func INTEGER ) RETURNS VOID LANGUAGE PLPGSQL AS
+$$
+  BEGIN
+IF  EXISTS (SELECT id  FROM rating_post  WHERE reader_id =user_id AND post_id=rating_post_id AND deleted_at IS NULL)
+THEN
+UPDATE  rating_post SET reader_rate =  reader_rate_func  WHERE reader_id = user_id AND post_id = rating_post_id AND deleted_at IS NULL   ;
+   ELSE
+   INSERT INTO rating_post (reader_id  , post_id ,reader_rate ) VALUES (user_id  , rating_post_id , reader_rate_func)  ;
+   END IF;
+  END
+$$;
