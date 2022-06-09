@@ -67,9 +67,9 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				account.GET("/get-my-post", handler.getMyPost)                   // DONE
 				account.GET("/history-post", handler.getMyHistoryPost)           //DONE
 				account.GET("/create-saved-post", handler.createMySavedPost)     //DONE
-				account.GET("/get-my-saved-post", handler.getMySavedPost)
-				account.GET("/get-my-like-post", handler.getMyLikePost) // DONE
-				account.GET("/get-my-data", handler.getMyUserData)      // DONE
+				account.GET("/get-my-saved-post", handler.getMySavedPost)        //DONE
+				account.GET("/get-my-like-post", handler.getMyLikePost)          // DONE
+				account.GET("/get-my-data", handler.getMyUserData)               // DONE
 			}
 
 			post := auth.Group("/post")
@@ -94,14 +94,14 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 			}
 			post := ghost.Group("/post")
 			{
-				post.GET("/get/:id", handler.getPostID)          //DONE
-				post.GET("/get-commit", handler.getCommits)      //DONE
-				post.GET("/get-body/:id", handler.getPostBodyID) //DONE
-				post.GET("/get-user-post", handler.getUserPost)  //DONE
-				post.GET("/get-most-viewed", handler.getMostViewed)
-				post.GET("/get-most-liked", handler.getMostLiked)
-				post.GET("/get-most-rated", handler.getMostRated)
-				post.GET("/resent", handler.getResentPost)
+				post.GET("/get/:id", handler.getPostID)             //DONE
+				post.GET("/get-commit", handler.getCommits)         //DONE
+				post.GET("/get-body/:id", handler.getPostBodyID)    //DONE
+				post.GET("/get-user-post", handler.getUserPost)     //DONE
+				post.GET("/get-most-viewed", handler.getMostViewed) //DONE
+				post.GET("/get-most-liked", handler.getMostLiked)   //DONE
+				post.GET("/get-most-rated", handler.getMostRated)   //DONE
+				post.GET("/resent", handler.getResentPost)          //DONE
 			}
 
 			search := ghost.Group("/search")
