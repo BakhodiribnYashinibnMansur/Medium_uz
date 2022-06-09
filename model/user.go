@@ -42,6 +42,7 @@ type UserFull struct {
 	IsVerified        bool           `json:"is_verified" db:"is_verified"`
 	Verification_date sql.NullTime   `json:"verification_date" db:"verification_date"`
 	AccountImagePath  sql.NullString `json:"account_image_path" db:"account_image_path"`
+	SavedPostCount    int            `json:"saved_post_count" db:"saved_post_count"`
 	Phone             string         `json:"phone" db:"phone"`
 	Rating            string         `json:"rating" db:"rating"`
 	PostViewsCount    int            `json:"post_views" db:"post_views_count"`

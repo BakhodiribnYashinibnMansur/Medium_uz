@@ -27,7 +27,7 @@ func (repo *SearchDB) SearchPost(search string, pagination model.Pagination, log
 
 func (repo *SearchDB) SearchUser(search string, pagination model.Pagination, logrus *logrus.Logger) ([]model.UserFull, error) {
 	var searchUser []model.UserFull
-	query := fmt.Sprintf("SELECT  	id,	email,	firstname,secondname,nickname,		city,	is_verified,	bio,interests,account_image_path,	phone,	rating,	post_views_count,	follower_count, following_count,like_count,is_super_user	FROM %s WHERE firstname ~* $1 OR secondname ~* $2 AND deleted_at IS NULL  OFFSET $3 LIMIT $4 ", usersTable)
+	query := fmt.Sprintf("SELECT  	id,	email,	firstname,secondname,nickname,		city,	is_verified,	bio,interests,account_image_path,	phone,	rating,	post_views_count,	saved_post_count,follower_count, following_count,like_count,is_super_user	FROM %s WHERE firstname ~* $1 OR secondname ~* $2 AND deleted_at IS NULL  OFFSET $3 LIMIT $4 ", usersTable)
 	err := repo.db.Select(&searchUser, query, search, search, pagination.Offset, pagination.Limit)
 	return searchUser, err
 }

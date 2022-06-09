@@ -24,7 +24,7 @@ func NewUserDB(db *sqlx.DB, redis *redis.Client) *UserDB {
 
 func (repo *UserDB) GetUserData(id string, logrus *logrus.Logger) (model.UserFull, error) {
 	var user model.UserFull
-	query := fmt.Sprintf("SELECT  	id,	email,	firstname,secondname,nickname,		city,	is_verified,	bio,interests,account_image_path,	phone,	rating,	post_views_count,	follower_count, following_count,like_count,is_super_user	FROM %s WHERE id=$1 ", usersTable)
+	query := fmt.Sprintf("SELECT  	id,	email,	firstname,secondname,nickname,		city,	is_verified,	bio,interests,account_image_path,	phone,	rating,	post_views_count,saved_post_count,	follower_count, following_count,like_count,is_super_user	FROM %s WHERE id=$1 ", usersTable)
 	err := repo.db.Get(&user, query, id)
 	if err != nil {
 		if err == sql.ErrNoRows {
