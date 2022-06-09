@@ -694,3 +694,48 @@ func (handler *Handler) getMyLikePost(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "User HIstory Post", Data: result})
 
 }
+
+
+
+// @Summary Get My Saved Post
+// @Tags Account
+// @Description Get My Saved Post
+// @ID get-my-saved-post
+// @Accept  json
+// @Produce  json
+// @Param        postID   query  int     false "POST ID "
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/account/get-my-saved-post [GET]
+// @Security ApiKeyAuth
+func (handler *Handler) getMYSavedPost(ctx *gin.Context) {
+	logrus := handler.logrus
+	userID, err := getUserId(ctx, logrus)
+
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	postIDQuery := ctx.DefaultQuery("offset", "0")
+	if postIDQuery == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Offset is empty", logrus)
+		return
+	}
+
+	postID, err := strconv.Atoi(postIDQuery)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	result, err := handler.services.GetUserPost(userID, pagination, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: "Post DONE User", Data: result})
+}

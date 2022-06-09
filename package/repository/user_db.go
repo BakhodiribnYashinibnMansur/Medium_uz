@@ -55,7 +55,7 @@ func (repo *UserDB) UpdateUserVerified(id string, logrus *logrus.Logger) (effect
 }
 
 func (repo *UserDB) UpdateAccountImage(id int, filePath string, logrus *logrus.Logger) (int64, error) {
-	query := fmt.Sprintf("	UPDATE %s SET account_image_path=$1,updated_at=NOW()	WHERE id = $1  RETURNING id ", usersTable)
+	query := fmt.Sprintf("	UPDATE %s SET account_image_path=$1,updated_at=NOW()	WHERE id = $2  RETURNING id ", usersTable)
 	rows, err := repo.db.Exec(query, filePath, id)
 
 	if err != nil {
