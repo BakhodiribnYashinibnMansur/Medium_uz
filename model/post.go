@@ -51,4 +51,5 @@ type CommitFull struct {
 	UserNickname string         `json:"user_nickname" db:"nickname"`
 	UserImage    sql.NullString `json:"user_image" db:"account_image_path"`
 	PostCommit   string         `json:"post_commit" db:"commits" `
+	CommitData   string         `json:"commit_data" db:"review_data"`
 }
