@@ -23,7 +23,10 @@ type UpdatePost struct {
 type PostFull struct {
 	ID                   int            `json:"id" db:"id"`
 	AuthorID             int            `json:"post_author_id" db:"post_author_id"`
-	
+	AuthorFirstName      string         `json:"post_author_first_name" db:"firstname"`
+	AuthorSecondName     string         `json:"post_author_second_name" db:"secondname"`
+	AuthorImage          string         `json:"post_author_image" db:"account_image_path"`
+	AuthorNickname       string         `json:"post_author_nickname" db:"nickname"`
 	PostTitle            string         `json:"post_title" db:"post_title"`
 	PostImagePath        sql.NullString `json:"image" db:"post_image_path"`
 	PostBody             string         `json:"post_body" db:"post_body"`

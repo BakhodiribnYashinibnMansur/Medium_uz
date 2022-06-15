@@ -79,7 +79,6 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.PUT("/update", handler.updatePost)              //DONE
 				post.DELETE("/delete", handler.deletePost)           //DONE
 				post.GET("/like", handler.likePost)                  //DONE
-				post.GET("/view", handler.viewPost)                  //DONE
 				post.GET("/rating", handler.ratedPost)               // DONE
 				post.POST("/commit", handler.commitPost)             //DONE
 
@@ -94,14 +93,16 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 			}
 			post := ghost.Group("/post")
 			{
-				post.GET("/get-post", handler.getPostID)             //DONE
+				post.GET("/get-post", handler.getPostID)            //DONE
 				post.GET("/get-commit", handler.getCommits)         //DONE
-				post.GET("/get-body/", handler.getPostBodyID)    //DONE
+				post.GET("/get-body/", handler.getPostBodyID)       //DONE
 				post.GET("/get-user-post", handler.getUserPost)     //DONE
 				post.GET("/get-most-viewed", handler.getMostViewed) //DONE
 				post.GET("/get-most-liked", handler.getMostLiked)   //DONE
 				post.GET("/get-most-rated", handler.getMostRated)   //DONE
 				post.GET("/resent", handler.getResentPost)          //DONE
+				post.GET("/view", handler.viewPost)                 //DONE
+
 			}
 
 			search := ghost.Group("/search")

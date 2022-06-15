@@ -1645,8 +1645,6 @@ paths:
           description: ""
           schema:
             $ref: '#/definitions/error.errorResponse'
-      security:
-      - ApiKeyAuth: []
       summary: View  Post By ID
       tags:
       - Post

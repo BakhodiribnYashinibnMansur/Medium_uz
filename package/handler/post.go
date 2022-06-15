@@ -110,7 +110,7 @@ func (handler *Handler) getPostBodyID(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Data: resp, Message: "DONE"})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Data: resp.PostBody, Message: "DONE"})
 }
 
 // @Summary Upload Post Image
@@ -267,10 +267,10 @@ func (handler *Handler) deletePost(ctx *gin.Context) {
 		return
 	}
 	deletePostResult, deletePostUserResult, err := handler.services.DeletePost(userID, postID, logrus)
-		if err != nil {
-			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
-			return
-		}
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
 	if deletePostResult == 0 || deletePostUserResult == 0 {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Not Deleted", logrus)
 		return
@@ -387,7 +387,6 @@ func (handler *Handler) commitPost(ctx *gin.Context) {
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
 // @Router /api/post/view [GET]
-//@Security ApiKeyAuth
 func (handler *Handler) viewPost(ctx *gin.Context) {
 	logrus := handler.logrus
 	userID, err := getUserId(ctx, logrus)

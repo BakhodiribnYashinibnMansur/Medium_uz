@@ -2336,11 +2336,6 @@ const docTemplate = `{
         },
         "/api/post/view": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "View post by id",
                 "consumes": [
                     "application/json"
