@@ -111,7 +111,7 @@ func (handler *Handler) getPostBodyID(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Data: resp, Message: "DONE"})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Data: resp.PostBody, Message: "DONE"})
 }
 
 // @Summary Upload Post Image
