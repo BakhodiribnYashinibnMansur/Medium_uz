@@ -92,7 +92,7 @@ func (handler *Handler) getPostID(ctx *gin.Context) {
 // @Failure 409 {object} error.errorResponseData
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router /api/ghost/post/get-body [GET]
+// @Router /api/ghost/post/get-post-body [GET]
 func (handler *Handler) getPostBodyID(ctx *gin.Context) {
 	logrus := handler.logrus
 	paramID := ctx.Query("id")
