@@ -94,9 +94,9 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 			}
 			post := ghost.Group("/post")
 			{
-				post.GET("/get/:id", handler.getPostID)             //DONE
+				post.GET("/get-post", handler.getPostID)             //DONE
 				post.GET("/get-commit", handler.getCommits)         //DONE
-				post.GET("/get-body/:id", handler.getPostBodyID)    //DONE
+				post.GET("/get-body/", handler.getPostBodyID)    //DONE
 				post.GET("/get-user-post", handler.getUserPost)     //DONE
 				post.GET("/get-most-viewed", handler.getMostViewed) //DONE
 				post.GET("/get-most-liked", handler.getMostLiked)   //DONE

@@ -53,16 +53,16 @@ func (handler *Handler) createPost(ctx *gin.Context) {
 // @ID get-post-id
 // @Accept  json
 // @Produce  json
-// @Param        id   path  int     true "Param ID"
+// @Param        id   query  int     true "Param ID"
 // @Success 200 {object} model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
 // @Failure 409 {object} error.errorResponseData
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router /api/ghost/post/get/{id} [GET]
+// @Router /api/ghost/post/get-post [GET]
 func (handler *Handler) getPostID(ctx *gin.Context) {
 	logrus := handler.logrus
-	paramID := ctx.Param("id")
+	paramID := ctx.Query("id")
 	if paramID == "" {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID is empty", logrus)
 		return
@@ -72,7 +72,7 @@ func (handler *Handler) getPostID(ctx *gin.Context) {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
 	}
-	resp, err := handler.services.GetPostById(id, logrus)
+	resp, err := handler.services.GetPostByIdWithoutBody(id, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
@@ -86,16 +86,16 @@ func (handler *Handler) getPostID(ctx *gin.Context) {
 // @ID get-post-body-id
 // @Accept  json
 // @Produce  json
-// @Param        id   path  int     true "Param ID"
+// @Param        id   query  int     true "Param ID"
 // @Success 200 {object} model.ResponseSuccess
 // @Failure 400,404 {object} error.errorResponse
 // @Failure 409 {object} error.errorResponseData
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router /api/ghost/post/get-body/{id} [GET]
+// @Router /api/ghost/post/get-body [GET]
 func (handler *Handler) getPostBodyID(ctx *gin.Context) {
 	logrus := handler.logrus
-	paramID := ctx.Param("id")
+	paramID := ctx.Query("id")
 	if paramID == "" {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "ID is empty", logrus)
 		return
@@ -267,12 +267,10 @@ func (handler *Handler) deletePost(ctx *gin.Context) {
 		return
 	}
 	deletePostResult, deletePostUserResult, err := handler.services.DeletePost(userID, postID, logrus)
-	if err != nil {
 		if err != nil {
 			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 			return
 		}
-	}
 	if deletePostResult == 0 || deletePostUserResult == 0 {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Not Deleted", logrus)
 		return

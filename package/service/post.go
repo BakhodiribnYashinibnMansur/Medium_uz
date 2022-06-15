@@ -27,9 +27,10 @@ func (service *PostService) CreatePost(userId int, post model.Post, logrus *logr
 	return postId, err
 }
 
-func (service *PostService) GetPostById(id int, logrus *logrus.Logger) (post model.PostFull, err error) {
-	return service.repo.GetPostById(id, logrus)
+func (service *PostService) GetPostByIdWithoutBody(id int, logrus *logrus.Logger) (post model.PostFull, err error) {
+	return service.repo.GetPostByIdWithoutBody(id, logrus)
 }
+
 func (service *PostService) GetPostBodyById(id int, logrus *logrus.Logger) (post model.PostFull, err error) {
 	return service.repo.GetPostBodyById(id, logrus)
 }

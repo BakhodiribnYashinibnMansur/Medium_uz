@@ -1129,7 +1129,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/ghost/post/get-body/{id}": {
+        "/api/ghost/post/get-body": {
             "get": {
                 "description": "get post body by id",
                 "consumes": [
@@ -1148,7 +1148,7 @@ const docTemplate = `{
                         "type": "integer",
                         "description": "Param ID",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -1471,9 +1471,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/ghost/post/get-user-post": {
+        "/api/ghost/post/get-post": {
             "get": {
-                "description": "Get User Posts",
+                "description": "get post by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1483,25 +1483,13 @@ const docTemplate = `{
                 "tags": [
                     "Post"
                 ],
-                "summary": "Get User Posts",
-                "operationId": "get-user-post",
+                "summary": "Get  Post By ID",
+                "operationId": "get-post-id",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Offset ",
-                        "name": "offset",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Limit ",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "userID ",
-                        "name": "userID",
+                        "description": "Param ID",
+                        "name": "id",
                         "in": "query",
                         "required": true
                     }
@@ -1546,9 +1534,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/ghost/post/get/{id}": {
+        "/api/ghost/post/get-user-post": {
             "get": {
-                "description": "get post by id",
+                "description": "Get User Posts",
                 "consumes": [
                     "application/json"
                 ],
@@ -1558,14 +1546,26 @@ const docTemplate = `{
                 "tags": [
                     "Post"
                 ],
-                "summary": "Get  Post By ID",
-                "operationId": "get-post-id",
+                "summary": "Get User Posts",
+                "operationId": "get-user-post",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Param ID",
-                        "name": "id",
-                        "in": "path",
+                        "description": "Offset ",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit ",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "userID ",
+                        "name": "userID",
+                        "in": "query",
                         "required": true
                     }
                 ],

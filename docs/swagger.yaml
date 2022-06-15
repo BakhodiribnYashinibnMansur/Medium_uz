@@ -812,7 +812,7 @@ paths:
       summary: Get Account Data For Ghost
       tags:
       - Account
-  /api/ghost/post/get-body/{id}:
+  /api/ghost/post/get-body:
     get:
       consumes:
       - application/json
@@ -820,7 +820,7 @@ paths:
       operationId: get-post-body-id
       parameters:
       - description: Param ID
-        in: path
+        in: query
         name: id
         required: true
         type: integer
@@ -1039,6 +1039,48 @@ paths:
       summary: Get Most Viewed
       tags:
       - Post
+  /api/ghost/post/get-post:
+    get:
+      consumes:
+      - application/json
+      description: get post by id
+      operationId: get-post-id
+      parameters:
+      - description: Param ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ResponseSuccess'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/error.errorResponseData'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/error.errorResponse'
+      summary: Get  Post By ID
+      tags:
+      - Post
   /api/ghost/post/get-user-post:
     get:
       consumes:
@@ -1087,48 +1129,6 @@ paths:
           schema:
             $ref: '#/definitions/error.errorResponse'
       summary: Get User Posts
-      tags:
-      - Post
-  /api/ghost/post/get/{id}:
-    get:
-      consumes:
-      - application/json
-      description: get post by id
-      operationId: get-post-id
-      parameters:
-      - description: Param ID
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.ResponseSuccess'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/error.errorResponseData'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/error.errorResponse'
-      summary: Get  Post By ID
       tags:
       - Post
   /api/ghost/post/resent:
