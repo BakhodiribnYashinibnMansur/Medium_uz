@@ -375,10 +375,10 @@ func (handler *Handler) commitPost(ctx *gin.Context) {
 
 }
 
-// @Summary View  Post By ID
+// @Summary History and View  Post By ID
 // @Tags Post
 // @Description View post by id
-// @ID view-post-id
+// @ID history-post-id
 // @Accept  json
 // @Produce  json
 // @Param        id   query  int     true "Param ID"
@@ -387,8 +387,9 @@ func (handler *Handler) commitPost(ctx *gin.Context) {
 // @Failure 409 {object} error.errorResponseData
 // @Failure 500 {object} error.errorResponse
 // @Failure default {object} error.errorResponse
-// @Router /api/post/view [GET]
-func (handler *Handler) viewPost(ctx *gin.Context) {
+// @Router /api/post/history [GET]
+//@Security ApiKeyAuth
+func (handler *Handler) historyPost(ctx *gin.Context) {
 	logrus := handler.logrus
 	userID, err := getUserId(ctx, logrus)
 	if err != nil {
@@ -412,7 +413,7 @@ func (handler *Handler) viewPost(ctx *gin.Context) {
 		return
 	}
 
-	result, err := handler.services.ViewPost(userID, postID, logrus)
+	result, err := handler.services.HistoryPost(userID, postID, logrus)
 	if err != nil {
 		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
 		return
@@ -423,7 +424,51 @@ func (handler *Handler) viewPost(ctx *gin.Context) {
 			return
 		}
 	}
-	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " View Post", Data: result})
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " History Post", Data: result})
+
+}
+
+// @Summary View  Post By ID
+// @Tags Post
+// @Description View post by id
+// @ID view-post-id
+// @Accept  json
+// @Produce  json
+// @Param        id   query  int     true "Param ID"
+// @Success 200 {object} model.ResponseSuccess
+// @Failure 400,404 {object} error.errorResponse
+// @Failure 409 {object} error.errorResponseData
+// @Failure 500 {object} error.errorResponse
+// @Failure default {object} error.errorResponse
+// @Router /api/ghost/post/view [GET]
+func (handler *Handler) viewPost(ctx *gin.Context) {
+	logrus := handler.logrus
+
+	paramID := ctx.Query("id")
+
+	if paramID == "" {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "Param is empty", logrus)
+		return
+	}
+
+	postID, err := strconv.Atoi(paramID)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+
+	result, err := handler.services.ViewPost( postID, logrus)
+	if err != nil {
+		error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, err.Error(), logrus)
+		return
+	}
+	if result == 0 {
+		if err != nil {
+			error.NewHandlerErrorResponse(ctx, http.StatusBadRequest, "DO NOT WORK", logrus)
+			return
+		}
+	}
+	ctx.JSON(http.StatusOK, model.ResponseSuccess{Message: " View Post", Data: "result"})
 
 }
 

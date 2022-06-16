@@ -44,7 +44,7 @@ type Post interface {
 	UpdatePost(userID, postID int, post model.UpdatePost, logrus *logrus.Logger) (int64, error)
 	DeletePost(userID, postID int, logrus *logrus.Logger) (int64, int64, error)
 	LikePost(userID, postID int, logrus *logrus.Logger) (int64, error)
-	ViewPost(userID, postID int, logrus *logrus.Logger) (int, error)
+	HistoryPost(userID, postID int, logrus *logrus.Logger) (int, error)
 	RatingPost(userID, postID, userRating int, logrus *logrus.Logger) (int64, error)
 	CommitPost(input model.CommitPost, logrus *logrus.Logger) (int, error)
 	GetCommitPost(postID int, pagination model.Pagination, logrus *logrus.Logger) ([]model.CommitFull, error)
@@ -53,6 +53,7 @@ type Post interface {
 	GetMostViewed(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
 	GetMostLiked(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
 	GetMostRated(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error)
+	ViewPost( postID int, logrus *logrus.Logger) (int64, error)
 }
 
 type Search interface {

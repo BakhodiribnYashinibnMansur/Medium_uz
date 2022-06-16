@@ -55,8 +55,8 @@ func (service *PostService) LikePost(userID, postID int, logrus *logrus.Logger) 
 	return service.repo.LikePost(userID, postID, logrus)
 }
 
-func (service *PostService) ViewPost(userID, postID int, logrus *logrus.Logger) (int, error) {
-	return service.repo.ViewPost(userID, postID, logrus)
+func (service *PostService) HistoryPost(userID, postID int, logrus *logrus.Logger) (int, error) {
+	return service.repo.HistoryPost(userID, postID, logrus)
 }
 func (service *PostService) RatingPost(userID, postID, userRating int, logrus *logrus.Logger) (int64, error) {
 	return service.repo.RatingPost(userID, postID, userRating, logrus)
@@ -85,4 +85,8 @@ func (service *PostService) GetMostLiked(pagination model.Pagination, logrus *lo
 }
 func (service *PostService) GetMostRated(pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error) {
 	return service.repo.GetMostRated(pagination, logrus)
+}
+
+func (service *PostService) ViewPost(postID int ,logrus *logrus.Logger) (int64, error) {
+	return service.repo.ViewPost(postID, logrus)
 }

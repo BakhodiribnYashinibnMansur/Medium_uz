@@ -34,23 +34,6 @@ FOR EACH ROW EXECUTE PROCEDURE unlike_post();
 
 
 -- //////////////////////////////////////////////////////////////////////////
--- VIEW TRIGGER
--- /////////////////////////////////////////////////////////////////////////
-
-CREATE OR REPLACE FUNCTION view_post() RETURNS TRIGGER LANGUAGE PLPGSQL AS
-$$
-  BEGIN
-    UPDATE post SET post_views_count = post_views_count + 1,
-    updated_at = NOW()
-    WHERE id = NEW.post_id AND deleted_at IS NULL ;
-    RETURN NEW;
-  END;
-$$;
-
-CREATE TRIGGER view_post_trigger AFTER INSERT ON viewed_post
-FOR EACH ROW EXECUTE PROCEDURE view_post();
-
--- //////////////////////////////////////////////////////////////////////////
 -- RATING TRIGGER
 -- /////////////////////////////////////////////////////////////////////////
 

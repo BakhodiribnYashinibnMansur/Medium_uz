@@ -68,7 +68,7 @@ func (repo *PostDB) GetPostByIdWithoutBody(id int, logrus *logrus.Logger) (post 
 
 func (repo *PostDB) GetUserPost(userID int, pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
 
-	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id FROM %s p INNER JOIN %s pu on p.id =pu.post_id WHERE pu.post_author_id = $1 AND pu.deleted_at IS NULL AND p.deleted_at IS NULL OFFSET $2 LIMIT $3 ", postTable, postUserTable)
+	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id,u.firstname,u.secondname,u.account_image_path,u.nickname FROM %s p INNER JOIN %s pu on p.id =pu.post_id INNER JOIN %s u ON u.id= pu.post_author_id WHERE pu.post_author_id = $1 AND pu.deleted_at IS NULL AND p.deleted_at IS NULL OFFSET $2 LIMIT $3 ", postTable, postUserTable,usersTable)
 	err = repo.db.Select(&posts, query, userID, pagination.Offset, pagination.Limit)
 	if err != nil {
 		logrus.Errorf("ERROR: don't get users %s", err)
@@ -122,7 +122,6 @@ func (repo *PostDB) UpdatePost(userID, postID int, post model.UpdatePost, logrus
 	rows, err := repo.db.Exec(updateQuery, post.Title, post.Body, pq.Array(post.Tags), userID, postID)
 
 	if err != nil {
-
 		logrus.Errorf("ERROR: Update Post : %v", err)
 		return 0, err
 	}
@@ -192,7 +191,7 @@ func (repo *PostDB) LikePost(userID, postID int, logrus *logrus.Logger) (int64, 
 	return numRowEffected, nil
 }
 
-func (repo *PostDB) ViewPost(userID, postID int, logrus *logrus.Logger) (int, error) {
+func (repo *PostDB) HistoryPost(userID, postID int, logrus *logrus.Logger) (int, error) {
 
 	var id int
 	query := fmt.Sprintf("INSERT INTO %s (reader_id  , post_id ) VALUES ($1, $2)  RETURNING id", postViewTable)
@@ -273,7 +272,6 @@ func (repo *PostDB) GetMostViewed(pagination model.Pagination, logrus *logrus.Lo
 }
 
 func (repo *PostDB) GetMostLiked(pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
-
 	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id ,u.firstname,u.secondname,u.account_image_path,u.nickname FROM %s p INNER JOIN %s pu on p.id =pu.post_id INNER JOIN %s u ON u.id= pu.post_author_id  WHERE  pu.deleted_at IS NULL AND p.deleted_at IS NULL ORDER BY p.post_like_count DESC OFFSET $1 LIMIT $2 ", postTable, postUserTable, usersTable)
 	err = repo.db.Select(&posts, query, pagination.Offset, pagination.Limit)
 	if err != nil {
@@ -283,9 +281,10 @@ func (repo *PostDB) GetMostLiked(pagination model.Pagination, logrus *logrus.Log
 	logrus.Info("DONE:get user data from psql")
 	return posts, err
 }
+
 func (repo *PostDB) GetMostRated(pagination model.Pagination, logrus *logrus.Logger) (posts []model.PostFull, err error) {
 
-	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id,u.firstname,u.secondname,u.account_image_path,u.nickname FROM %s p INNER JOIN %s pu on p.id =pu.post_id INNER JOIN %s u ON u.id= pu.post_author_id  WHERE  pu.deleted_at  IS NULL AND p.deleted_at IS NULL ORDER BY p.post_rated DESC OFFSET $1 LIMIT $2 ", postTable, postUserTable,usersTable)
+	query := fmt.Sprintf("SELECT p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id,u.firstname,u.secondname,u.account_image_path,u.nickname FROM %s p INNER JOIN %s pu on p.id =pu.post_id INNER JOIN %s u ON u.id= pu.post_author_id  WHERE  pu.deleted_at  IS NULL AND p.deleted_at IS NULL ORDER BY p.post_rated DESC OFFSET $1 LIMIT $2 ", postTable, postUserTable, usersTable)
 	err = repo.db.Select(&posts, query, pagination.Offset, pagination.Limit)
 	if err != nil {
 		logrus.Errorf("ERROR: don't get users %s", err)
@@ -293,4 +292,24 @@ func (repo *PostDB) GetMostRated(pagination model.Pagination, logrus *logrus.Log
 	}
 	logrus.Info("DONE:get user data from psql")
 	return posts, err
+}
+
+func (repo *PostDB) ViewPost( postID int, logrus *logrus.Logger) (int64, error) {
+	query := fmt.Sprintf("UPDATE %s SET post_views_count = post_views_count + 1 WHERE id = $1", postTable)
+	result, err := repo.db.Exec(query, postID)
+	if err != nil {
+		logrus.Errorf("ERROR: don't update post %s", err)
+		return 0, err
+	}
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		logrus.Errorf("ERROR: don't update post %s", err)
+		return 0, err
+	}
+	if rowsAffected == 0 {
+		logrus.Errorf("ERROR: don't update post %s", err)
+		return 0, err
+	}
+	logrus.Info("DONE:update post from psql")
+	return rowsAffected, err
 }

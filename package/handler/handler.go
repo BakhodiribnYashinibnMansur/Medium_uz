@@ -28,10 +28,10 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 	docs.SwaggerInfo.Title = config.AppName
 	docs.SwaggerInfo.Version = config.Version
 	// LOCAL
-	docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
+	// docs.SwaggerInfo.Host = config.ServiceHost + config.HTTPPort
 
 	// FOR HEROKU
-// docs.SwaggerInfo.Host = config.ServiceHost
+	docs.SwaggerInfo.Host = config.ServiceHost
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 	router := gin.New()
 	router.Use(cors.CORSMiddleware())
@@ -81,6 +81,7 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 				post.GET("/like", handler.likePost)                  //DONE
 				post.GET("/rating", handler.ratedPost)               // DONE
 				post.POST("/commit", handler.commitPost)             //DONE
+				post.GET("/history", handler.historyPost)            //DONE
 
 			}
 		}
@@ -95,14 +96,13 @@ func (handler *Handler) InitRoutes() *gin.Engine {
 			{
 				post.GET("/get-post", handler.getPostID)            //DONE
 				post.GET("/get-commit", handler.getCommits)         //DONE
-				post.GET("/get-post-body", handler.getPostBodyID)       //DONE
+				post.GET("/get-post-body", handler.getPostBodyID)   //DONE
 				post.GET("/get-user-post", handler.getUserPost)     //DONE
 				post.GET("/get-most-viewed", handler.getMostViewed) //DONE
 				post.GET("/get-most-liked", handler.getMostLiked)   //DONE
 				post.GET("/get-most-rated", handler.getMostRated)   //DONE
 				post.GET("/resent", handler.getResentPost)          //DONE
-				post.GET("/view", handler.viewPost)                 //DONE
-
+				post.GET("/view", handler.viewPost)
 			}
 
 			search := ghost.Group("/search")
