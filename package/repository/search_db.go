@@ -18,7 +18,7 @@ func NewSearchDB(db *sqlx.DB) *SearchDB {
 
 func (repo *SearchDB) SearchPost(search string, pagination model.Pagination, logrus *logrus.Logger) ([]model.PostFull, error) {
 	var searchPost []model.PostFull
-	query := fmt.Sprintf("SELECT id , post_title ,post_image_path,  post_views_count, post_like_count, post_rated, post_vote_count, post_tags,  post_date, is_new, is_top_read FROM %s WHERE post_title  ~*  $1  AND deleted_at IS NULL  OFFSET $2 LIMIT $3", postTable)
+	query := fmt.Sprintf("SELECT i p.id , p.post_title ,p.post_image_path, p.post_views_count, p.post_like_count, p.post_rated, p.post_vote_count, p.post_tags, p. post_date, p.is_new, p.is_top_read,pu.post_author_id,u.firstname,u.secondname,u.account_image_path,u.nickname %s p INNER JOIN %s pu on p.id =pu.post_id INNER JOIN %s u ON u.id= pu.post_author_id WHERE pu.post_author_id = $1 AND pu.deleted_at IS NULL AND p.deleted_at IS NUL AND post_title  ~*  $1    OFFSET $2 LIMIT $3", postTable, postUserTable, usersTable)
 	err := repo.db.Select(&searchPost, query, search, pagination.Offset, pagination.Limit)
 	logrus.Info("DONE:get post data from psql")
 	logrus.Info(searchPost)
