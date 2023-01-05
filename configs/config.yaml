@@ -1,7 +1,7 @@
 app:
   name: Medium_uz
   # ////   For HEROKU
-  host: "109.123.234.250:7007"
+  host: "109.123.234.250:"
   # LOCAL
   # host: "localhost:"
   version: "1.0"
