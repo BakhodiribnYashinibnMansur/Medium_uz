@@ -14,8 +14,8 @@ db:
   username: "quffklnl"
 
 redis:
-  host: "redis-10231.c61.us-east-1-3.ec2.cloud.redislabs.com"
-  port: "10231"
+  host: "redis-16183.c257.us-east-1-3.ec2.cloud.redislabs.com"
+  port: "16183"
   db: 0
 
 smtp:

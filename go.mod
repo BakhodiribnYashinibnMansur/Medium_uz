@@ -1,7 +1,7 @@
 module github.com/BakhodiribnYashinibnMansur/Medium_uz
 
 // +heroku goVersion go1.18
-go 1.18
+go 1.19
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
