@@ -1,9 +1,9 @@
 app:
   name: Medium_uz
   # ////   For HEROKU
-  # host: "mediumuz.herokuapp.com"
+  host: "109.123.234.250:7007"
   # LOCAL
-  host: "localhost:"
+  # host: "localhost:"
   version: "1.0"
 
 db:
